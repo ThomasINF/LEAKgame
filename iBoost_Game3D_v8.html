@@ -7178,12 +7178,16 @@ renderer.domElement.addEventListener('click', () => {
     const cnv = document.createElement('canvas');
     cnv.width = 384; cnv.height = 256;
     const tex = new THREE.CanvasTexture(cnv);
-    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.94 });
-    const geo = new THREE.PlaneGeometry(0.16, 0.107);
+    // R13: DoubleSide damit auch von oben sichtbar, opacity hoch, kein depthWrite-Trick
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.98, side: THREE.DoubleSide });
+    // R13: 21cm × 14cm — deutlich größer für gute Lesbarkeit
+    const geo = new THREE.PlaneGeometry(0.21, 0.14);
     const mesh = new THREE.Mesh(geo, mat);
-    mesh.position.set(0.04, 0.02, -0.10);
-    mesh.rotation.x = -Math.PI * 0.30;
-    VR3.wrist = { mesh, canvas: cnv, tex, ctx: cnv.getContext('2d') };
+    // R13: 8cm über dem Grip, 4cm vor der Hand, 50° gekippt — wie Smartwatch beim Blick aufs Handgelenk
+    mesh.position.set(0, 0.05, -0.04);
+    mesh.rotation.x = -Math.PI * 0.42;
+    mesh.renderOrder = 10;
+    VR3.wrist = { mesh, canvas: cnv, tex, ctx: cnv.getContext('2d'), _attached: false };
     return VR3.wrist;
   }
   // v8 R12: Komplettes Wrist-Tablet HUD — alle wichtigen Werte aus dem 2D-HUD
@@ -7744,6 +7748,16 @@ renderer.domElement.addEventListener('click', () => {
   };
   window.enterVR = async function() {
     window._vrStatus('🥽 Initializing VR…');
+    // R13: Re-Entry-Schutz — wenn Session noch läuft, abbrechen statt erneuten setSession
+    if (renderer && renderer.xr && renderer.xr.isPresenting) {
+      window._vrStatus('⚠️ VR-Session läuft bereits.<br><span style="font-size:13px; opacity:0.8">Helm absetzen + zurücksetzen, oder Seite neu laden (Strg+Shift+R).</span>', true);
+      return;
+    }
+    // R13: Wenn nach einem Crash der xr-Manager-State korrupt ist → Seite-Reload
+    if (renderer && renderer.xr && renderer.xr._lastCrash) {
+      window._vrStatus('❌ VR ist gecrasht.<br><span style="font-size:14px">Bitte die Seite neu laden (F5 oder Strg+Shift+R), bevor VR wieder gestartet werden kann.</span>', true);
+      return;
+    }
     if (!navigator.xr) {
       window._vrStatus('❌ WebXR not available in this browser.<br><span style="font-size:14px; opacity:0.8">On Quest 3: use the Meta-Browser. On PC: Chrome / Edge with WebXR.</span>', true);
       return;
@@ -7773,7 +7787,7 @@ renderer.domElement.addEventListener('click', () => {
     try { renderer.xr.setReferenceSpaceType('local-floor'); } catch (e) {}
     try {
       if (typeof renderer.xr.setFramebufferScaleFactor === 'function') {
-        renderer.xr.setFramebufferScaleFactor(VR3.isQuest ? 1.2 : VR3.settings.framebufferScale);
+        renderer.xr.setFramebufferScaleFactor(VR3.isQuest ? 1.0 : VR3.settings.framebufferScale);  // R13: 1.2 war Crash-Auslöser
       }
     } catch (e) {}
 
@@ -7785,10 +7799,11 @@ renderer.domElement.addEventListener('click', () => {
     let session = null;
     try {
       session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures, requiredFeatures: ['local-floor'] });
+      VR3._refSpaceType = 'local-floor';
     } catch (e1) {
       console.warn('[VR] requiredFeatures failed:', e1);
       _vrStatus('🥽 Retrying without strict floor reference…');
-      try { session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures }); }
+      try { session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures }); VR3._refSpaceType = 'local'; }
       catch (e2) {
         _vrStatus('❌ VR session request failed.<br><span style="font-size:14px; opacity:0.85">' + (e2 && e2.message || 'unknown error') + '</span><br><br><span style="font-size:13px; opacity:0.7">Try: Quest browser permission granted? VR mode not blocked?</span>', true);
         return;
@@ -7798,8 +7813,10 @@ renderer.domElement.addEventListener('click', () => {
     try {
       await renderer.xr.setSession(session);
     } catch (e) {
-      _vrStatus('❌ Renderer setup failed: ' + (e && e.message), true);
+      _vrStatus('❌ Renderer setup failed: ' + (e && e.message) + '<br><span style="font-size:13px; opacity:0.85">Bitte Seite neu laden (F5 / Strg+Shift+R) bevor VR erneut versucht wird.</span>', true);
       console.error('[VR3] setSession failed', e);
+      // R13: Korrupten Zustand markieren — nächster enterVR-Aufruf wird sofort mit Reload-Hinweis abgewiesen
+      try { renderer.xr._lastCrash = true; } catch(_){}
       return;
     }
     _vrStatusHide();
@@ -7838,35 +7855,28 @@ renderer.domElement.addEventListener('click', () => {
         console.log('[VR R8] beep played — audio OK');
       } else { console.warn('[VR R8] no audio ctx'); }
     } catch (e) { console.warn('[VR R8] beep failed', e); }
-    // 3D-Banner mitten im Raum (vor Spieler-Position)
-    try {
-      const cv = document.createElement('canvas');
-      cv.width = 1024; cv.height = 256;
-      const cc = cv.getContext('2d');
-      cc.fillStyle = 'rgba(99,149,189,0.95)'; cc.fillRect(0,0,1024,256);
-      cc.fillStyle = '#fff'; cc.font = 'bold 120px Arial';
-      cc.textAlign = 'center'; cc.textBaseline = 'middle';
-      cc.fillText('🥽 VR ACTIVE — R8', 512, 90);
-      cc.font = 'bold 40px Arial';
-      cc.fillText('If you see this, WebXR rendering works.', 512, 180);
-      const tex = new THREE.CanvasTexture(cv);
-      const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthTest: false });
-      const plane = new THREE.Mesh(new THREE.PlaneGeometry(4.0, 1.0), mat);
-      plane.position.set(0, 1.6, -3.0);   // 3m vor Spawn in Augenhöhe
-      plane.renderOrder = 9999;
-      scene.add(plane);
-      console.log('[VR R8] diagnostic banner added at (0, 1.6, -3.0)');
-      // nach 8s entfernen
-      setTimeout(() => { try { scene.remove(plane); mat.dispose(); tex.dispose(); plane.geometry.dispose(); } catch(e){} }, 8000);
-    } catch (e) { console.warn('[VR R8] banner failed', e); }
+    // R13: Diagnostic-Banner entfernt — depthTest:false + renderOrder 9999
+    // hat unter Last das Quest-Stereo-Rendering gestört (überlagerte Bilder).
     // setup controllers + dolly
     vrSetupControllers();
     const d = ensureDolly();
     // === R8: Force Dolly to safe spawn position ===
     if (d) {
-      d.position.set(0, 0, 8);   // R11: 8m vor Kammer (war 4m → war IN Connect-Bereich)
-      d.rotation.y = 0;          // explizit nach -Z (Richtung Kammer) schauend
-      console.log('[VR R11] dolly forced to (0, 0, 8) facing -Z');
+      // R13: refSpace prüfen — bei 'local' (kein floor) Spieler manuell auf 1.6m heben
+      let needHeightFallback = false;
+      try {
+        const rs = renderer.xr.getReferenceSpace();
+        // Three.js r128 hat keinen .type — wir versuchen über trial: wenn keine
+        // local-floor anfragbar war, ist es 'local' und HMD startet bei y=0.
+        needHeightFallback = (VR3._refSpaceType === 'local');
+      } catch (e) {}
+      const spawnY = needHeightFallback ? 1.6 : 0;
+      d.position.set(0, spawnY, 8);
+      d.rotation.y = 0;
+      console.log('[VR R13] dolly spawn (0, ' + spawnY + ', 8), refSpaceType=' + (VR3._refSpaceType||'unknown'));
+      // R13: Force-Spawn die ersten 1.5s — gegen Drift bei verzögertem Head-Tracking-Init
+      VR3._spawnForceUntil = performance.now() + 1500;
+      VR3._spawnX = 0; VR3._spawnY = spawnY; VR3._spawnZ = 8;
     }
     // === R8: Force renderer.setAnimationLoop reregister (manchmal verloren bei setSession) ===
     try {
@@ -7884,13 +7894,15 @@ renderer.domElement.addEventListener('click', () => {
         sprayContainer.rotation.set(0, 0, 0);
       }
     } catch (e) {}
-    // attach wrist tablet to left grip, laser to right
+    // attach wrist tablet to left grip, laser to right (R13: mark _attached, re-poll if grip missing)
     try {
       const w = buildWristTablet();
-      if (xrGrip1 && !w.mesh.parent) xrGrip1.add(w.mesh);
+      if (xrGrip1 && !w.mesh.parent) { xrGrip1.add(w.mesh); w._attached = true; console.log('[VR R13] wrist tablet attached @ sessionstart'); }
+      else if (xrController1 && !w.mesh.parent) { xrController1.add(w.mesh); w._attached = true; console.log('[VR R13] wrist tablet attached to controller @ sessionstart'); }
+      else { console.warn('[VR R13] wrist tablet NOT attached yet — will retry in perFrame'); }
       const laser = buildLaser();
       if (xrController2 && !laser.parent) xrController2.add(laser);
-    } catch (e) {}
+    } catch (e) { console.warn('[VR R13] wrist/laser attach failed', e); }
     // hand visuals
     if (!VR3.handR) VR3.handR = buildHandVisual(0xFFB347);
     if (!VR3.handL) VR3.handL = buildHandVisual(0x9DCDED);
@@ -7916,6 +7928,12 @@ renderer.domElement.addEventListener('click', () => {
   renderer.xr.addEventListener('sessionend', function() {
     VR3.inXR = false;
     VR3.session = null;
+    VR3._spawnForceUntil = 0;
+    // R13: Wrist re-attach Flag zurücksetzen — wird beim nächsten sessionstart wieder gebraucht
+    if (VR3.wrist) VR3.wrist._attached = false;
+    // R13: setAnimationLoop löschen + Desktop-RAF fortsetzen, gegen "stuck"-Crash
+    try { renderer.setAnimationLoop(null); } catch (e) {}
+    try { if (typeof window.animate === 'function') requestAnimationFrame(window.animate); } catch (e) {}
     // restore sprayContainer
     try {
       if (typeof sprayContainer !== 'undefined' && sprayContainer && sprayContainer.userData._origParent) {
@@ -7991,7 +8009,7 @@ renderer.domElement.addEventListener('click', () => {
       const btn = gp.buttons || [];
       const handed = src.handedness;
       const stickX = ax[2] || 0, stickY = ax[3] || 0;
-      // R11: LINKER Stick = Laufen (natürlicher als rechts)
+      // R13: LINKER Stick = Laufen — Speed 2.5 m/s (war 1.8, zu langsam laut Test)
       if (handed === 'left') {
         if (VR3.settings.locomotion !== 'teleport' && (Math.abs(stickX) > 0.15 || Math.abs(stickY) > 0.15)) {
           const cam = renderer.xr.getCamera();
@@ -7999,9 +8017,10 @@ renderer.domElement.addEventListener('click', () => {
           fwd.y = 0; fwd.normalize();
           const right = new THREE.Vector3(1,0,0).applyQuaternion(cam.quaternion);
           right.y = 0; right.normalize();
-          const speed = 1.8;
-          VR3.dolly.position.addScaledVector(fwd, speed * (-stickY) * dt);
-          VR3.dolly.position.addScaledVector(right, speed * stickX * dt);
+          const speed = 2.5;   // R13: war 1.8
+          const safeDt = (typeof dt === 'number' && dt > 0 && dt < 0.1) ? dt : 1/72;
+          VR3.dolly.position.addScaledVector(fwd, speed * (-stickY) * safeDt);
+          VR3.dolly.position.addScaledVector(right, speed * stickX * safeDt);
           if (VR3.settings.comfortVignette !== 'aus') VR3.setVignette(0.20);
         }
       }
@@ -8050,16 +8069,18 @@ renderer.domElement.addEventListener('click', () => {
           else if (!pressed) btn[0]._was = false;
         }
       } else if (handed === 'left') {
-        // left stick = teleport gesture (push and release)
-        const mag = Math.hypot(stickX, stickY);
-        if (mag > 0.5) {
-          VR3.teleportActive = true;
-          const cam = renderer.xr.getCamera();
-          const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
-          fwd.y = Math.max(-0.05, Math.min(0.5, fwd.y + 0.25));
-          updateTeleportArc(cam.getWorldPosition(new THREE.Vector3()), fwd);
-        } else if (VR3.teleportActive) {
-          commitTeleport();
+        // R13: Teleport-Gesture NUR im Teleport-Modus aktiv — sonst kollidiert mit Smooth-Walk
+        if (VR3.settings.locomotion === 'teleport') {
+          const mag = Math.hypot(stickX, stickY);
+          if (mag > 0.5) {
+            VR3.teleportActive = true;
+            const cam = renderer.xr.getCamera();
+            const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
+            fwd.y = Math.max(-0.05, Math.min(0.5, fwd.y + 0.25));
+            updateTeleportArc(cam.getWorldPosition(new THREE.Vector3()), fwd);
+          } else if (VR3.teleportActive) {
+            commitTeleport();
+          }
         }
         // trigger = iBoost cycle
         if (btn[0] && btn[0].pressed && !btn[0]._was) {
@@ -8075,6 +8096,26 @@ renderer.domElement.addEventListener('click', () => {
           btn[1]._was = true;
         } else if (btn[1] && !btn[1].pressed) btn[1]._was = false;
       }
+    }
+    // R13: Wrist-Tablet re-attach falls xrGrip1 erst nach sessionstart kommt
+    try {
+      if (VR3.wrist && !VR3.wrist._attached) {
+        if (xrGrip1) {
+          xrGrip1.add(VR3.wrist.mesh);
+          VR3.wrist._attached = true;
+          console.log('[VR R13] wrist tablet attached to left grip');
+        } else if (xrController1) {
+          xrController1.add(VR3.wrist.mesh);
+          VR3.wrist._attached = true;
+          console.log('[VR R13] wrist tablet attached to left controller (no grip)');
+        }
+      }
+    } catch (e) {}
+    // R13: Force-Spawn die ersten 1.5s nach sessionstart
+    if (VR3._spawnForceUntil && performance.now() < VR3._spawnForceUntil) {
+      VR3.dolly.position.set(VR3._spawnX, VR3._spawnY, VR3._spawnZ);
+    } else if (VR3._spawnForceUntil) {
+      VR3._spawnForceUntil = 0;  // disable
     }
     // pinch right = trigger emulation
     if (VR3.pinchR && !VR3.menuOpen) {
