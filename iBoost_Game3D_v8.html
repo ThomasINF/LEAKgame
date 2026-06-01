@@ -30,9 +30,10 @@
     inset: 0;
     background: linear-gradient(135deg, rgba(14, 22, 32, 0.97), rgba(44, 72, 102, 0.95));
     display: flex; flex-direction: column;
-    align-items: center; justify-content: center;
+    align-items: center; justify-content: flex-start;
     z-index: 100;
     padding: 20px;
+    overflow-y: auto;
   }
   #startScreen .tag {
     color: var(--inf-cyan);
@@ -826,8 +827,17 @@
     <div style="color: var(--inf-cyan); font-size: 56px; font-weight: bold; letter-spacing: 8px; line-height: 1; margin-bottom: 6px;">INFICON</div>
     <h1 style="font-size: 44px; letter-spacing: 6px; margin: 6px 0 2px 0;">LEAK QUEST</h1>
     <h2 style="font-size: 14px; letter-spacing: 3px; color: #C8D2DC; margin: 0 0 14px 0;">3D vacuum leak-hunt prototype</h2>
-    <div style="color: var(--inf-cyan); font-size: 11px; letter-spacing: 2.5px; margin-bottom: 14px; opacity: 0.75;">OWNER · THOMAS GRELLMANN · v7</div>
+    <div style="color: var(--inf-cyan); font-size: 11px; letter-spacing: 2.5px; margin-bottom: 14px; opacity: 0.75;">OWNER · THOMAS GRELLMANN · v8</div>
     <div class="badge">EARLY VISUAL PREVIEW</div>
+    <div style="height: 22px;"></div>
+    <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
+      <button onclick="startGame3D()">▶  Start (Desktop)</button>
+      <button id="vrButton" onclick="enterVR()" style="background: var(--sig-orange); color: #1A2E48; border-color: #FFD580;">🥽  Start VR (Quest)</button>
+      <button onclick="openTrainingMenu3D()" style="background: #3FAFC8; border-color: #9DDCEE;">🎓  Training</button>
+        <button onclick="skipTutorial3D()" style="background: rgba(124,255,124,0.12); color: #B7E9C2; border: 1px solid rgba(124,255,124,0.50); padding: 10px 22px; border-radius: 6px; cursor: pointer; letter-spacing: 2px; font-size: 13px;">⏩ Skip tutorial</button>
+        <button onclick="(function(){ console.log('[startscreen] Highscore clicked'); if (typeof showHighscores3D === 'function') showHighscores3D(); else console.error('showHighscores3D not defined'); })()" style="background: rgba(99,149,189,0.18); color: var(--inf-cyan); border: 1px solid rgba(99,149,189,0.55); padding: 10px 22px; border-radius: 6px; cursor: pointer; letter-spacing: 2px; font-size: 13px;">🏆 High scores</button>
+        <button onclick="(function(){ console.log('[startscreen] Settings clicked'); if (typeof openSettings3D === 'function') openSettings3D(); else console.error('openSettings3D not defined'); })()" style="background: rgba(99,149,189,0.18); color: var(--inf-cyan); border: 1px solid rgba(99,149,189,0.55); padding: 10px 22px; border-radius: 6px; cursor: pointer; letter-spacing: 2px; font-size: 13px;">⚙ Settings</button>
+    </div>
     <div class="info-box">
       <p>Walk around a vacuum process chamber holding the <b>SMART-Spray</b>. Hunt down helium leaks at flanges and hose connections. The <b>UL3000 Fab</b> leak detector measures and shows the live leak rate.</p>
       <p style="margin-top:14px;"><b>Controls</b></p>
@@ -856,14 +866,7 @@
         🎓 Pro mode — all iBoost levels unlocked
       </label>
     </div>
-    <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
-      <button onclick="startGame3D()">▶  Start (Desktop)</button>
-      <button id="vrButton" onclick="enterVR()" style="background: var(--sig-orange); color: #1A2E48; border-color: #FFD580;">🥽  Start VR (Quest)</button>
-      <button onclick="openTrainingMenu3D()" style="background: #3FAFC8; border-color: #9DDCEE;">🎓  Training</button>
-        <button onclick="skipTutorial3D()" style="background: rgba(124,255,124,0.12); color: #B7E9C2; border: 1px solid rgba(124,255,124,0.50); padding: 10px 22px; border-radius: 6px; cursor: pointer; letter-spacing: 2px; font-size: 13px;">⏩ Skip tutorial</button>
-        <button onclick="(function(){ console.log('[startscreen] Highscore clicked'); if (typeof showHighscores3D === 'function') showHighscores3D(); else console.error('showHighscores3D not defined'); })()" style="background: rgba(99,149,189,0.18); color: var(--inf-cyan); border: 1px solid rgba(99,149,189,0.55); padding: 10px 22px; border-radius: 6px; cursor: pointer; letter-spacing: 2px; font-size: 13px;">🏆 High scores</button>
-        <button onclick="(function(){ console.log('[startscreen] Settings clicked'); if (typeof openSettings3D === 'function') openSettings3D(); else console.error('openSettings3D not defined'); })()" style="background: rgba(99,149,189,0.18); color: var(--inf-cyan); border: 1px solid rgba(99,149,189,0.55); padding: 10px 22px; border-radius: 6px; cursor: pointer; letter-spacing: 2px; font-size: 13px;">⚙ Settings</button>
-    </div>
+    
     <p class="note">Three.js loads from CDN — first load may take a moment.<br>
        Fullscreen: <kbd>F11</kbd>  ·  VR works in Quest browser or PC + SteamVR</p>
   </div>
@@ -7687,7 +7690,7 @@ renderer.domElement.addEventListener('click', () => {
       }
     } catch (e) {}
 
-    const optionalFeatures = ['local-floor','bounded-floor','hand-tracking','layers'];
+    const optionalFeatures = ['local-floor','bounded-floor','hand-tracking'];   // v8 R9: 'layers' raus — inkompatibel mit Three.js r128 baseLayer
     if (VR3.isQuest) {
       optionalFeatures.push('high-refresh-rate', 'high-fixed-foveation-level');
     }
