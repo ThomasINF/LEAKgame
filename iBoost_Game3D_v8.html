@@ -7634,15 +7634,39 @@ renderer.domElement.addEventListener('click', () => {
   // 11. enterVR — robust Quest-aware
   // ---------------------------------------------------------------------
   const _origEnterVR = window.enterVR;
+  // v8 R7: visible on-screen status overlay
+  window._vrStatus = function(text, isError) {
+    let el = document.getElementById('vrStatusOverlay');
+    if (!el) {
+      el = document.createElement('div');
+      el.id = 'vrStatusOverlay';
+      el.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); padding:24px 36px; background:rgba(14,22,32,0.96); border:3px solid #6395BD; border-radius:14px; color:#fff; font:bold 18px Arial; letter-spacing:1px; z-index:99999; text-align:center; max-width:80vw; line-height:1.5; box-shadow:0 8px 40px rgba(0,0,0,0.7);';
+      document.body.appendChild(el);
+    }
+    el.innerHTML = text;
+    el.style.borderColor = isError ? '#D9534F' : '#6395BD';
+    el.style.display = 'block';
+    console.log('[VR] ' + text.replace(/<[^>]+>/g, ' '));
+  };
+  window._vrStatusHide = function() {
+    const el = document.getElementById('vrStatusOverlay');
+    if (el) el.style.display = 'none';
+  };
   window.enterVR = async function() {
+    window._vrStatus('🥽 Initializing VR…');
     if (!navigator.xr) {
-      alert('WebXR ist in diesem Browser nicht verfügbar.\\nQuest-3-Test braucht den Meta-Browser.');
+      window._vrStatus('❌ WebXR not available in this browser.<br><span style="font-size:14px; opacity:0.8">On Quest 3: use the Meta-Browser. On PC: Chrome / Edge with WebXR.</span>', true);
       return;
     }
+    window._vrStatus('🥽 Checking VR support…');
     let supported = false;
-    try { supported = await navigator.xr.isSessionSupported('immersive-vr'); } catch (e) {}
+    try { supported = await navigator.xr.isSessionSupported('immersive-vr'); }
+    catch (e) {
+      window._vrStatus('❌ VR support check failed: ' + (e && e.message), true);
+      return;
+    }
     if (!supported) {
-      alert('Immersive VR nicht unterstützt.\\nQuest-3-Test braucht HTTPS oder http://<PC-IP>:8000/.');
+      window._vrStatus('❌ Immersive VR not supported.<br><span style="font-size:14px; opacity:0.8">Needs HTTPS and a WebXR-capable browser.</span>', true);
       return;
     }
     // pre-warm audio (Quest verbietet AudioContext-Start IN-Session)
@@ -7667,16 +7691,28 @@ renderer.domElement.addEventListener('click', () => {
     if (VR3.isQuest) {
       optionalFeatures.push('high-refresh-rate', 'high-fixed-foveation-level');
     }
+    _vrStatus('🥽 Requesting VR session…');
     let session = null;
     try {
       session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures, requiredFeatures: ['local-floor'] });
     } catch (e1) {
+      console.warn('[VR] requiredFeatures failed:', e1);
+      _vrStatus('🥽 Retrying without strict floor reference…');
       try { session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures }); }
-      catch (e2) { alert('VR-Session konnte nicht gestartet werden: ' + (e2 && e2.message)); return; }
+      catch (e2) {
+        _vrStatus('❌ VR session request failed.<br><span style="font-size:14px; opacity:0.85">' + (e2 && e2.message || 'unknown error') + '</span><br><br><span style="font-size:13px; opacity:0.7">Try: Quest browser permission granted? VR mode not blocked?</span>', true);
+        return;
+      }
     }
+    _vrStatus('🥽 Setting up renderer…');
     try {
       await renderer.xr.setSession(session);
-    } catch (e) { console.error('[VR3] setSession failed', e); return; }
+    } catch (e) {
+      _vrStatus('❌ Renderer setup failed: ' + (e && e.message), true);
+      console.error('[VR3] setSession failed', e);
+      return;
+    }
+    _vrStatusHide();
 
     // Quest-3-specials
     try {
@@ -7696,11 +7732,58 @@ renderer.domElement.addEventListener('click', () => {
   // 12. Session lifecycle hooks
   // ---------------------------------------------------------------------
   renderer.xr.addEventListener('sessionstart', function() {
+    console.log('[VR R8] sessionstart fired');
     VR3.inXR = true;
     VR3.session = renderer.xr.getSession();
+    // === R8 DIAGNOSTIC: hörbarer Beep + 3D-Banner ===
+    try {
+      const ac = (VR3.audioCtx || (typeof audio3D === 'function' && audio3D()));
+      if (ac) {
+        const o = ac.createOscillator(); const g = ac.createGain();
+        o.frequency.value = 880; g.gain.value = 0.30;
+        o.connect(g); g.connect(ac.destination);
+        o.start(); o.frequency.linearRampToValueAtTime(1320, ac.currentTime + 0.30);
+        g.gain.linearRampToValueAtTime(0.0001, ac.currentTime + 0.40);
+        o.stop(ac.currentTime + 0.45);
+        console.log('[VR R8] beep played — audio OK');
+      } else { console.warn('[VR R8] no audio ctx'); }
+    } catch (e) { console.warn('[VR R8] beep failed', e); }
+    // 3D-Banner mitten im Raum (vor Spieler-Position)
+    try {
+      const cv = document.createElement('canvas');
+      cv.width = 1024; cv.height = 256;
+      const cc = cv.getContext('2d');
+      cc.fillStyle = 'rgba(99,149,189,0.95)'; cc.fillRect(0,0,1024,256);
+      cc.fillStyle = '#fff'; cc.font = 'bold 120px Arial';
+      cc.textAlign = 'center'; cc.textBaseline = 'middle';
+      cc.fillText('🥽 VR ACTIVE — R8', 512, 90);
+      cc.font = 'bold 40px Arial';
+      cc.fillText('If you see this, WebXR rendering works.', 512, 180);
+      const tex = new THREE.CanvasTexture(cv);
+      const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthTest: false });
+      const plane = new THREE.Mesh(new THREE.PlaneGeometry(4.0, 1.0), mat);
+      plane.position.set(0, 1.6, -3.0);   // 3m vor Spawn in Augenhöhe
+      plane.renderOrder = 9999;
+      scene.add(plane);
+      console.log('[VR R8] diagnostic banner added at (0, 1.6, -3.0)');
+      // nach 8s entfernen
+      setTimeout(() => { try { scene.remove(plane); mat.dispose(); tex.dispose(); plane.geometry.dispose(); } catch(e){} }, 8000);
+    } catch (e) { console.warn('[VR R8] banner failed', e); }
     // setup controllers + dolly
     vrSetupControllers();
     const d = ensureDolly();
+    // === R8: Force Dolly to safe spawn position ===
+    if (d) {
+      d.position.set(0, 0, 4);   // 4m vor Kammer-Mitte, Boden
+      console.log('[VR R8] dolly forced to (0, 0, 4)');
+    }
+    // === R8: Force renderer.setAnimationLoop reregister (manchmal verloren bei setSession) ===
+    try {
+      if (typeof window.animate === 'function') {
+        renderer.setAnimationLoop(window.animate);
+        console.log('[VR R8] setAnimationLoop re-registered');
+      }
+    } catch (e) { console.warn('[VR R8] setAnimationLoop failed', e); }
     // re-parent sprayContainer to right controller
     try {
       if (typeof sprayContainer !== 'undefined' && sprayContainer && xrController2) {
