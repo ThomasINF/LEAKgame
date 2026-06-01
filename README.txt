@@ -1,68 +1,93 @@
-INFICON LEAK QUEST — Quest/VR Upload Bundle
-============================================
-Stand: 2026-06-01 / Quest Edition + v8 R14
+INFICON LEAK QUEST · VR-TEST-MATRIX
+====================================
+Stand: 2026-06-01 Abend
 
-Diese 9 Dateien sind alles, was zum Hochladen auf GitHub Pages /
-Netlify / einen lokalen HTTP-Server gebraucht wird.
-
-  index.html                5.4 KB   Landing-Page (4 Modi)
-  iBoost_Game3D_v8.html     415 KB   Hauptspiel Desktop (Browser, Maus+WASD)
-  iBoost_Game3D_Quest.html  432 KB   *** EMPFOHLEN für Meta Quest 3 ***
-  iBoost_Game3D_VR.html     390 KB   Experimenteller WebXR-Versuch
-  leakquest_campaign.html   419 KB   3-Missionen-Story-Modus
-  smartspray.glb           3.3 MB
-  smartspray_data.js       4.3 MB
-  ul3000_fab.glb           895 KB
-  ul3000_fab_data.js       1.2 MB
-
-Gesamt ca. 11 MB.
+ZIEL: Funktionierendes VR-Erlebnis auf Meta Quest 3 finden.
+Vorheriges Problem: Bild flackert / schwarze Balken sobald linker
+Stick zum Laufen genutzt wird → Foveated-Rendering-Artefakt.
 
 
-EMPFOHLEN auf der Quest 3:
-==========================
-Die Quest-Edition (grüne Karte auf der Landing-Page) ist die zuverlässige
-Wahl. Sie nutzt KEIN WebXR — das Spiel läuft im normalen Quest-Browser
-als 2D-Fläche (so wie ein großer Monitor), und die Bedienung erfolgt
-über On-Screen-Joysticks, die du mit dem Controller-Pointer "anpacken"
-kannst:
+TESTANLEITUNG MORGEN FRÜH (in dieser Reihenfolge):
+==================================================
 
-  Linker Joystick (unten links)   → laufen / strafen
-  Rechter Joystick (unten rechts) → umsehen (yaw + pitch)
-  SPRAY-Button                    → SmartSpray auslösen
-  HINT-Button (oben mitte)        → Lecks 5s anzeigen
-  iBOOST-Button (oben mitte)      → Stufe weiterschalten
-  PAUSE-Button (oben mitte)       → Esc
+Schritt 1: 🔬 Diagnose v3 (5 Sekunden Test)
+-------------------------------------------
+Auf der Landing-Page: "Test v3 — Foveation-Fix" anklicken.
+START → linker Stick bedienen, schauen ob sauber läuft.
 
-Beide Quest-Controller können gleichzeitig gehalten werden — der eine
-zeigt auf den linken Joystick, der andere auf den rechten. So spielt
-es sich wie ein Mobile-Game mit zwei Daumen, nur mit Laser-Pointern.
+  ✅ Wenn läuft → weiter zu Schritt 2 (Spiel v2)
+  ❌ Wenn flackert → weiter zu Schritt 3
 
-Falls du eine Bluetooth-Tastatur an die Quest gekoppelt hast, kannst
-du auch normal mit WASD + Maus spielen.
+Schritt 2: 🛠️ Spiel mit v2-Fixes (kompletter Test)
+--------------------------------------------------
+"Spiel — VR v2" anklicken. Hat alle Diagnose-v3-Fixes drin plus das
+vollständige Spiel (Lecks, Score, Wrist-Tablet, alles).
+
+Schritt 3: 🔬 Diagnose v4 — Teleport-only
+-----------------------------------------
+Falls Smooth-Walking das Problem war, ist Teleport-only der Workaround.
+Linker Stick = Teleport-Bogen, loslassen = Sprung an die Stelle.
+
+  ✅ Wenn läuft → ich baue dir morgen ein Spiel mit Teleport-only
+  ❌ Wenn auch flackert → Schritt 4
+
+Schritt 4: 🚀 Diagnose v5 — Three.js r160
+------------------------------------------
+3 Jahre neuere Bibliothek mit vielen Quest-Bugfixes.
+
+  ✅ Wenn läuft → "Spiel — VR r160" testen, das ist der Goldstandard
+  ❌ Wenn auch flackert → Schritt 5
+
+Schritt 5: 🔬 Diagnose v6 — refSpace-Offset
+-------------------------------------------
+Alternative Locomotion-Methode (XRRigidTransform statt dolly.position).
+Echter WebXR-Standard-Pattern.
+
+  ✅ Wenn läuft → ich baue Spiel-Version damit
+  ❌ Wenn auch flackert → ALLE WebXR-Pfade gescheitert → Schritt 6
+
+Schritt 6: Wolvic-Browser
+-------------------------
+Im Meta Store nach "Wolvic" suchen, kostenlos installieren.
+Wolvic ist eine alternative WebXR-Implementierung (Open Source).
+Quest-Browser hat dokumentierte Bugs in Horizon OS v83+.
+In Wolvic die Landing-Page öffnen und Tests v3/v4/v5/v6 NOCHMAL probieren.
 
 
-VR Edition v1 (experimentell, NICHT empfohlen):
-===============================================
-Das ist der echte WebXR-Stereo-Versuch. Auf manchen Builds funktioniert
-das stabil, auf anderen kommt es zu Rendering-Glitches (überlagerte
-Bilder, Flackern, keine Bewegung). Stand 1.6. eher instabil — die
-Quest Edition oben ist der zuverlässige Weg.
-
-
-Hochladen:
-==========
-- GitHub Pages: alle 9 Dateien ins Repo-Root pushen, Pages-Branch auf main.
-- Netlify Drop: vr_upload-Ordner als ZIP draggen.
-- Lokaler Test: `python -m http.server 8000` im vr_upload-Ordner, dann
-  auf der Quest http://<PC-IP>:8000/ im Meta-Browser öffnen.
-
-
-Verifikation nach dem Upload:
+DATEIEN IM BUNDLE (15 Stück):
 =============================
-1. Landing-Page öffnen → 4 Karten sichtbar
-2. "🎮 Quest Edition" anklicken
-3. Auf dem Startbildschirm muss das GRÜNE Badge stehen:
-   "🎮 QUEST EDITION · 2026-06-01"
-4. Auf "🎮 Start Quest" klicken → Joysticks erscheinen unten links + rechts
-5. Mit dem Quest-Controller-Pointer auf den linken Joystick zeigen,
-   ziehen → du läufst.
+  index.html                       — Landing-Page mit Test-Matrix
+
+  Spielbare Versionen:
+  iBoost_Game3D_v8.html             Desktop (Maus+WASD)
+  iBoost_Game3D_Quest.html          Quest 2D mit On-Screen-Joysticks
+  iBoost_Game3D_VR.html             VR v1 (alt, Referenz)
+  iBoost_Game3D_VR_v2.html          VR v2 mit Foveation-Fix
+  iBoost_Game3D_VR_r160.html        VR mit Three.js r160
+  leakquest_campaign.html           Campaign-Modus
+
+  Diagnose-Tests (10 KB jeweils):
+  vr_minimal_test.html              v1 (alt)
+  vr_minimal_test_v2.html           v2 (schwarz, alt)
+  vr_minimal_test_v3.html           v3 Foveation-Fix
+  vr_minimal_test_v4.html           v4 Teleport-only
+  vr_minimal_test_v5.html           v5 Three.js r160
+  vr_minimal_test_v6.html           v6 refSpace-Offset
+
+  Assets:
+  smartspray.glb + smartspray_data.js
+  ul3000_fab.glb + ul3000_fab_data.js
+
+Gesamt ca. 11.5 MB.
+
+
+WICHTIG:
+========
+• Quest-Browser hat einen dokumentierten Schwarzbild-Bug in Horizon OS v83
+  (Stand Januar 2026). Falls deine Quest dieses OS hat, könnte das die
+  Ursache sein. Wolvic umgeht das.
+
+• Bei jedem Test in der Konsole (Quest-Browser → Menü → DevTools)
+  nach Logs mit "[v3]", "[v4]" usw. schauen — die zeigen genau wo's klemmt.
+
+• Cache-Bust: ?v=irgendwas an die URL anhängen falls alte Version geladen wird.

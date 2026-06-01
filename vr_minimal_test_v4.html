@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VR Min v4 · Teleport-only Locomotion</title>
+<style>
+  html, body { margin:0; padding:0; height:100%; background:#000; color:#fff; font-family:Arial; overflow:hidden; }
+  #info { position:fixed; top:0; left:0; right:0; background:rgba(11,22,38,0.92); padding:12px 16px; z-index:10; font-size:14px; }
+  #info h1 { margin:0 0 6px 0; color:#9DDCEE; font-size:18px; letter-spacing:2px; }
+  #vrBtn { display:block; margin:14px auto; padding:14px 30px; background:#9DDCEE; color:#0E1620;
+           border:3px solid #C8EBF5; border-radius:8px; font-size:18px; font-weight:bold; cursor:pointer; }
+  #log { position:fixed; bottom:0; left:0; right:0; background:rgba(0,0,0,0.85); color:#9DDCEE;
+         font-family:monospace; font-size:12px; padding:10px; max-height:25vh; overflow-y:auto;
+         border-top:2px solid #6395BD; z-index:10; }
+  .ok{color:#7CFF7C} .err{color:#FF5C5C} .warn{color:#FFB347}
+</style></head>
+<body>
+<div id="info">
+  <h1>🔬 VR MIN v4 — Teleport-only (KEIN Smooth-Walk)</h1>
+  <div>Theorie: Smooth-Walk-Updates pro Frame fragmentieren das Stereo-Rendering. v4 nutzt nur diskrete Teleport-Sprünge: linker Stick nach vorne drücken → Sprung an die Position.</div>
+  <div><b>Bedienung:</b> linker Stick → Teleport-Arc, loslassen → Sprung. Rechter Stick X → Snap-Turn.</div>
+  <button id="vrBtn" onclick="enterVR()">START v4</button>
+</div>
+<div id="log">[v4]</div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const logEl=document.getElementById('log');
+function log(m,c){const t=new Date().toTimeString().slice(0,8);
+  logEl.innerHTML+='<div class="'+(c||'')+'">['+t+'] '+m+'</div>';logEl.scrollTop=logEl.scrollHeight;
+  console.log('[v4]',m);}
+log('Three.js '+THREE.REVISION);
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x14263B);
+const camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.05,100);
+const dolly=new THREE.Group(); dolly.name='dolly'; scene.add(dolly); dolly.add(camera); dolly.position.set(0,0,3);
+
+const renderer=new THREE.WebGLRenderer({antialias:false});
+renderer.setSize(innerWidth,innerHeight);
+renderer.xr.enabled=true;
+document.body.appendChild(renderer.domElement);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x404060, 0.9));
+const sun=new THREE.DirectionalLight(0xffffff,0.7); sun.position.set(2,4,3); scene.add(sun);
+
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,30),
+  new THREE.MeshStandardMaterial({color:0x6395BD, roughness:0.85}));
+floor.rotation.x=-Math.PI/2; scene.add(floor);
+
+const grid=new THREE.GridHelper(30,30,0xFFE298,0xE8862A); grid.position.y=0.01; scene.add(grid);
+
+// Visible markers + targets to teleport to
+const box=new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5),
+  new THREE.MeshStandardMaterial({color:0x7CFF7C, emissive:0x114411}));
+box.position.set(0,1.0,-4); scene.add(box);
+
+const tgt1=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.3,0.05,32),
+  new THREE.MeshStandardMaterial({color:0xFFB347, emissive:0x442200}));
+tgt1.position.set(5,0.03,-3); scene.add(tgt1);
+const tgt2=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.3,0.05,32),
+  new THREE.MeshStandardMaterial({color:0xFFB347, emissive:0x442200}));
+tgt2.position.set(-5,0.03,-3); scene.add(tgt2);
+const tgt3=new THREE.Mesh(new THREE.CylinderGeometry(0.3,0.3,0.05,32),
+  new THREE.MeshStandardMaterial({color:0xFFB347, emissive:0x442200}));
+tgt3.position.set(0,0.03,-7); scene.add(tgt3);
+
+// Teleport arc line
+const arcGeo=new THREE.BufferGeometry();
+const arcPos=new Float32Array(30*3);
+arcGeo.setAttribute('position',new THREE.BufferAttribute(arcPos,3));
+const arcMat=new THREE.LineBasicMaterial({color:0x7CFF7C});
+const arcLine=new THREE.Line(arcGeo, arcMat);
+arcLine.visible=false;
+scene.add(arcLine);
+
+// Landing ring
+const ring=new THREE.Mesh(new THREE.TorusGeometry(0.35,0.06,8,24),
+  new THREE.MeshBasicMaterial({color:0x7CFF7C}));
+ring.rotation.x=-Math.PI/2;
+ring.visible=false;
+scene.add(ring);
+
+log('Scene + teleport targets ready', 'ok');
+
+let inVR=false, c1=null, c2=null, snapArmed=true;
+let telActive=false, telTarget=new THREE.Vector3();
+
+async function enterVR(){
+  log('enterVR');
+  if(!navigator.xr){log('no xr','err');return;}
+  let sup=false; try{sup=await navigator.xr.isSessionSupported('immersive-vr');}catch(e){}
+  if(!sup){log('no immersive-vr','err');return;}
+  let s;
+  try{s=await navigator.xr.requestSession('immersive-vr',{requiredFeatures:['local-floor']});log('session OK','ok');}
+  catch(e){try{s=await navigator.xr.requestSession('immersive-vr');log('local fallback','warn');}catch(e2){log('FAIL','err');return;}}
+  try{await renderer.xr.setSession(s);log('setSession OK','ok');}
+  catch(e){log('setSession FAIL','err');return;}
+  document.getElementById('info').style.display='none';
+}
+
+renderer.xr.addEventListener('sessionstart',()=>{
+  log('>>> sessionstart','ok');
+  inVR=true;
+  try{renderer.xr.setFoveation(0);}catch(e){}
+  dolly.position.set(0,0,3); dolly.rotation.set(0,0,0);
+  c1=renderer.xr.getController(0); c2=renderer.xr.getController(1);
+  dolly.add(c1); dolly.add(c2);
+  const s1=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12),new THREE.MeshStandardMaterial({color:0x9DDCEE}));
+  s1.position.z=-0.06; c1.add(s1);
+  const s2=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12),new THREE.MeshStandardMaterial({color:0xFFB347}));
+  s2.position.z=-0.06; c2.add(s2);
+});
+renderer.xr.addEventListener('sessionend',()=>{inVR=false;document.getElementById('info').style.display='';});
+
+function updateArc(originPos, dirFwd){
+  // Parabolic arc — simple ballistic
+  const points=[];
+  const v0=6.0;
+  const vy0=Math.max(0.15, dirFwd.y+0.5) * v0;
+  const vxz=v0;
+  const gxz=new THREE.Vector3(dirFwd.x,0,dirFwd.z).normalize().multiplyScalar(vxz);
+  for(let i=0;i<30;i++){
+    const t=i*0.05;
+    const x=originPos.x + gxz.x*t;
+    const z=originPos.z + gxz.z*t;
+    const y=originPos.y + vy0*t - 0.5*9.8*t*t;
+    points.push(x, Math.max(0.01,y), z);
+    if(y<0.01 && i>3){
+      telTarget.set(x,0,z);
+      // pad with last point
+      for(let j=i+1;j<30;j++){ points.push(x,0.01,z); }
+      break;
+    }
+  }
+  arcPos.set(points);
+  arcGeo.attributes.position.needsUpdate=true;
+  arcLine.visible=true;
+  ring.position.set(telTarget.x, 0.02, telTarget.z);
+  ring.visible=true;
+}
+function commitTeleport(){
+  // Dolly jumps in ONE atomic update — no continuous animation
+  const cam=renderer.xr.getCamera();
+  const camPos=new THREE.Vector3();
+  cam.getWorldPosition(camPos);
+  // delta to bring camera to telTarget at same height
+  const delta=new THREE.Vector3().subVectors(telTarget, camPos);
+  delta.y=0;
+  dolly.position.add(delta);
+  arcLine.visible=false;
+  ring.visible=false;
+  telActive=false;
+}
+
+let lastTs=performance.now();
+function frame(){
+  const now=performance.now(); const dt=Math.min(0.05,(now-lastTs)/1000); lastTs=now;
+  box.rotation.y+=dt*0.8;
+  if(inVR){
+    const sess=renderer.xr.getSession();
+    if(sess) for(const src of sess.inputSources){
+      const gp=src.gamepad; if(!gp||!gp.axes)continue;
+      const sx=gp.axes[2]||0, sy=gp.axes[3]||0, h=src.handedness;
+      if(h==='left'){
+        const mag=Math.hypot(sx,sy);
+        if(mag>0.3){
+          telActive=true;
+          const cam=renderer.xr.getCamera();
+          const q=new THREE.Quaternion(); cam.getWorldQuaternion(q);
+          const fwd=new THREE.Vector3(0,0,-1).applyQuaternion(q);
+          fwd.y=Math.max(0.15, fwd.y+0.3);
+          const camPos=new THREE.Vector3(); cam.getWorldPosition(camPos);
+          updateArc(camPos, fwd);
+        } else if(telActive){
+          commitTeleport();
+        }
+      }
+      if(h==='right'){
+        if(Math.abs(sx)>0.7 && snapArmed){dolly.rotation.y+=(sx>0?-1:1)*30*Math.PI/180;snapArmed=false;}
+        else if(Math.abs(sx)<0.3) snapArmed=true;
+      }
+    }
+  }
+  renderer.render(scene,camera);
+}
+renderer.setAnimationLoop(frame);
+log('loop start','ok');
+window.enterVR=enterVR;
+</script></body></html>

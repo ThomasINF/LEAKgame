@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VR Min v5 · Three.js r160 (modern)</title>
+<style>
+  html, body { margin:0; padding:0; height:100%; background:#000; color:#fff; font-family:Arial; overflow:hidden; }
+  #info { position:fixed; top:0; left:0; right:0; background:rgba(11,22,38,0.92); padding:12px 16px; z-index:10; font-size:14px; }
+  #info h1 { margin:0 0 6px 0; color:#A6A6E6; font-size:18px; letter-spacing:2px; }
+  #vrBtn { display:block; margin:14px auto; padding:14px 30px; background:#A6A6E6; color:#0E1620;
+           border:3px solid #C8CAF2; border-radius:8px; font-size:18px; font-weight:bold; cursor:pointer; }
+  #log { position:fixed; bottom:0; left:0; right:0; background:rgba(0,0,0,0.85); color:#A6A6E6;
+         font-family:monospace; font-size:12px; padding:10px; max-height:25vh; overflow-y:auto;
+         border-top:2px solid #6395BD; z-index:10; }
+  .ok{color:#7CFF7C} .err{color:#FF5C5C} .warn{color:#FFB347}
+</style></head>
+<body>
+<div id="info">
+  <h1>🔬 VR MIN v5 — Three.js r160 (modern Lib)</h1>
+  <div>r160 ist 3 Jahre neuer als r128 — viele Quest-WebXR-Fixes integriert. Falls v3/v4 nicht halfen, ist das der Library-Upgrade-Pfad.</div>
+  <button id="vrBtn" onclick="enterVR()">START v5</button>
+</div>
+<div id="log">[v5]</div>
+
+<!-- Three.js r160 via ES-Modules from jsdelivr -->
+<script type="importmap">
+{
+  "imports": {
+    "three": "https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js"
+  }
+}
+</script>
+<script type="module">
+import * as THREE from 'three';
+
+const logEl=document.getElementById('log');
+function log(m,c){const t=new Date().toTimeString().slice(0,8);
+  logEl.innerHTML+='<div class="'+(c||'')+'">['+t+'] '+m+'</div>';logEl.scrollTop=logEl.scrollHeight;
+  console.log('[v5]',m);}
+log('Three.js '+THREE.REVISION+' (sollte ~160 sein)');
+
+const scene=new THREE.Scene();
+scene.background=new THREE.Color(0x14263B);
+const camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.05,100);
+const dolly=new THREE.Group(); dolly.name='dolly'; scene.add(dolly); dolly.add(camera); dolly.position.set(0,0,3);
+
+const renderer=new THREE.WebGLRenderer({antialias:true});
+renderer.setSize(innerWidth,innerHeight);
+renderer.xr.enabled=true;
+document.body.appendChild(renderer.domElement);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+
+scene.add(new THREE.HemisphereLight(0xffffff, 0x404060, 0.9));
+const sun=new THREE.DirectionalLight(0xffffff,0.7); sun.position.set(2,4,3); scene.add(sun);
+
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,30),
+  new THREE.MeshStandardMaterial({color:0x6395BD, roughness:0.85}));
+floor.rotation.x=-Math.PI/2; scene.add(floor);
+const grid=new THREE.GridHelper(30,30,0xFFE298,0xE8862A); grid.position.y=0.01; scene.add(grid);
+
+const box=new THREE.Mesh(new THREE.BoxGeometry(0.5,0.5,0.5),
+  new THREE.MeshStandardMaterial({color:0x7CFF7C, emissive:0x114411}));
+box.position.set(0,1.0,-2); scene.add(box);
+const pR=new THREE.Mesh(new THREE.CylinderGeometry(0.15,0.15,2.0,12),
+  new THREE.MeshStandardMaterial({color:0xFF5C5C}));
+pR.position.set(3,1.0,0); scene.add(pR);
+const pL=new THREE.Mesh(new THREE.CylinderGeometry(0.15,0.15,2.0,12),
+  new THREE.MeshStandardMaterial({color:0x9DDCEE}));
+pL.position.set(-3,1.0,0); scene.add(pL);
+
+log('Scene ready (r160, with AA + lights)', 'ok');
+
+let inVR=false, c1=null, c2=null, snapArmed=true;
+
+window.enterVR=async function(){
+  log('enterVR');
+  if(!navigator.xr){log('no xr','err');return;}
+  let sup=false; try{sup=await navigator.xr.isSessionSupported('immersive-vr');}catch(e){}
+  if(!sup){log('no immersive-vr','err');return;}
+  let s;
+  try{s=await navigator.xr.requestSession('immersive-vr',{requiredFeatures:['local-floor']});log('session OK','ok');}
+  catch(e){try{s=await navigator.xr.requestSession('immersive-vr');log('local fallback','warn');}catch(e2){log('FAIL','err');return;}}
+  try{await renderer.xr.setSession(s);log('setSession OK','ok');}
+  catch(e){log('setSession FAIL: '+e.message,'err');return;}
+  document.getElementById('info').style.display='none';
+};
+
+renderer.xr.addEventListener('sessionstart',()=>{
+  log('>>> sessionstart','ok');
+  inVR=true;
+  try{renderer.xr.setFoveation(0);}catch(e){}
+  dolly.position.set(0,0,3); dolly.rotation.set(0,0,0);
+  c1=renderer.xr.getController(0); c2=renderer.xr.getController(1);
+  dolly.add(c1); dolly.add(c2);
+  const s1=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12),new THREE.MeshStandardMaterial({color:0x9DDCEE}));
+  s1.position.z=-0.06; c1.add(s1);
+  const s2=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12),new THREE.MeshStandardMaterial({color:0xFFB347}));
+  s2.position.z=-0.06; c2.add(s2);
+});
+renderer.xr.addEventListener('sessionend',()=>{inVR=false;document.getElementById('info').style.display='';});
+
+let lastTs=performance.now();
+function frame(){
+  const now=performance.now(); const dt=Math.min(0.05,(now-lastTs)/1000); lastTs=now;
+  box.rotation.y+=dt*0.8;
+  if(inVR){
+    const sess=renderer.xr.getSession();
+    if(sess) for(const src of sess.inputSources){
+      const gp=src.gamepad; if(!gp||!gp.axes)continue;
+      const sx=gp.axes[2]||0, sy=gp.axes[3]||0, h=src.handedness;
+      if(h==='left' && (Math.abs(sx)>0.15||Math.abs(sy)>0.15)){
+        const cam=renderer.xr.getCamera(); const q=new THREE.Quaternion(); cam.getWorldQuaternion(q);
+        const fwd=new THREE.Vector3(0,0,-1).applyQuaternion(q); fwd.y=0;
+        if(fwd.lengthSq()>0.001) fwd.normalize();
+        const rt=new THREE.Vector3(1,0,0).applyQuaternion(q); rt.y=0;
+        if(rt.lengthSq()>0.001) rt.normalize();
+        dolly.position.addScaledVector(fwd, 1.5*(-sy)*dt);
+        dolly.position.addScaledVector(rt, 1.5*sx*dt);
+      }
+      if(h==='right'){
+        if(Math.abs(sx)>0.7 && snapArmed){dolly.rotation.y+=(sx>0?-1:1)*30*Math.PI/180;snapArmed=false;}
+        else if(Math.abs(sx)<0.3) snapArmed=true;
+      }
+    }
+  }
+  renderer.render(scene,camera);
+}
+renderer.setAnimationLoop(frame);
+log('loop start','ok');
+</script>
+</body></html>
