@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VR Minimal Test · Quest 3 Diagnose</title>
+<style>
+  html, body { margin:0; padding:0; height:100%; background:#000; color:#fff; font-family:Arial, sans-serif; overflow:hidden; }
+  #info {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(11,22,38,0.92);
+    padding: 12px 16px;
+    z-index: 10;
+    font-size: 14px;
+    line-height: 1.5;
+    box-shadow: 0 2px 12px rgba(0,0,0,0.6);
+    max-height: 50vh;
+    overflow-y: auto;
+  }
+  #info h1 { margin: 0 0 6px 0; color: #7CFF7C; font-size: 18px; letter-spacing: 2px; }
+  #info .v { color: #FFE298; font-weight: bold; }
+  #vrBtn {
+    display: block;
+    margin: 14px auto;
+    padding: 14px 30px;
+    background: #7CFF7C;
+    color: #0E1620;
+    border: 3px solid #BFFFBF;
+    border-radius: 8px;
+    font-size: 18px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    cursor: pointer;
+    box-shadow: 0 4px 14px rgba(124,255,124,0.4);
+  }
+  #vrBtn:hover { background: #BFFFBF; }
+  #log {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.85);
+    color: #9DDCEE;
+    font-family: monospace;
+    font-size: 12px;
+    padding: 10px;
+    max-height: 30vh;
+    overflow-y: auto;
+    border-top: 2px solid #6395BD;
+    z-index: 10;
+  }
+  .ok { color: #7CFF7C; }
+  .err { color: #FF5C5C; }
+  .warn { color: #FFB347; }
+</style>
+</head>
+<body>
+
+<div id="info">
+  <h1>🥽 VR MINIMAL TEST · <span class="v">2026-06-01</span></h1>
+  <div>Diagnose ob WebXR auf der Quest 3 grundsätzlich läuft.</div>
+  <div>Wenn die grüne Box gerade vor dir steht und du mit dem linken Stick rumlaufen kannst → WebXR funktioniert, das Spiel-Setup hat das Problem.</div>
+  <div>Wenn nicht (Flackern, schwarz, Crash) → Quest-Browser-WebXR ist generell instabil. Wolvic-Browser probieren!</div>
+  <button id="vrBtn" onclick="enterVR()">🥽 START VR-TEST</button>
+  <div>Bedienung in VR: Linker Stick = laufen, Rechter Stick X = Snap-Turn</div>
+</div>
+
+<div id="log">[Logs erscheinen hier]</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+// =====================================================================
+// VR MINIMAL TEST — soll WebXR auf Quest 3 generisch testen
+// Bewusst klein gehalten: 1 Boden, 1 Box, 1 Light. Keine GLBs, keine
+// Texturen, kein Audio, keine komplexe Logik.
+// =====================================================================
+
+const logEl = document.getElementById('log');
+function log(msg, cls) {
+  const t = new Date().toTimeString().slice(0, 8);
+  logEl.innerHTML += '<div class="' + (cls||'') + '">[' + t + '] ' + msg + '</div>';
+  logEl.scrollTop = logEl.scrollHeight;
+  console.log('[VR-MIN]', msg);
+}
+
+log('Script geladen, Three.js ' + (window.THREE ? THREE.REVISION : 'MISSING'), THREE ? 'ok' : 'err');
+log('UA: ' + navigator.userAgent.slice(0, 100));
+log('navigator.xr: ' + (navigator.xr ? 'verfügbar' : 'FEHLT'), navigator.xr ? 'ok' : 'err');
+
+// ---------- Scene Setup (sehr minimal) ----------
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x14263B);
+
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.05, 100);
+camera.position.set(0, 1.6, 3);
+
+// KRITISCH für korrekten VR-Locomotion: camera in eine dolly-Group
+const dolly = new THREE.Group();
+dolly.name = 'playerDolly';
+scene.add(dolly);
+dolly.add(camera);
+
+const renderer = new THREE.WebGLRenderer({ antialias: true });
+renderer.setSize(window.innerWidth, window.innerHeight);
+renderer.setPixelRatio(window.devicePixelRatio);
+renderer.xr.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+// Resize
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// ---------- Lights ----------
+scene.add(new THREE.AmbientLight(0xffffff, 0.6));
+const sun = new THREE.DirectionalLight(0xffffff, 0.8);
+sun.position.set(2, 4, 3);
+scene.add(sun);
+
+// ---------- Floor (großer farbiger Boden) ----------
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(30, 30),
+  new THREE.MeshStandardMaterial({ color: 0x6395BD })
+);
+floor.rotation.x = -Math.PI/2;
+scene.add(floor);
+
+// ---------- Grid-Hilfe damit man Bewegung sieht ----------
+const grid = new THREE.GridHelper(30, 30, 0xFFE298, 0xE8862A);
+grid.position.y = 0.01;
+scene.add(grid);
+
+// ---------- DIE TEST-BOX vor dem Spieler ----------
+const box = new THREE.Mesh(
+  new THREE.BoxGeometry(0.5, 0.5, 0.5),
+  new THREE.MeshStandardMaterial({ color: 0x7CFF7C, emissive: 0x224422 })
+);
+box.position.set(0, 1.0, -2);
+scene.add(box);
+
+// ---------- Reference object: rote Säule rechts ----------
+const pillar = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.15, 0.15, 2.0, 12),
+  new THREE.MeshStandardMaterial({ color: 0xFF5C5C })
+);
+pillar.position.set(3, 1.0, 0);
+scene.add(pillar);
+
+// Blaue Säule links
+const pillar2 = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.15, 0.15, 2.0, 12),
+  new THREE.MeshStandardMaterial({ color: 0x9DDCEE })
+);
+pillar2.position.set(-3, 1.0, 0);
+scene.add(pillar2);
+
+log('Scene gebaut: Boden, Grid, Box vorne, rote+blaue Säule seitlich', 'ok');
+
+// ---------- VR-Modus State ----------
+let inVR = false;
+let xrController1 = null, xrController2 = null;
+let snapArmed = true;
+
+async function enterVR() {
+  log('enterVR aufgerufen');
+  if (!navigator.xr) { log('navigator.xr fehlt — kein WebXR auf diesem Browser', 'err'); return; }
+
+  try {
+    const supported = await navigator.xr.isSessionSupported('immersive-vr');
+    log('immersive-vr supported: ' + supported, supported ? 'ok' : 'err');
+    if (!supported) { log('Auf Quest: nur im Meta-Browser oder Wolvic versuchen', 'warn'); return; }
+  } catch(e) { log('isSessionSupported error: ' + e.message, 'err'); return; }
+
+  let session;
+  try {
+    session = await navigator.xr.requestSession('immersive-vr', {
+      requiredFeatures: ['local-floor']
+    });
+    log('Session granted (local-floor)', 'ok');
+  } catch(e1) {
+    log('local-floor failed, retry local: ' + e1.message, 'warn');
+    try {
+      session = await navigator.xr.requestSession('immersive-vr');
+      log('Session granted (local fallback)', 'ok');
+    } catch(e2) {
+      log('Session failed: ' + e2.message, 'err'); return;
+    }
+  }
+
+  try {
+    await renderer.xr.setSession(session);
+    log('setSession OK', 'ok');
+  } catch(e) {
+    log('setSession FAILED: ' + e.message, 'err'); return;
+  }
+
+  // Hide info overlay
+  document.getElementById('info').style.display = 'none';
+}
+
+// ---------- Session-Lifecycle ----------
+renderer.xr.addEventListener('sessionstart', () => {
+  log('>>> sessionstart fired', 'ok');
+  inVR = true;
+  // Spawn position
+  dolly.position.set(0, 0, 0);
+  dolly.rotation.set(0, 0, 0);
+  // Controllers
+  xrController1 = renderer.xr.getController(0);
+  xrController2 = renderer.xr.getController(1);
+  dolly.add(xrController1);
+  dolly.add(xrController2);
+  // Visible controller stubs
+  const c1Stub = new THREE.Mesh(
+    new THREE.BoxGeometry(0.04, 0.04, 0.12),
+    new THREE.MeshStandardMaterial({ color: 0x9DDCEE })
+  );
+  c1Stub.position.z = -0.06;
+  xrController1.add(c1Stub);
+  const c2Stub = new THREE.Mesh(
+    new THREE.BoxGeometry(0.04, 0.04, 0.12),
+    new THREE.MeshStandardMaterial({ color: 0xFFB347 })
+  );
+  c2Stub.position.z = -0.06;
+  xrController2.add(c2Stub);
+  log('Controllers attached to dolly + stubs visible', 'ok');
+});
+
+renderer.xr.addEventListener('sessionend', () => {
+  log('<<< sessionend fired');
+  inVR = false;
+  document.getElementById('info').style.display = '';
+});
+
+// ---------- Animate loop with input poll ----------
+const clock = new THREE.Clock();
+let frameCount = 0;
+
+function animate() {
+  const dt = Math.min(0.05, clock.getDelta());
+  frameCount++;
+  if (frameCount % 300 === 0) {
+    log('Frame ' + frameCount + ', inVR=' + inVR + ', dolly@' + dolly.position.toArray().map(n=>n.toFixed(2)).join(','));
+  }
+
+  // Rotate box for visual frame-rate sanity
+  box.rotation.y += dt * 0.8;
+  box.rotation.x += dt * 0.4;
+
+  if (inVR) {
+    const session = renderer.xr.getSession();
+    if (session) {
+      for (const src of session.inputSources) {
+        const gp = src.gamepad;
+        if (!gp || !gp.axes) continue;
+        const sx = gp.axes[2] || 0, sy = gp.axes[3] || 0;
+        const handed = src.handedness;
+
+        if (handed === 'left' && (Math.abs(sx) > 0.15 || Math.abs(sy) > 0.15)) {
+          // Smooth walk in camera direction
+          const cam = renderer.xr.getCamera();
+          const q = new THREE.Quaternion();
+          cam.getWorldQuaternion(q);
+          const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(q);
+          fwd.y = 0; if (fwd.lengthSq()>0.001) fwd.normalize();
+          const right = new THREE.Vector3(1,0,0).applyQuaternion(q);
+          right.y = 0; if (right.lengthSq()>0.001) right.normalize();
+          dolly.position.addScaledVector(fwd, 2.5 * (-sy) * dt);
+          dolly.position.addScaledVector(right, 2.5 * sx * dt);
+        }
+
+        if (handed === 'right') {
+          // Snap-turn
+          if (Math.abs(sx) > 0.7 && snapArmed) {
+            dolly.rotation.y += (sx > 0 ? -1 : 1) * 30 * Math.PI/180;
+            snapArmed = false;
+          } else if (Math.abs(sx) < 0.3) {
+            snapArmed = true;
+          }
+        }
+      }
+    }
+  }
+
+  renderer.render(scene, camera);
+}
+
+renderer.setAnimationLoop(animate);
+log('Animation loop started', 'ok');
+
+// Make enterVR available globally
+window.enterVR = enterVR;
+</script>
+
+</body>
+</html>
