@@ -4410,7 +4410,7 @@ function _baselineNoise() {
   for (let i = 0; i < 4; i++) s += Math.random();
   return base * (1 + s * amp / 4);
 }
-const TAU_NORMAL = 5.5;   // 63% rise after 4s without iBoost (Customer-feedback realistic)
+const TAU_NORMAL = 11.0;   // v8 R6: doubled — lecks waren zu schnell gefunden
 // ── Live leak-rate graph state (animate() füttert das, _redrawLeakGraph zeichnet) ──
 const _GRAPH_MAX_SAMPLES = 360;   // 12 s @ 30 Hz
 const _graphHistory = [];
