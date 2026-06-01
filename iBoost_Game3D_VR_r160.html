@@ -2,7 +2,7 @@
 <html lang="de">
 <head>
 <meta charset="UTF-8">
-<title>INFICON LEAK QUEST · VR EDITION r160 (Modern Three.js)</title>
+<title>INFICON LEAK QUEST · VR r160 · Gameplay-Fix</title>
 <style>
   :root {
     --inf-blue:        #2C4866;
@@ -828,7 +828,7 @@
     <h1 style="font-size: 44px; letter-spacing: 6px; margin: 6px 0 2px 0;">LEAK QUEST</h1>
     <h2 style="font-size: 14px; letter-spacing: 3px; color: #C8D2DC; margin: 0 0 14px 0;">3D vacuum leak-hunt prototype</h2>
     <div style="color: var(--inf-cyan); font-size: 11px; letter-spacing: 2.5px; margin-bottom: 14px; opacity: 0.75;">OWNER · THOMAS GRELLMANN</div>
-    <div style="display:inline-block; background:#7CFF7C; color:#0E1620; font-weight:bold; padding:8px 22px; border-radius:6px; font-size:17px; letter-spacing:3px; margin-bottom:10px; box-shadow:0 2px 14px rgba(124,255,124,0.5);">🚀 VR EDITION r160 · Modern Three.js · 2026-06-01</div>
+    <div style="display:inline-block; background:#7CFF7C; color:#0E1620; font-weight:bold; padding:8px 22px; border-radius:6px; font-size:17px; letter-spacing:3px; margin-bottom:10px; box-shadow:0 2px 14px rgba(124,255,124,0.5);">🎯 VR r160 · GAMEPLAY-FIX · 2026-06-01</div>
     <div class="badge">EARLY VISUAL PREVIEW</div>
     <div style="height: 22px;"></div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
@@ -3028,7 +3028,13 @@ if (typeof THREE.GLTFLoader === 'function') {
   // Try embedded base64 first (works under file://)
   if (window.UL3000_GLB_B64) {
     try {
-      gltfLoader.parse(_b64ToArrayBuffer(window.UL3000_GLB_B64), '', onULLoaded, onULError);
+      gltfLoader.parse(_b64ToArrayBuffer(window.UL3000_GLB_B64), '', function(gltf){
+        console.log('[r160-fix] UL3000 GLB loaded OK, scene =', gltf && gltf.scene && gltf.scene.children && gltf.scene.children.length);
+        onULLoaded(gltf);
+      }, function(err){
+        console.error('[r160-fix] UL3000 GLB load ERROR', err);
+        onULError(err);
+      });
     } catch (e) { onULError(e); }
   } else {
     // Fallback to file fetch (works under http://, blocked under file://)
@@ -5067,6 +5073,7 @@ const BOOST_FACTORS_3D = [1, 1.5, 2.5, 4, 8, 32];   // each iBoost step ~50% wea
 //  HELICAN-PICKUPS — 3 Aufladepunkte im Spielfeld
 // ════════════════════════════════════════════════════════════════════════════
 const _helicanPickups = [];
+let _tmpVec3 = null;  // reused world-pos vector for pickup checks
 function _spawnHelicanPickup(x, z) {
   const g = new THREE.Group();
   // Stand-Sockel (small cylinder)
@@ -5138,11 +5145,13 @@ function _updateHelicanPickups(dt, t) {
       }
     });
     p.children[1].rotation.y += dt * 1.6;
-    // Pickup-check (XZ Abstand)
-    const dx = camera.position.x - p.position.x;
-    const dz = camera.position.z - p.position.z;
-    const dy = camera.position.y - 1.4;     // approx player feet
-    if (dx*dx + dz*dz < 1.0 && Math.abs(dy) < 1.8) {
+    // Pickup-check — VR-fix: world-position statt local
+    if (!_tmpVec3) _tmpVec3 = new THREE.Vector3();
+    camera.getWorldPosition(_tmpVec3);
+    const dx = _tmpVec3.x - p.position.x;
+    const dz = _tmpVec3.z - p.position.z;
+    const dy = _tmpVec3.y - 1.4;
+    if (dx*dx + dz*dz < 1.5 && Math.abs(dy) < 1.8) {
       // Pickup!
       p.userData.consumed = true;
       p.visible = false;
@@ -7274,8 +7283,8 @@ renderer.domElement.addEventListener('click', () => {
     log('session granted, refSpaceType=', VR.refSpaceType);
     status('🥽 Renderer-Setup…');
 
-    // v2: KEIN setFramebufferScaleFactor — Default lassen
-    // KEIN setFoveation(0.6) später — wir setzen 0 im sessionstart
+    // r160-Gameplay-Fix: Framebuffer 1.5 für schärferes Bild (r160 stabil)
+    try { renderer.xr.setFramebufferScaleFactor(1.5); log('framebuffer scale 1.5 set'); } catch(e){}
 
     try { await renderer.xr.setSession(session); }
     catch(e) {
@@ -7344,6 +7353,13 @@ renderer.domElement.addEventListener('click', () => {
       warn('NO left attach point — wrist invisible!');
     }
 
+    // R13: Auto-Pickup für VR — Spielmechanik-Blocker entfernen
+    try {
+      window._spraySetupComplete = true;
+      if (typeof window._showSprayInHand === 'function') window._showSprayInHand();
+      log('SmartSpray auto-equipped (skip pickup-phase)');
+    } catch(e) { warn('auto-equip failed', e); }
+
     // 6) SmartSpray → right controller
     try {
       if (typeof sprayContainer !== 'undefined' && sprayContainer) {
@@ -7375,6 +7391,36 @@ renderer.domElement.addEventListener('click', () => {
         }
       }, 8000);
     }
+
+    // VR-AUDIO: AudioContext warm + Industrial Hum + Footstep generator
+    try {
+      let ac = (typeof audioCtx !== 'undefined' && audioCtx) ? audioCtx
+             : (THREE.AudioContext && THREE.AudioContext.getContext ? THREE.AudioContext.getContext()
+             : new (window.AudioContext || window.webkitAudioContext)());
+      if (ac.state !== 'running') ac.resume();
+      window._vrAudioCtx = ac;
+      log('AudioContext state: ' + ac.state);
+
+      // Industrial Hum — low-pass 92Hz drone (positional fake via gain)
+      if (!window._vrHum) {
+        const osc = ac.createOscillator(); osc.type = 'sawtooth'; osc.frequency.value = 88;
+        const lpf = ac.createBiquadFilter(); lpf.type = 'lowpass'; lpf.frequency.value = 240;
+        const gain = ac.createGain(); gain.gain.value = 0.04;
+        osc.connect(lpf).connect(gain).connect(ac.destination);
+        osc.start();
+        window._vrHum = { osc, gain, lpf };
+        log('Industrial hum started (88Hz)');
+      }
+
+      // Higher fan whine — 220Hz triangle, layered
+      if (!window._vrFan) {
+        const osc = ac.createOscillator(); osc.type = 'triangle'; osc.frequency.value = 220;
+        const gain = ac.createGain(); gain.gain.value = 0.018;
+        osc.connect(gain).connect(ac.destination);
+        osc.start();
+        window._vrFan = { osc, gain };
+      }
+    } catch(e) { warn('audio init failed', e); }
 
     // 8) Hide DOM HUD
     ['hud','rightPanel','crosshair','crosshairContainer','startScreen','liveGraph','endGameOverlay','victoryOverlay'].forEach(function(id){
@@ -7496,6 +7542,22 @@ renderer.domElement.addEventListener('click', () => {
           const speed = 2.0;  // v2: langsamer — weniger Foveation-Stress
           VR.dolly.position.addScaledVector(fwd, speed * (-sy) * dt);
           VR.dolly.position.addScaledVector(right, speed * sx * dt);
+          // Footstep — every ~0.45s while walking
+          const mvMag = Math.hypot(sx, sy);
+          if (mvMag > 0.3) {
+            VR._stepAcc = (VR._stepAcc || 0) + dt * mvMag;
+            if (VR._stepAcc > 0.45 && window._vrAudioCtx) {
+              VR._stepAcc = 0;
+              try {
+                const ac = window._vrAudioCtx;
+                const osc = ac.createOscillator(); osc.type = 'sine'; osc.frequency.value = 110 + Math.random() * 30;
+                const g = ac.createGain(); g.gain.value = 0.06;
+                osc.connect(g).connect(ac.destination); osc.start();
+                g.gain.linearRampToValueAtTime(0.0001, ac.currentTime + 0.10);
+                osc.stop(ac.currentTime + 0.12);
+              } catch(_e){}
+            }
+          } else { VR._stepAcc = 0; }
         }
         // Left trigger = iBoost cycle
         if (btn[0] && btn[0].pressed && !btn[0]._was) {
@@ -7817,9 +7879,11 @@ function _updateRadarPickups(dt, t) {
     p.children[1].position.y = 1.10 + bob;
     p.children[1].rotation.x += dt * 1.2;
     p.children[1].rotation.y += dt * 0.9;
-    const dx = camera.position.x - p.position.x;
-    const dz = camera.position.z - p.position.z;
-    if (dx*dx + dz*dz < 1.0) {
+    if (!_tmpVec3) _tmpVec3 = new THREE.Vector3();
+    camera.getWorldPosition(_tmpVec3);
+    const dx = _tmpVec3.x - p.position.x;
+    const dz = _tmpVec3.z - p.position.z;
+    if (dx*dx + dz*dz < 1.5) {
       p.userData.consumed = true;
       p.visible = false;
       _activateRadar();
