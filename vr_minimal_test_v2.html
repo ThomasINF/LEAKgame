@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VR Minimal Test v2 · Foveation-Fix</title>
+<style>
+  html, body { margin:0; padding:0; height:100%; background:#000; color:#fff; font-family:Arial, sans-serif; overflow:hidden; }
+  #info {
+    position: fixed; top: 0; left: 0; right: 0;
+    background: rgba(11,22,38,0.92); padding: 12px 16px; z-index: 10;
+    font-size: 14px; line-height: 1.5;
+  }
+  #info h1 { margin: 0 0 6px 0; color: #FFB347; font-size: 18px; letter-spacing: 2px; }
+  #info .v { color: #FFE298; font-weight: bold; }
+  #vrBtn {
+    display: block; margin: 14px auto; padding: 14px 30px;
+    background: #FFB347; color: #0E1620; border: 3px solid #FFD580; border-radius: 8px;
+    font-size: 18px; font-weight: bold; letter-spacing: 2px; cursor: pointer;
+  }
+  #log {
+    position: fixed; bottom: 0; left: 0; right: 0;
+    background: rgba(0,0,0,0.85); color: #9DDCEE; font-family: monospace; font-size: 12px;
+    padding: 10px; max-height: 25vh; overflow-y: auto; border-top: 2px solid #6395BD; z-index: 10;
+  }
+  .ok { color: #7CFF7C; } .err { color: #FF5C5C; } .warn { color: #FFB347; }
+</style>
+</head>
+<body>
+
+<div id="info">
+  <h1>🔬 VR MINIMAL TEST v2 · <span class="v">2026-06-01 · Foveation-Fix</span></h1>
+  <div>v1 hat funktioniert bis du den Stick bedient hast — schwarze schräge Balken = Foveation-Artefakte. v2 schaltet ALLE XR-Optimierungen ab.</div>
+  <div><b>Erwartung:</b> Bewegung jetzt stabil ohne Flackern. Wenn nicht → Quest-Browser-Bug → Wolvic ausprobieren.</div>
+  <button id="vrBtn" onclick="enterVR()">🔬 START VR-TEST v2</button>
+</div>
+
+<div id="log">[Logs erscheinen hier]</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+const logEl = document.getElementById('log');
+function log(msg, cls) {
+  const t = new Date().toTimeString().slice(0, 8);
+  logEl.innerHTML += '<div class="' + (cls||'') + '">[' + t + '] ' + msg + '</div>';
+  logEl.scrollTop = logEl.scrollHeight;
+  console.log('[VR-v2]', msg);
+}
+
+log('Three.js ' + THREE.REVISION + ', UA: ' + navigator.userAgent.slice(0, 80));
+
+// =====================================================================
+// Three.js Setup — KEINE XR-Optimierungen
+// =====================================================================
+const scene = new THREE.Scene();
+scene.background = new THREE.Color(0x14263B);
+
+const camera = new THREE.PerspectiveCamera(70, window.innerWidth/window.innerHeight, 0.05, 100);
+
+// KRITISCH: camera VOR setSession in eine dolly hängen, persistent
+const dolly = new THREE.Group();
+dolly.name = 'playerDolly';
+scene.add(dolly);
+dolly.add(camera);
+dolly.position.set(0, 0, 3);
+
+// Renderer: KEIN antialias, KEIN preserveDrawingBuffer, KEIN shadowMap
+const renderer = new THREE.WebGLRenderer({ antialias: false });
+renderer.setSize(window.innerWidth, window.innerHeight);
+// KEIN setPixelRatio() — Default lassen (= 1)
+renderer.xr.enabled = true;
+document.body.appendChild(renderer.domElement);
+
+window.addEventListener('resize', () => {
+  camera.aspect = window.innerWidth/window.innerHeight;
+  camera.updateProjectionMatrix();
+  renderer.setSize(window.innerWidth, window.innerHeight);
+});
+
+// Lights — sehr einfach
+scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+const sun = new THREE.DirectionalLight(0xffffff, 0.6);
+sun.position.set(2, 4, 3);
+scene.add(sun);
+
+// Floor — MeshBasicMaterial statt Standard (kein PBR-Lighting-Compositing-Trick)
+const floor = new THREE.Mesh(
+  new THREE.PlaneGeometry(30, 30),
+  new THREE.MeshBasicMaterial({ color: 0x6395BD })
+);
+floor.rotation.x = -Math.PI/2;
+scene.add(floor);
+
+// Visible markers
+const box = new THREE.Mesh(
+  new THREE.BoxGeometry(0.5, 0.5, 0.5),
+  new THREE.MeshBasicMaterial({ color: 0x7CFF7C })
+);
+box.position.set(0, 1.0, -2);
+scene.add(box);
+
+const pillarR = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.15, 0.15, 2.0, 12),
+  new THREE.MeshBasicMaterial({ color: 0xFF5C5C })
+);
+pillarR.position.set(3, 1.0, 0);
+scene.add(pillarR);
+
+const pillarL = new THREE.Mesh(
+  new THREE.CylinderGeometry(0.15, 0.15, 2.0, 12),
+  new THREE.MeshBasicMaterial({ color: 0x9DDCEE })
+);
+pillarL.position.set(-3, 1.0, 0);
+scene.add(pillarL);
+
+// Reference walls so movement is obvious
+function makeWall(x, z, w, h, color){
+  const m = new THREE.Mesh(
+    new THREE.BoxGeometry(w, h, 0.05),
+    new THREE.MeshBasicMaterial({ color: color })
+  );
+  m.position.set(x, h/2, z);
+  scene.add(m);
+}
+makeWall(0, -8,  6, 2.5, 0xFFE298);  // gelbe Wand vorn
+makeWall(0,  8,  6, 2.5, 0xE8862A);  // orange Wand hinten
+makeWall(-8, 0, 16, 2.5, 0xA6A6E6).rotation.y = Math.PI/2;
+
+log('Scene fertig — MeshBasicMaterial, kein AA, kein PixelRatio-Boost', 'ok');
+
+// =====================================================================
+// VR State
+// =====================================================================
+let inVR = false;
+let xrController1 = null, xrController2 = null;
+let snapArmed = true;
+
+async function enterVR() {
+  log('enterVR aufgerufen');
+  if (!navigator.xr) { log('navigator.xr fehlt', 'err'); return; }
+  let supported = false;
+  try { supported = await navigator.xr.isSessionSupported('immersive-vr'); } catch(e){}
+  if (!supported) { log('immersive-vr nicht supportet', 'err'); return; }
+
+  let session;
+  try {
+    session = await navigator.xr.requestSession('immersive-vr', { requiredFeatures: ['local-floor'] });
+    log('Session OK (local-floor)', 'ok');
+  } catch(e) {
+    try {
+      session = await navigator.xr.requestSession('immersive-vr');
+      log('Session OK (local fallback)', 'warn');
+    } catch(e2) {
+      log('Session FAILED: ' + e2.message, 'err'); return;
+    }
+  }
+
+  // KEIN setFramebufferScaleFactor, KEIN setFoveation — alles default
+  try {
+    await renderer.xr.setSession(session);
+    log('setSession OK — NO foveation, NO scale factor', 'ok');
+  } catch(e) {
+    log('setSession FAILED: ' + e.message, 'err'); return;
+  }
+
+  document.getElementById('info').style.display = 'none';
+}
+
+renderer.xr.addEventListener('sessionstart', () => {
+  log('>>> sessionstart', 'ok');
+  inVR = true;
+  // EXPLIZIT: kein Foveation
+  try { renderer.xr.setFoveation(0); log('foveation=0 set', 'ok'); } catch(e){}
+  // Spawn
+  dolly.position.set(0, 0, 3);
+  dolly.rotation.set(0, 0, 0);
+  // Controllers
+  xrController1 = renderer.xr.getController(0);
+  xrController2 = renderer.xr.getController(1);
+  dolly.add(xrController1);
+  dolly.add(xrController2);
+  const stub1 = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12), new THREE.MeshBasicMaterial({color:0x9DDCEE}));
+  stub1.position.z = -0.06; xrController1.add(stub1);
+  const stub2 = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12), new THREE.MeshBasicMaterial({color:0xFFB347}));
+  stub2.position.z = -0.06; xrController2.add(stub2);
+  log('Controllers attached', 'ok');
+});
+
+renderer.xr.addEventListener('sessionend', () => {
+  log('<<< sessionend');
+  inVR = false;
+  document.getElementById('info').style.display = '';
+});
+
+// =====================================================================
+// Animation Loop — Movement BEFORE renderer.render()
+// =====================================================================
+let lastTs = performance.now();
+
+function frame() {
+  const now = performance.now();
+  const dt = Math.min(0.05, (now - lastTs) / 1000);
+  lastTs = now;
+
+  box.rotation.y += dt * 0.8;
+
+  // === Input poll BEFORE render, so pose-update and movement happen
+  //     in the same logical frame (avoids stereo-desync) ===
+  if (inVR) {
+    const session = renderer.xr.getSession();
+    if (session) {
+      for (const src of session.inputSources) {
+        const gp = src.gamepad;
+        if (!gp || !gp.axes) continue;
+        const sx = gp.axes[2] || 0, sy = gp.axes[3] || 0;
+        const handed = src.handedness;
+
+        if (handed === 'left' && (Math.abs(sx) > 0.15 || Math.abs(sy) > 0.15)) {
+          const cam = renderer.xr.getCamera();
+          const q = new THREE.Quaternion();
+          cam.getWorldQuaternion(q);
+          const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(q);
+          fwd.y = 0; if (fwd.lengthSq() > 0.001) fwd.normalize();
+          const right = new THREE.Vector3(1,0,0).applyQuaternion(q);
+          right.y = 0; if (right.lengthSq() > 0.001) right.normalize();
+          // Langsamer (1.5 statt 2.5) damit kein Motion-Sickness
+          dolly.position.addScaledVector(fwd, 1.5 * (-sy) * dt);
+          dolly.position.addScaledVector(right, 1.5 * sx * dt);
+        }
+
+        if (handed === 'right') {
+          if (Math.abs(sx) > 0.7 && snapArmed) {
+            dolly.rotation.y += (sx > 0 ? -1 : 1) * 30 * Math.PI/180;
+            snapArmed = false;
+          } else if (Math.abs(sx) < 0.3) {
+            snapArmed = true;
+          }
+        }
+      }
+    }
+  }
+
+  renderer.render(scene, camera);
+}
+
+renderer.setAnimationLoop(frame);
+log('Animation started — MeshBasic, no AA, no foveation, no scale', 'ok');
+
+window.enterVR = enterVR;
+</script>
+
+</body>
+</html>
