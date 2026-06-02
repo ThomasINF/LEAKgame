@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VR Test · Movement + Item-Pickup</title>
+<style>
+  html, body { margin:0; padding:0; height:100%; background:#000; color:#fff; font-family:Arial; overflow:hidden; }
+  #info { position:fixed; top:0; left:0; right:0; background:rgba(11,22,38,0.92); padding:12px 16px; z-index:10; font-size:13px; }
+  #info h1 { margin:0 0 6px 0; color:#7CFF7C; font-size:17px; }
+  #vrBtn { display:block; margin:10px auto; padding:12px 26px; background:#7CFF7C; color:#0E1620;
+           border:3px solid #BFFFBF; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; }
+  #log { position:fixed; bottom:0; left:0; right:0; background:rgba(0,0,0,0.88); color:#9DDCEE;
+         font-family:monospace; font-size:11px; padding:10px; max-height:25vh; overflow-y:auto;
+         border-top:2px solid #6395BD; z-index:10; }
+  .ok{color:#7CFF7C} .err{color:#FF5C5C} .warn{color:#FFB347}
+</style></head>
+<body>
+<div id="info">
+  <h1>🔬 Movement-Test — Pickup mit World-Position</h1>
+  <div>3 orange Patronen verteilt. Hingehen → Pickup-Counter im Wrist-Tablet zählt hoch. Test ob die World-Position-Berechnung in VR funktioniert.</div>
+  <button id="vrBtn" onclick="enterVR()">START Movement-Test</button>
+</div>
+<div id="log">[move]</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script>
+const logEl=document.getElementById('log');
+function log(m,c){const t=new Date().toTimeString().slice(0,8);
+  logEl.innerHTML+='<div class="'+(c||'')+'">['+t+'] '+m+'</div>';logEl.scrollTop=logEl.scrollHeight;
+  console.log('[move]',m);}
+log('Three.js '+THREE.REVISION);
+
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x14263B);
+const camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.05,100);
+const dolly=new THREE.Group(); scene.add(dolly); dolly.add(camera); dolly.position.set(0,0,3);
+
+const renderer=new THREE.WebGLRenderer({antialias:false});
+renderer.setSize(innerWidth,innerHeight);
+renderer.xr.enabled=true;
+document.body.appendChild(renderer.domElement);
+addEventListener('resize',()=>{camera.aspect=innerWidth/innerHeight;camera.updateProjectionMatrix();renderer.setSize(innerWidth,innerHeight);});
+
+scene.add(new THREE.HemisphereLight(0xffffff,0x404060,0.9));
+scene.add(new THREE.DirectionalLight(0xffffff,0.7));
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,30),
+  new THREE.MeshStandardMaterial({color:0x6395BD,roughness:0.85}));
+floor.rotation.x=-Math.PI/2; scene.add(floor);
+const grid=new THREE.GridHelper(30,30,0xFFE298,0xE8862A); grid.position.y=0.01; scene.add(grid);
+
+// Pickups als orange Sphären, verstreut
+const pickups=[];
+function spawnPickup(x,z){
+  const g=new THREE.Group();
+  const s=new THREE.Mesh(new THREE.SphereGeometry(0.2,16,12),
+    new THREE.MeshStandardMaterial({color:0xFFB347, emissive:0xFFB347, emissiveIntensity:0.5}));
+  s.position.y=1.0;
+  g.add(s);
+  const ring=new THREE.Mesh(new THREE.RingGeometry(0.35,0.45,24),
+    new THREE.MeshBasicMaterial({color:0x9DCDED, transparent:true, opacity:0.6, side:THREE.DoubleSide}));
+  ring.rotation.x=-Math.PI/2; ring.position.y=0.02;
+  g.add(ring);
+  g.position.set(x,0,z);
+  g.userData.consumed=false;
+  scene.add(g);
+  pickups.push(g);
+}
+spawnPickup(2, -3);
+spawnPickup(-4, -2);
+spawnPickup(0, -6);
+spawnPickup(5, 0);
+spawnPickup(-3, 3);
+
+let pickupCount=0;
+let inVR=false, c1=null, c2=null, snapArmed=true;
+
+// Wrist Tablet
+let wristMesh=null;
+const _wristCanvas=document.createElement('canvas');
+_wristCanvas.width=384; _wristCanvas.height=192;
+const _wristCtx=_wristCanvas.getContext('2d');
+let _wristTex=null;
+function drawWrist(){
+  const c=_wristCtx, W=384, H=192;
+  c.fillStyle='#0B1626'; c.fillRect(0,0,W,H);
+  c.fillStyle='#142540'; c.fillRect(0,0,W,30);
+  c.fillStyle='#7CFF7C'; c.font='bold 16px Arial';
+  c.fillText('MOVEMENT TEST', 10, 22);
+  c.fillStyle='#FFE298'; c.font='bold 40px Arial';
+  c.fillText('PICKUPS', 10, 70);
+  c.fillStyle='#7CFF7C'; c.font='bold 70px Arial';
+  c.fillText(pickupCount + ' / ' + pickups.length, 10, 140);
+  c.fillStyle='#5A7090'; c.font='12px Arial';
+  c.fillText('Geh zu den orangen Sphären', 10, 175);
+  if(_wristTex) _wristTex.needsUpdate=true;
+}
+
+const tempObjs=[];
+window.enterVR=async function(){
+  if(!navigator.xr) return log('no xr','err');
+  if(renderer.xr.isPresenting) return log('Already presenting','warn');
+  let s;
+  try{s=await navigator.xr.requestSession('immersive-vr',{requiredFeatures:['local-floor']});}
+  catch(e){try{s=await navigator.xr.requestSession('immersive-vr');}catch(e2){return log('FAIL '+e2.message,'err');}}
+  try{await renderer.xr.setSession(s);}catch(e){return log('setSession FAIL '+e.message,'err');}
+  document.getElementById('info').style.display='none';
+};
+renderer.xr.addEventListener('sessionstart',()=>{
+  log('>>> sessionstart','ok');
+  inVR=true;
+  try{renderer.xr.setFoveation(0);}catch(e){}
+  // Reset
+  pickupCount=0;
+  pickups.forEach(p=>{p.userData.consumed=false; p.visible=true;});
+  dolly.position.set(0,0,3); dolly.rotation.set(0,0,0);
+  c1=renderer.xr.getController(0); c2=renderer.xr.getController(1);
+  dolly.add(c1); dolly.add(c2);
+  tempObjs.push(c1,c2);
+  const s1=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12),new THREE.MeshStandardMaterial({color:0x9DDCEE}));
+  s1.position.z=-0.06; c1.add(s1); tempObjs.push(s1);
+  const s2=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12),new THREE.MeshStandardMaterial({color:0xFFB347}));
+  s2.position.z=-0.06; c2.add(s2); tempObjs.push(s2);
+  // Wrist tablet
+  _wristTex = new THREE.CanvasTexture(_wristCanvas);
+  const mat=new THREE.MeshBasicMaterial({map:_wristTex, transparent:true, side:THREE.DoubleSide});
+  wristMesh=new THREE.Mesh(new THREE.PlaneGeometry(0.21,0.105), mat);
+  wristMesh.position.set(0, 0.06, -0.02);
+  wristMesh.rotation.x=-Math.PI*0.42;
+  c1.add(wristMesh);
+  tempObjs.push(wristMesh);
+  drawWrist();
+});
+renderer.xr.addEventListener('sessionend',()=>{
+  log('<<< sessionend','warn');
+  inVR=false;
+  tempObjs.forEach(o=>{
+    if(o.parent) o.parent.remove(o);
+    if(o.geometry) o.geometry.dispose();
+    if(o.material) o.material.dispose();
+  });
+  tempObjs.length=0;
+  c1=null; c2=null; wristMesh=null;
+  document.getElementById('info').style.display='';
+});
+
+const _tmp = new THREE.Vector3();
+let _wristHz=0, lastTs=performance.now();
+function frame(){
+  const now=performance.now(); const dt=Math.min(0.05,(now-lastTs)/1000); lastTs=now;
+
+  // Pickup loop using WORLD position
+  if (inVR) {
+    camera.getWorldPosition(_tmp);
+    for (const p of pickups) {
+      if (p.userData.consumed) continue;
+      const dx = _tmp.x - p.position.x;
+      const dz = _tmp.z - p.position.z;
+      if (dx*dx + dz*dz < 1.5) {
+        p.userData.consumed = true;
+        p.visible = false;
+        pickupCount++;
+        log('Pickup! Count = ' + pickupCount, 'ok');
+        drawWrist();
+        // small visual flash
+        const flash=new THREE.PointLight(0x7CFF7C, 2.0, 3.0); flash.position.copy(p.position); flash.position.y=1.0;
+        scene.add(flash);
+        setTimeout(()=>{scene.remove(flash);}, 200);
+      }
+    }
+  }
+
+  // Wrist update at 5 Hz
+  if (inVR) {
+    _wristHz += dt;
+    if (_wristHz > 0.2) { _wristHz = 0; drawWrist(); }
+  }
+
+  // Input poll
+  if(inVR){
+    const sess=renderer.xr.getSession();
+    if(sess) for(const src of sess.inputSources){
+      const gp=src.gamepad; if(!gp||!gp.axes)continue;
+      const sx=gp.axes[2]||0, sy=gp.axes[3]||0, h=src.handedness;
+      if(h==='left' && (Math.abs(sx)>0.15||Math.abs(sy)>0.15)){
+        const cam=renderer.xr.getCamera(); const q=new THREE.Quaternion(); cam.getWorldQuaternion(q);
+        const fwd=new THREE.Vector3(0,0,-1).applyQuaternion(q); fwd.y=0;
+        if(fwd.lengthSq()>0.001) fwd.normalize();
+        const rt=new THREE.Vector3(1,0,0).applyQuaternion(q); rt.y=0;
+        if(rt.lengthSq()>0.001) rt.normalize();
+        dolly.position.addScaledVector(fwd, 2.0*(-sy)*dt);
+        dolly.position.addScaledVector(rt, 2.0*sx*dt);
+      }
+      if(h==='right'){
+        if(Math.abs(sx)>0.7 && snapArmed){dolly.rotation.y+=(sx>0?-1:1)*30*Math.PI/180;snapArmed=false;}
+        else if(Math.abs(sx)<0.3) snapArmed=true;
+      }
+    }
+  }
+  renderer.render(scene,camera);
+}
+renderer.setAnimationLoop(frame);
+log('loop start','ok');
+</script>
+</body></html>

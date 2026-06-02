@@ -17,110 +17,147 @@
       radial-gradient(900px 500px at 80% 90%, rgba(232,134,42,0.08), transparent 60%),
       linear-gradient(180deg, #0E1620 0%, #14263B 100%);
     min-height:100vh; display:flex; align-items:center; justify-content:center;
-    flex-direction:column; padding:40px 24px;
+    flex-direction:column; padding:30px 20px;
   }
-
-  header { text-align:center; margin-bottom:24px; }
-  header .logo { font-size:52px; font-weight:700; letter-spacing:2px; color:var(--inf-cyan); }
+  header { text-align:center; margin-bottom:20px; }
+  header .logo { font-size:46px; font-weight:700; letter-spacing:2px; color:var(--inf-cyan); }
   header .logo .dot { color:var(--sig-orange); }
-  header h1 { margin:14px 0 4px 0; font-size:56px; letter-spacing:4px;
+  header h1 { margin:10px 0 4px 0; font-size:48px; letter-spacing:4px;
     background:linear-gradient(180deg, #fff 0%, #B8D6E8 100%);
     -webkit-background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
   header .subtitle { font-size:13px; color:#9DDCEE; letter-spacing:3px; }
 
+  .section-title {
+    text-align:center; margin:24px 0 14px 0; color:#FFE298;
+    font-size:13px; letter-spacing:4px; font-weight:bold;
+    padding: 8px 16px;
+    border-top: 1px solid rgba(255,226,152,0.3);
+    border-bottom: 1px solid rgba(255,226,152,0.3);
+    width:100%; max-width:1100px;
+  }
+
   .grid {
-    display:grid; gap:22px;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    max-width:1000px; width:100%;
+    display:grid; gap:14px;
+    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+    max-width:1100px; width:100%;
   }
   .card {
     background:linear-gradient(180deg, rgba(20,30,45,0.88), rgba(14,22,32,0.92));
-    border:2px solid var(--inf-cyan); border-radius:14px;
-    padding:26px 22px 24px; cursor:pointer; text-decoration:none; color:#fff;
+    border:2px solid var(--inf-cyan); border-radius:10px;
+    padding:16px 14px; cursor:pointer; text-decoration:none; color:#fff;
     transition:all 0.18s ease;
     display:flex; flex-direction:column; align-items:flex-start;
-    box-shadow:0 8px 28px rgba(0,0,0,0.4);
+    box-shadow:0 6px 18px rgba(0,0,0,0.4);
   }
-  .card:hover { transform:translateY(-4px); box-shadow:0 14px 38px rgba(99,149,189,0.35); }
-  .card .icon { font-size:42px; margin-bottom:12px; }
-  .card .title { font-size:22px; font-weight:700; letter-spacing:1px; margin:0 0 8px 0; }
-  .card .desc { font-size:13px; line-height:1.5; color:#C8D2DC; margin:0 0 16px 0; }
-  .card .cta { font-size:12px; letter-spacing:2.5px; font-weight:bold; color:var(--inf-cyan-hi); margin-top:auto; }
-  .card .badge { display:inline-block; padding:3px 10px; margin-bottom:8px;
-    font-size:10px; letter-spacing:2px; border-radius:6px;
-    background:#7CFF7C; color:#0E1620; font-weight:bold; }
+  .card:hover { transform:translateY(-3px); box-shadow:0 10px 24px rgba(99,149,189,0.35); }
+  .card .icon { font-size:26px; margin-bottom:6px; }
+  .card .title { font-size:14px; font-weight:700; letter-spacing:0.5px; margin:0 0 5px 0; }
+  .card .desc { font-size:11px; line-height:1.4; color:#C8D2DC; margin:0 0 10px 0; }
+  .card .cta { font-size:10px; letter-spacing:2px; font-weight:bold; color:var(--inf-cyan-hi); margin-top:auto; }
+  .badge { display:inline-block; padding:2px 8px; margin-bottom:6px;
+    font-size:9px; letter-spacing:1.5px; border-radius:4px; font-weight:bold; }
 
-  details {
-    margin-top: 30px; max-width: 1000px; width: 100%;
-    background: rgba(20,30,45,0.5); border: 1px solid #2C4866; border-radius: 10px; padding: 10px 16px;
-  }
-  details summary { cursor: pointer; color: #9DCDED; font-size: 13px; letter-spacing: 1.5px; }
-  details .grid { margin-top: 14px; }
-  details .card { padding: 14px; }
-  details .card .title { font-size: 14px; }
-  details .card .desc { font-size: 11px; }
-
-  footer { margin-top:36px; font-size:11px; letter-spacing:2px; color:#5A6C80; text-align:center; }
+  footer { margin-top:30px; max-width:760px; font-size:11px; letter-spacing:1px;
+    color:#7A8FA8; text-align:center; line-height:1.7; }
   footer b { color:#9DDCEE; }
+  .step { color:#FFE298; }
 </style>
 </head>
 <body>
   <header>
     <div class="logo">INF<span class="dot">i</span>CON</div>
     <h1>LEAK QUEST</h1>
-    <div class="subtitle">3 Modi · Stand 1. Juni 2026</div>
+    <div class="subtitle">VR-Tests · 1. Juni 2026 Abend</div>
   </header>
 
+  <!-- ============ HAUPT-BUILDS (sortiert nach Wahrscheinlichkeit) ============ -->
+  <div class="section-title">🎯 HAUPT-VERSIONEN (in dieser Reihenfolge testen)</div>
   <div class="grid">
-    <a class="card" href="iBoost_Game3D_VR_r160.html" style="border-color:#7CFF7C;">
-      <div class="badge">EMPFOHLEN</div>
-      <div class="icon">🥽</div>
-      <div class="title">VR — Quest 3</div>
-      <div class="desc">Echtes VR mit Three.js r160. Stick zum Laufen, Snap-Turn, SmartSpray am rechten Controller, Wrist-Tablet am linken.</div>
-      <div class="cta" style="color:#7CFF7C;">VR STARTEN →</div>
+    <a class="card" href="iBoost_Game3D_VR_r161.html" style="border-color:#7CFF7C;">
+      <div class="badge" style="background:#7CFF7C; color:#0E1620;">EMPFOHLEN</div>
+      <div class="icon">✨</div>
+      <div class="title">VR r161 — Quest-Stable</div>
+      <div class="desc">r147 statt r160 (GLTFLoader-Fix), GLB-Load-Status sichtbar, World-Position für Pickups, AudioContext sauber suspend bei Sessionend, KEIN Hum mehr.</div>
+      <div class="cta" style="color:#7CFF7C;">START →</div>
     </a>
-
-    <a class="card" href="iBoost_Game3D_v8.html" style="border-color:#6395BD;">
-      <div class="icon">▶</div>
-      <div class="title">Desktop (PC)</div>
-      <div class="desc">Im normalen Browser mit Maus + WASD. Vollständiges Spiel mit Lecks, Score, iBoost, Helican-Patronen.</div>
-      <div class="cta">START →</div>
+    <a class="card" href="iBoost_Game3D_VR_lite.html" style="border-color:#9DDCEE;">
+      <div class="badge" style="background:#9DDCEE; color:#0E1620;">MINIMAL</div>
+      <div class="icon">🪶</div>
+      <div class="title">VR Lite</div>
+      <div class="desc">Wie r161, aber nur 2 Helican-Pickups statt 9. Schlanker, übersichtlicher. Falls r161 zu vollgestellt war.</div>
+      <div class="cta" style="color:#9DDCEE;">START →</div>
     </a>
-
-    <a class="card" href="leakquest_campaign.html" style="border-color:#E8862A;">
-      <div class="icon">🎬</div>
-      <div class="title">Campaign</div>
-      <div class="desc">3 Story-Missionen mit Kunde, Tau-Lektion und iBoost-Erklärung.</div>
-      <div class="cta" style="color:#FFD580;">BEGIN →</div>
+    <a class="card" href="iBoost_Game3D_VR_arcade.html" style="border-color:#FF6BB5;">
+      <div class="badge" style="background:#FF6BB5; color:#0E1620;">SPASS</div>
+      <div class="icon">🎉</div>
+      <div class="title">VR Arcade — Disco</div>
+      <div class="desc">6 farbige rotierende Disco-Lichter, Rainbow-Hintergrund, doppeltes Konfetti, Combo-Banner. Coole Demo-Variante.</div>
+      <div class="cta" style="color:#FF6BB5;">START →</div>
     </a>
   </div>
 
-  <details>
-    <summary>🔬 Diagnose-Versionen (für Entwicklung)</summary>
-    <div class="grid">
-      <a class="card" href="iBoost_Game3D_Quest.html" style="border-color:#7A8696;">
-        <div class="title">Quest 2D (Touch)</div>
-        <div class="desc">Notfall-Variante ohne WebXR: On-Screen-Joysticks.</div>
-        <div class="cta">2D →</div>
-      </a>
-      <a class="card" href="iBoost_Game3D_VR_v2.html" style="border-color:#7A8696;">
-        <div class="title">VR v2 (r128, alt)</div>
-        <div class="desc">r128-Variante mit Foveation-Fix. Flackert noch.</div>
-        <div class="cta">v2 →</div>
-      </a>
-      <a class="card" href="iBoost_Game3D_VR.html" style="border-color:#7A8696;">
-        <div class="title">VR v1 (r128, original)</div>
-        <div class="desc">Erste VR-Edition. Referenz, hatte Bugs.</div>
-        <div class="cta">v1 →</div>
-      </a>
-      <a class="card" href="vr_minimal_test_v5.html" style="border-color:#A6A6E6;">
-        <div class="title">Minimal-Test v5 (r160)</div>
-        <div class="desc">Validierungs-Test, hat funktioniert.</div>
-        <div class="cta">TEST →</div>
-      </a>
-    </div>
-  </details>
+  <!-- ============ DIAGNOSE-TESTS ============ -->
+  <div class="section-title">🔬 KLEINE DIAGNOSE-TESTS (wenn was nicht klappt)</div>
+  <div class="grid">
+    <a class="card" href="vr_test_glb_r147.html" style="border-color:#FFB347;">
+      <div class="icon">📦</div>
+      <div class="title">GLB-Load-Test</div>
+      <div class="desc">Lädt UL3000+SmartSpray-GLB und zeigt visuell ob's klappt. Grüne Box = geladen, rot = Fail.</div>
+      <div class="cta" style="color:#FFB347;">TEST →</div>
+    </a>
+    <a class="card" href="vr_test_movement.html" style="border-color:#7CFF7C;">
+      <div class="icon">🏃</div>
+      <div class="title">Movement + Pickup</div>
+      <div class="desc">5 orange Sphären verstreut. Hingehen → Pickup-Counter im Wrist-Tablet.</div>
+      <div class="cta" style="color:#7CFF7C;">TEST →</div>
+    </a>
+    <a class="card" href="vr_test_audio.html" style="border-color:#A6A6E6;">
+      <div class="icon">🔊</div>
+      <div class="title">Audio (kein Brummen)</div>
+      <div class="desc">Footsteps + Trigger-Beep + Pickup-Chime. KEIN Hum. Suspend bei Sessionend.</div>
+      <div class="cta" style="color:#A6A6E6;">TEST →</div>
+    </a>
+    <a class="card" href="vr_test_reentry.html" style="border-color:#9DDCEE;">
+      <div class="icon">🔁</div>
+      <div class="title">Re-Entry-Test</div>
+      <div class="desc">Session ein/aus/ein. Counter zählt hoch. Cleanup-Test.</div>
+      <div class="cta" style="color:#9DDCEE;">TEST →</div>
+    </a>
+  </div>
 
-  <footer><b>INFICON · LEAK QUEST</b> &nbsp;·&nbsp; Owner: Thomas Grellmann</footer>
+  <!-- ============ DESKTOP / FALLBACK ============ -->
+  <div class="section-title">🖥️ DESKTOP / FALLBACK</div>
+  <div class="grid">
+    <a class="card" href="iBoost_Game3D_v8.html" style="border-color:#6395BD;">
+      <div class="icon">▶</div>
+      <div class="title">Desktop (PC)</div>
+      <div class="desc">Browser-Maus+WASD. Vollständig.</div>
+      <div class="cta">START →</div>
+    </a>
+    <a class="card" href="iBoost_Game3D_Quest.html" style="border-color:#7A8696;">
+      <div class="icon">🎮</div>
+      <div class="title">Quest 2D (Touch)</div>
+      <div class="desc">Quest-Browser ohne WebXR, On-Screen-Joysticks.</div>
+      <div class="cta">START →</div>
+    </a>
+    <a class="card" href="leakquest_campaign.html" style="border-color:#E8862A;">
+      <div class="icon">🎬</div>
+      <div class="title">Campaign</div>
+      <div class="desc">3 Story-Missionen (Desktop).</div>
+      <div class="cta" style="color:#FFD580;">START →</div>
+    </a>
+  </div>
+
+  <footer>
+    <b>Test-Anleitung morgen früh:</b><br>
+    <span class="step">1.</span> Erst <b>VR r161</b> testen — ist der Haupt-Build mit allen Fixes<br>
+    <span class="step">2.</span> Falls UL noch wie Fass aussieht → <b>GLB-Load-Test</b>: die grünen Boxen müssen leuchten<br>
+    <span class="step">3.</span> Falls Bewegung hakt → <b>Movement-Test</b>: 5 Sphären einsammeln. Klappt das, ist Bewegung OK<br>
+    <span class="step">4.</span> Falls Sound stört → <b>Audio-Test</b>: Footsteps + Pickup-Chime, KEIN Brummen mehr<br>
+    <span class="step">5.</span> <b>Re-Entry</b>: mehrfach in und aus VR → Counter geht hoch ohne F5<br>
+    <span class="step">6.</span> Wenn r161 läuft: <b>Arcade-Mode</b> für die Demo, oder <b>Lite</b> für klare Performance<br>
+    <br>
+    <b>INFICON · LEAK QUEST</b> &nbsp;·&nbsp; Owner: Thomas Grellmann
+  </footer>
 </body>
 </html>
