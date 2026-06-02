@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>VR Pickup Live-Diagnose</title>
+<style>
+  html, body { margin:0; padding:0; height:100%; background:#000; color:#fff; font-family:Arial; overflow:hidden; }
+  #info { position:fixed; top:0; left:0; right:0; background:rgba(11,22,38,0.92); padding:12px 16px; z-index:10; font-size:13px; }
+  #info h1 { margin:0 0 6px 0; color:#FFB347; font-size:17px; }
+  #vrBtn { display:block; margin:10px auto; padding:12px 26px; background:#FFB347; color:#0E1620;
+           border:3px solid #FFD580; border-radius:8px; font-size:16px; font-weight:bold; cursor:pointer; }
+  #log { position:fixed; bottom:0; left:0; right:0; background:rgba(0,0,0,0.88); color:#9DDCEE;
+         font-family:monospace; font-size:11px; padding:10px; max-height:30vh; overflow-y:auto;
+         border-top:2px solid #6395BD; z-index:10; }
+  .ok{color:#7CFF7C} .err{color:#FF5C5C} .warn{color:#FFB347}
+</style></head>
+<body>
+<div id="info">
+  <h1>🔬 Pickup Live-Diagnose</h1>
+  <div>3 orange Pickups vor dir. Großer Live-Display zeigt:<br>
+  • dolly.position (echte Spieler-Welt-Pos)<br>
+  • Distanz zu jedem Pickup<br>
+  • OB Pickup ausgelöst wird</div>
+  <button id="vrBtn" onclick="enterVR()">START Diagnose</button>
+</div>
+<div id="log">[diag]</div>
+
+<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>
+<script>
+const logEl=document.getElementById('log');
+function log(m,c){const t=new Date().toTimeString().slice(0,8);
+  logEl.innerHTML+='<div class="'+(c||'')+'">['+t+'] '+m+'</div>';logEl.scrollTop=logEl.scrollHeight;
+  console.log('[diag]',m);}
+
+const scene=new THREE.Scene(); scene.background=new THREE.Color(0x14263B);
+const camera=new THREE.PerspectiveCamera(70,innerWidth/innerHeight,0.05,100);
+const dolly=new THREE.Group(); scene.add(dolly); dolly.add(camera); dolly.position.set(0,0,3);
+
+const renderer=new THREE.WebGLRenderer({antialias:false});
+renderer.setSize(innerWidth,innerHeight);
+renderer.xr.enabled=true;
+document.body.appendChild(renderer.domElement);
+
+scene.add(new THREE.HemisphereLight(0xffffff,0x404060,1.0));
+scene.add(new THREE.DirectionalLight(0xffffff,0.7));
+const floor=new THREE.Mesh(new THREE.PlaneGeometry(30,30),
+  new THREE.MeshStandardMaterial({color:0x6395BD,roughness:0.85}));
+floor.rotation.x=-Math.PI/2; scene.add(floor);
+const grid=new THREE.GridHelper(30,30,0xFFE298,0xE8862A); grid.position.y=0.01; scene.add(grid);
+
+// 3 Pickups in unterschiedlichen Distanzen
+const pickups=[];
+function spawnP(x,z,label){
+  const g=new THREE.Group();
+  const c=new THREE.Mesh(new THREE.CylinderGeometry(0.15,0.15,0.4,16),
+    new THREE.MeshStandardMaterial({color:0xFFB347, emissive:0xFFB347, emissiveIntensity:0.6}));
+  c.position.y=1.0;
+  g.add(c);
+  const ring=new THREE.Mesh(new THREE.RingGeometry(0.4,0.55,32),
+    new THREE.MeshBasicMaterial({color:0x9DDCEE, side:THREE.DoubleSide, transparent:true, opacity:0.7}));
+  ring.rotation.x=-Math.PI/2; ring.position.y=0.02;
+  g.add(ring);
+  g.position.set(x,0,z);
+  g.userData = { consumed:false, label:label };
+  scene.add(g);
+  pickups.push(g);
+  return g;
+}
+spawnP(0, -1.5, 'A (1.5m vorne)');
+spawnP(2, 0,    'B (2m rechts)');
+spawnP(-2, -3,  'C (3.6m schräg)');
+
+// LIVE-DEBUG-DISPLAY als großes 3D-Plane
+let diagCanvas=document.createElement('canvas');
+diagCanvas.width=1024; diagCanvas.height=512;
+const diagCtx=diagCanvas.getContext('2d');
+const diagTex=new THREE.CanvasTexture(diagCanvas);
+const diagMat=new THREE.MeshBasicMaterial({map:diagTex, transparent:true, side:THREE.DoubleSide});
+const diagPlane=new THREE.Mesh(new THREE.PlaneGeometry(3.0, 1.5), diagMat);
+diagPlane.position.set(0, 2.0, -3.5);   // vor dem Spawn, gut sichtbar
+scene.add(diagPlane);
+
+let pickupCount=0;
+let lastEvent='(noch nichts)';
+function redrawDiag(){
+  const c=diagCtx, W=1024, H=512;
+  c.fillStyle='#0B1626'; c.fillRect(0,0,W,H);
+  c.strokeStyle='#7CFF7C'; c.lineWidth=4; c.strokeRect(2,2,W-4,H-4);
+
+  c.fillStyle='#FFB347'; c.font='bold 32px Arial';
+  c.fillText('🔬 PICKUP DIAGNOSE', 30, 50);
+
+  c.fillStyle='#9DDCEE'; c.font='24px monospace';
+  c.fillText('dolly.position = (' + dolly.position.x.toFixed(2) + ', ' + dolly.position.y.toFixed(2) + ', ' + dolly.position.z.toFixed(2) + ')', 30, 100);
+
+  c.fillStyle='#FFE298'; c.font='20px monospace';
+  c.fillText('camera.position = (' + camera.position.x.toFixed(2) + ', ' + camera.position.y.toFixed(2) + ', ' + camera.position.z.toFixed(2) + ')', 30, 135);
+
+  // Pickup distances
+  c.fillStyle='#fff'; c.font='bold 22px Arial';
+  c.fillText('PICKUPS:', 30, 180);
+  let y=215;
+  for (const p of pickups) {
+    const dx = dolly.position.x - p.position.x;
+    const dz = dolly.position.z - p.position.z;
+    const dist = Math.sqrt(dx*dx + dz*dz);
+    const isClose = dist < 1.5;
+    const consumed = p.userData.consumed;
+    c.fillStyle = consumed ? '#7CFF7C' : (isClose ? '#FF3B30' : '#9DDCEE');
+    c.font='22px monospace';
+    const status = consumed ? '✓ AUFGENOMMEN' : (isClose ? '★ IN REICHWEITE' : '');
+    c.fillText(p.userData.label + ':  dist=' + dist.toFixed(2) + 'm  ' + status, 60, y);
+    y += 32;
+  }
+
+  c.fillStyle='#7CFF7C'; c.font='bold 26px Arial';
+  c.fillText('PICKUPS GESAMMELT: ' + pickupCount + ' / ' + pickups.length, 30, y+30);
+
+  c.fillStyle='#FFE298'; c.font='18px Arial';
+  c.fillText('Letztes Event: ' + lastEvent, 30, y+65);
+
+  diagTex.needsUpdate=true;
+}
+
+log('Three.js: '+THREE.REVISION);
+let inVR=false, c1=null, c2=null, snapArmed=true;
+const tempObjs=[];
+
+window.enterVR=async function(){
+  if(!navigator.xr) return log('no xr','err');
+  if(renderer.xr.isPresenting) return log('already presenting','warn');
+  let s;
+  try{s=await navigator.xr.requestSession('immersive-vr',{requiredFeatures:['local-floor']});}
+  catch(e){try{s=await navigator.xr.requestSession('immersive-vr');}catch(e2){return log('FAIL '+e2.message,'err');}}
+  try{await renderer.xr.setSession(s);}catch(e){return log('setSession FAIL '+e.message,'err');}
+  document.getElementById('info').style.display='none';
+};
+renderer.xr.addEventListener('sessionstart',()=>{
+  log('>>> sessionstart','ok');
+  inVR=true; pickupCount=0; lastEvent='Session gestartet';
+  pickups.forEach(p=>{p.userData.consumed=false; p.visible=true;});
+  try{renderer.xr.setFoveation(0);}catch(e){}
+  dolly.position.set(0,0,3); dolly.rotation.set(0,0,0);
+  c1=renderer.xr.getController(0); c2=renderer.xr.getController(1);
+  dolly.add(c1); dolly.add(c2);
+  tempObjs.push(c1,c2);
+  const s1=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12),new THREE.MeshStandardMaterial({color:0x9DDCEE}));
+  s1.position.z=-0.06; c1.add(s1); tempObjs.push(s1);
+  const s2=new THREE.Mesh(new THREE.BoxGeometry(0.04,0.04,0.12),new THREE.MeshStandardMaterial({color:0xFFB347}));
+  s2.position.z=-0.06; c2.add(s2); tempObjs.push(s2);
+});
+renderer.xr.addEventListener('sessionend',()=>{
+  log('<<< sessionend','warn');
+  inVR=false;
+  tempObjs.forEach(o=>{if(o.parent) o.parent.remove(o);});
+  tempObjs.length=0; c1=null; c2=null;
+  document.getElementById('info').style.display='';
+});
+
+let lastTs=performance.now();
+let frameCount=0;
+function frame(){
+  const now=performance.now(); const dt=Math.min(0.05,(now-lastTs)/1000); lastTs=now;
+  frameCount++;
+
+  // PICKUP-LOOP — läuft IMMER, kein gameStarted-check
+  for (const p of pickups) {
+    if (p.userData.consumed) continue;
+    const dx = dolly.position.x - p.position.x;
+    const dz = dolly.position.z - p.position.z;
+    if (dx*dx + dz*dz < 1.5*1.5) {   // 1.5m Radius
+      p.userData.consumed = true;
+      p.visible = false;
+      pickupCount++;
+      lastEvent = 'PICKUP ' + p.userData.label + ' bei frame ' + frameCount;
+      log('PICKUP: ' + p.userData.label + ' @ dolly=(' + dolly.position.x.toFixed(2) + ',' + dolly.position.z.toFixed(2) + ')', 'ok');
+      // Visual flash
+      const fl=new THREE.PointLight(0x7CFF7C, 4.0, 5.0);
+      fl.position.copy(p.position); fl.position.y=1.0;
+      scene.add(fl);
+      setTimeout(()=>scene.remove(fl), 250);
+    }
+  }
+
+  if (frameCount % 12 === 0) redrawDiag();   // ~5 Hz
+
+  // Input poll
+  if(inVR){
+    const sess=renderer.xr.getSession();
+    if(sess) for(const src of sess.inputSources){
+      const gp=src.gamepad; if(!gp||!gp.axes)continue;
+      const sx=gp.axes[2]||0, sy=gp.axes[3]||0, h=src.handedness;
+      if(h==='left' && (Math.abs(sx)>0.15||Math.abs(sy)>0.15)){
+        const cam=renderer.xr.getCamera(); const q=new THREE.Quaternion(); cam.getWorldQuaternion(q);
+        const fwd=new THREE.Vector3(0,0,-1).applyQuaternion(q); fwd.y=0;
+        if(fwd.lengthSq()>0.001) fwd.normalize();
+        const rt=new THREE.Vector3(1,0,0).applyQuaternion(q); rt.y=0;
+        if(rt.lengthSq()>0.001) rt.normalize();
+        dolly.position.addScaledVector(fwd, 2.0*(-sy)*dt);
+        dolly.position.addScaledVector(rt, 2.0*sx*dt);
+      }
+      if(h==='right'){
+        if(Math.abs(sx)>0.7 && snapArmed){dolly.rotation.y+=(sx>0?-1:1)*30*Math.PI/180;snapArmed=false;}
+        else if(Math.abs(sx)<0.3) snapArmed=true;
+      }
+    }
+  }
+  renderer.render(scene,camera);
+}
+renderer.setAnimationLoop(frame);
+log('loop start','ok');
+redrawDiag();
+</script>
+</body></html>
