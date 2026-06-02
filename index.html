@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="de">
 <head>
 <meta charset="UTF-8" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%228%22%20fill%3D%22%2314263B%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2228%22%20width%3D%2216%22%20height%3D%2228%22%20fill%3D%22%23E8862A%22%20rx%3D%223%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2213%22%20r%3D%229%22%20fill%3D%22%23E8862A%22%2F%3E%3C%2Fsvg%3E"/>
@@ -69,26 +69,41 @@
   <header>
     <div class="logo">INF<span class="dot">i</span>CON</div>
     <h1>LEAK QUEST</h1>
-    <div class="subtitle">VR-Tests · 1. Juni 2026 Abend</div>
+    <div class="subtitle">VR-Tests · 2. Juni 2026</div>
   </header>
 
-  <!-- ============ HAUPT-BUILDS (sortiert nach Wahrscheinlichkeit) ============ -->
-  <div class="section-title">🎯 HAUPT-VERSIONEN (in dieser Reihenfolge testen)</div>
+  <!-- ============ HAUPT-BUILDS (neueste zuerst) ============ -->
+  <div class="section-title">🎯 AKTUELLE VERSION</div>
   <div class="grid">
-    <a class="card" href="iBoost_Game3D_VR_r172.html" style="border-color:#FF5C5C;">
-      <div class="badge" style="background:#FF5C5C; color:#fff;">EMPFOHLEN</div>
+    <a class="card" href="iBoost_Game3D_VR_r173.html" style="border-color:#7CFF7C;">
+      <div class="badge" style="background:#7CFF7C; color:#0E1620;">EMPFOHLEN · NEU</div>
+      <div class="icon">✅</div>
+      <div class="title">VR r173 — Kammer + Graph</div>
+      <div class="desc"><b>Kammer ist zurück</b> (Brute-Force-Radius-Kill entfernt). <b>Tisch + Smart Spray + Lichtkegel weg</b> (tableGroup in VR ausgeblendet). Leckrate als <b>v8-Verlaufs-Graph</b> auf dem Wrist-Tablet. Helium steigt nur noch <b>1/3 so schnell</b>; Untergrund-Balken ganz unten, klar getrennt vom Signal.</div>
+      <div class="cta" style="color:#7CFF7C;">START r173 →</div>
+    </a>
+  </div>
+
+  <div class="section-title">🗂️ VORGÄNGER (zum Vergleich)</div>
+  <div class="grid">
+    <a class="card" href="iBoost_Game3D_VR_r172.html" style="border-color:#FF6BB5;">
       <div class="icon">⚠️</div>
       <div class="title">VR r172 — He-Warnungen</div>
-      <div class="desc">He-Bar weg aus Wrist. <b>Roter Vignette-Rahmen</b> im Sichtfeld bei He-BG > 40% (pulsiert > 80%). Großer <b>"HELIUM LEER"</b>-3D-Banner vor Spieler bei helicansLeft = 0. Plus alle r171-Fixes.</div>
-      <div class="cta" style="color:#FF5C5C;">START r172 →</div>
+      <div class="desc">He-Bar weg aus Wrist, roter Vignette-Rahmen + "HELIUM LEER"-Banner. <b>Bekannte Probleme:</b> Kammer fehlte links, Tisch/Spray/Kegel noch drin, rotes Rechteck. → in r173 gefixt.</div>
+      <div class="cta">START r172 →</div>
     </a>
     <a class="card" href="iBoost_Game3D_VR_r171.html" style="border-color:#FF6BB5;">
       <div class="icon">🔨</div>
-      <div class="title">VR r171 (Vorgänger)</div>
-      <div class="desc">Tisch jetzt <b>per-WELT-Position</b> ausgeblendet (alles im 3m-Radius um SC_POS). INFICON jetzt VOR der Kammer schwebend (4m vorn, 3m hoch, 4×1m). Leckrate-Balken auf Wrist-Tablet beim Sprühen. Treppen begehbar via dolly.y=Plattform-Höhe.</div>
-      <div class="cta" style="color:#7CFF7C;">START r171 →</div>
+      <div class="title">VR r171 — Brute-Force</div>
+      <div class="desc">Basis für r173. Tisch-Kill per Welt-Position (3m-Radius) — hat versehentlich die Kammer mit-gelöscht. INFICON-Logo vor der Kammer schwebend.</div>
+      <div class="cta">START r171 →</div>
     </a>
-    <a class="card" href="iBoost_Game3D_VR_r170.html" style="border-color:#FF6BB5;">
-      <div class="icon">🏁</div>
-      <div class="title">VR r170 (Vorgänger)</div>
-      <div class="desc">Prio1-4 Sammelfix: <b>Leckrate-Display</b> (große Zahl + Balken statt %), Tisch PER-FRAME gekillt, vacuum-chamber-Label weg, INFICON niedriger, Standhöhe 0, Audio 3× resume, Helicans außen, To
+  </div>
+
+  <footer>
+    <b>Quest 3:</b> PC-Server starten (<span class="step">start_server.bat</span>), dann im Meta-Browser
+    <span class="step">http://&lt;PC-IP&gt;:8000/iBoost_Game3D_VR_r173.html</span> öffnen.
+    Details in <b>QUEST_3_QUICKSTART.md</b>. · Ältere Builds liegen jetzt im Ordner <b>_archiv/</b>.
+  </footer>
+</body>
+</html>
