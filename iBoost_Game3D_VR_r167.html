@@ -4,7 +4,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%228%22%20fill%3D%22%2314263B%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2228%22%20width%3D%2216%22%20height%3D%2228%22%20fill%3D%22%23E8862A%22%20rx%3D%223%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2213%22%20r%3D%229%22%20fill%3D%22%23E8862A%22%2F%3E%3C%2Fsvg%3E"/>
 <!-- inficon-favicon-marker-v3 -->
 <meta charset="UTF-8">
-<title>INFICON LEAK QUEST · VR r166 · Spray-Wolke + Sound</title>
+<title>INFICON LEAK QUEST · VR r167 · Polish</title>
 <style>
   :root {
     --inf-blue:        #2C4866;
@@ -830,7 +830,7 @@
     <h1 style="font-size: 44px; letter-spacing: 6px; margin: 6px 0 2px 0;">LEAK QUEST</h1>
     <h2 style="font-size: 14px; letter-spacing: 3px; color: #C8D2DC; margin: 0 0 14px 0;">3D vacuum leak-hunt prototype</h2>
     <div style="color: var(--inf-cyan); font-size: 11px; letter-spacing: 2.5px; margin-bottom: 14px; opacity: 0.75;">OWNER · THOMAS GRELLMANN</div>
-    <div style="display:inline-block; background:#7CFF7C; color:#0E1620; font-weight:bold; padding:8px 22px; border-radius:6px; font-size:17px; letter-spacing:3px; margin-bottom:10px; box-shadow:0 2px 14px rgba(124,255,124,0.5);">🌬️ VR r166 · WOLKE+SOUND · 2026-06-01</div>
+    <div style="display:inline-block; background:#7CFF7C; color:#0E1620; font-weight:bold; padding:8px 22px; border-radius:6px; font-size:17px; letter-spacing:3px; margin-bottom:10px; box-shadow:0 2px 14px rgba(124,255,124,0.5);">✨ VR r167 · POLISH · 2026-06-01</div>
     <div class="badge">EARLY VISUAL PREVIEW</div>
     <div style="height: 22px;"></div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
@@ -5048,7 +5048,7 @@ window.startGame3D = function() {
   leakFoundCount = 0;
   score = 0; combo = 1; comboTimer = 0; bestCombo = 1;
   displayedScore = 0;
-  helicansLeft = 3;   // v8 R2: nur 1 Kartusche (3 spray-seconds) zum Start
+  helicansLeft = 9;   // r167: 3 Kartuschen Start (90 spray-seconds)
   window._helicanWarned = false;
   window._helicanEmptyWarned = false;
   heBg = 0;
@@ -5210,7 +5210,7 @@ function _updateHelicanPickups(dt, t) {
       // Pickup!
       p.userData.consumed = true;
       p.visible = false;
-      helicansLeft = Math.min(15, helicansLeft + 3);   // +1 cartridge worth
+      helicansLeft = Math.max(helicansLeft, Math.min(15, helicansLeft + 3));   // r167: respect ∞Helium high values
       // iBoost-Stufen-Bonus: jedes Pickup hebt max-Stufe um 1 (bis 5)
       window._iBoostBonus = (window._iBoostBonus || 0) + 1;
       if (typeof computeIBoostMax3D === 'function') {
@@ -7597,12 +7597,19 @@ renderer.domElement.addEventListener('click', () => {
       }
     } catch(e) { warn('audio resume:', e); }
 
-    // r165: Pickup-Tisch (sprayCheckGroup) im VR ausblenden — wir haben Auto-Equip
+    // r167: Pickup-Tisch + alle Kinder HART ausblenden
     try {
       if (typeof sprayCheckGroup !== 'undefined' && sprayCheckGroup) {
         sprayCheckGroup.visible = false;
-        log('sprayCheckGroup hidden');
+        sprayCheckGroup.traverse(function(c){ c.visible = false; });
+        log('sprayCheckGroup + alle children hidden');
       }
+    } catch(e) {}
+    // r167: Helican + Radar Pickups beim Sessionstart resetten
+    try {
+      if (typeof _resetHelicanPickups === 'function') _resetHelicanPickups();
+      if (typeof _resetRadarPickups === 'function') _resetRadarPickups();
+      log('Pickups zurückgesetzt');
     } catch(e) {}
 
     // 10) Force-start the game (skip start screen) so leak generation runs
@@ -7727,6 +7734,63 @@ renderer.domElement.addEventListener('click', () => {
     } else if (VR._sprayForceUntil) {
       VR._sprayForceUntil = 0;
     }
+    // r167: Leck heller leuchten lassen bei Treffer
+    try {
+      if (typeof leaks !== 'undefined' && typeof spraying !== 'undefined' && typeof signalEMA !== 'undefined') {
+        // Reset all leak emissive (only those we touched)
+        if (!VR._glowedLeaks) VR._glowedLeaks = [];
+        VR._glowedLeaks.forEach(function(lk){
+          if (lk && lk.mesh && lk.mesh.material && lk._origEmissiveIntensity !== undefined) {
+            lk.mesh.material.emissiveIntensity = lk._origEmissiveIntensity;
+          }
+        });
+        VR._glowedLeaks = [];
+
+        if (spraying && signalEMA > 5e-9) {
+          // find the leak closest to spray tip
+          const tip = new THREE.Vector3();
+          getSprayTipWorld(tip);
+          let best = null, bestD = 99;
+          for (const lk of leaks) {
+            if (lk.found || lk.isSprayCheck) continue;
+            const d = tip.distanceTo(lk.mesh.position);
+            if (d < bestD && d < 2.5) { bestD = d; best = lk; }
+          }
+          if (best && best.mesh && best.mesh.material) {
+            if (best._origEmissiveIntensity === undefined) {
+              best._origEmissiveIntensity = best.mesh.material.emissiveIntensity || 0;
+            }
+            // Glow proportional to signal strength
+            const intensity = 0.5 + Math.min(3.0, Math.log10(signalEMA) / 4 + 2.5);
+            best.mesh.material.emissiveIntensity = intensity;
+            if (best.mesh.material.emissive) best.mesh.material.emissive.setHex(0x9DDCEE);
+            VR._glowedLeaks.push(best);
+
+            // 3D-Halo: cyan ring pulsing around the leak
+            if (!VR._leakHalo) {
+              const ring = new THREE.Mesh(
+                new THREE.TorusGeometry(0.20, 0.04, 10, 24),
+                new THREE.MeshBasicMaterial({ color: 0x9DDCEE, transparent: true, opacity: 0.85, depthTest: false })
+              );
+              ring.renderOrder = 90;
+              scene.add(ring);
+              VR._leakHalo = ring;
+            }
+            VR._leakHalo.visible = true;
+            VR._leakHalo.position.copy(best.mesh.position);
+            const t = performance.now() / 1000;
+            const pulse = 0.20 + Math.sin(t * 6) * 0.06;
+            VR._leakHalo.scale.setScalar(pulse / 0.20);
+            VR._leakHalo.material.opacity = 0.5 + 0.4 * Math.min(1, signalEMA / 1e-7);
+          } else if (VR._leakHalo) {
+            VR._leakHalo.visible = false;
+          }
+        } else if (VR._leakHalo) {
+          VR._leakHalo.visible = false;
+        }
+      }
+    } catch(e) {}
+
     // r165: Progress-Ring zeichnen (zeigt aktuelles Detection-Signal als Füll-Kreis)
     if (VR._progressRing && VR._ringCtx) {
       const c = VR._ringCtx, W = 256, H = 256;

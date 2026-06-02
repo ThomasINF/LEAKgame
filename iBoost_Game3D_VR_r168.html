@@ -4,7 +4,7 @@
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%228%22%20fill%3D%22%2314263B%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2228%22%20width%3D%2216%22%20height%3D%2228%22%20fill%3D%22%23E8862A%22%20rx%3D%223%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2213%22%20r%3D%229%22%20fill%3D%22%23E8862A%22%2F%3E%3C%2Fsvg%3E"/>
 <!-- inficon-favicon-marker-v3 -->
 <meta charset="UTF-8">
-<title>INFICON LEAK QUEST · VR r166 · Spray-Wolke + Sound</title>
+<title>INFICON LEAK QUEST · VR r168 · Highscore-VR</title>
 <style>
   :root {
     --inf-blue:        #2C4866;
@@ -830,7 +830,7 @@
     <h1 style="font-size: 44px; letter-spacing: 6px; margin: 6px 0 2px 0;">LEAK QUEST</h1>
     <h2 style="font-size: 14px; letter-spacing: 3px; color: #C8D2DC; margin: 0 0 14px 0;">3D vacuum leak-hunt prototype</h2>
     <div style="color: var(--inf-cyan); font-size: 11px; letter-spacing: 2.5px; margin-bottom: 14px; opacity: 0.75;">OWNER · THOMAS GRELLMANN</div>
-    <div style="display:inline-block; background:#7CFF7C; color:#0E1620; font-weight:bold; padding:8px 22px; border-radius:6px; font-size:17px; letter-spacing:3px; margin-bottom:10px; box-shadow:0 2px 14px rgba(124,255,124,0.5);">🌬️ VR r166 · WOLKE+SOUND · 2026-06-01</div>
+    <div style="display:inline-block; background:#7CFF7C; color:#0E1620; font-weight:bold; padding:8px 22px; border-radius:6px; font-size:17px; letter-spacing:3px; margin-bottom:10px; box-shadow:0 2px 14px rgba(124,255,124,0.5);">🏆 VR r168 · HIGHSCORE-VR · 2026-06-01</div>
     <div class="badge">EARLY VISUAL PREVIEW</div>
     <div style="height: 22px;"></div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
@@ -4683,8 +4683,13 @@ function markLeakFound(lk) {
   if (!trainingState && leakFoundCount >= leakStartCount) {
     console.log('[victory] all leaks found — show overlay NOW');
     if (document.exitPointerLock) document.exitPointerLock();
-    // Direkt aufrufen — kein setTimeout (das wurde bisher manchmal verschluckt)
     try { showVictory(); } catch(e) { console.error('[victory] showVictory threw', e); }
+    // r168: VR-Endgame als 3D-Plane vor Spieler
+    try {
+      if (window.VR && window.VR.inXR && typeof showVR_Endgame === 'function') {
+        showVR_Endgame();
+      }
+    } catch(e) {}
   }
 }
 
@@ -5048,7 +5053,7 @@ window.startGame3D = function() {
   leakFoundCount = 0;
   score = 0; combo = 1; comboTimer = 0; bestCombo = 1;
   displayedScore = 0;
-  helicansLeft = 3;   // v8 R2: nur 1 Kartusche (3 spray-seconds) zum Start
+  helicansLeft = 9;   // r167: 3 Kartuschen Start (90 spray-seconds)
   window._helicanWarned = false;
   window._helicanEmptyWarned = false;
   heBg = 0;
@@ -5210,7 +5215,7 @@ function _updateHelicanPickups(dt, t) {
       // Pickup!
       p.userData.consumed = true;
       p.visible = false;
-      helicansLeft = Math.min(15, helicansLeft + 3);   // +1 cartridge worth
+      helicansLeft = Math.max(helicansLeft, Math.min(15, helicansLeft + 3));   // r167: respect ∞Helium high values
       // iBoost-Stufen-Bonus: jedes Pickup hebt max-Stufe um 1 (bis 5)
       window._iBoostBonus = (window._iBoostBonus || 0) + 1;
       if (typeof computeIBoostMax3D === 'function') {
@@ -7597,12 +7602,19 @@ renderer.domElement.addEventListener('click', () => {
       }
     } catch(e) { warn('audio resume:', e); }
 
-    // r165: Pickup-Tisch (sprayCheckGroup) im VR ausblenden — wir haben Auto-Equip
+    // r167: Pickup-Tisch + alle Kinder HART ausblenden
     try {
       if (typeof sprayCheckGroup !== 'undefined' && sprayCheckGroup) {
         sprayCheckGroup.visible = false;
-        log('sprayCheckGroup hidden');
+        sprayCheckGroup.traverse(function(c){ c.visible = false; });
+        log('sprayCheckGroup + alle children hidden');
       }
+    } catch(e) {}
+    // r167: Helican + Radar Pickups beim Sessionstart resetten
+    try {
+      if (typeof _resetHelicanPickups === 'function') _resetHelicanPickups();
+      if (typeof _resetRadarPickups === 'function') _resetRadarPickups();
+      log('Pickups zurückgesetzt');
     } catch(e) {}
 
     // 10) Force-start the game (skip start screen) so leak generation runs
@@ -7727,6 +7739,63 @@ renderer.domElement.addEventListener('click', () => {
     } else if (VR._sprayForceUntil) {
       VR._sprayForceUntil = 0;
     }
+    // r167: Leck heller leuchten lassen bei Treffer
+    try {
+      if (typeof leaks !== 'undefined' && typeof spraying !== 'undefined' && typeof signalEMA !== 'undefined') {
+        // Reset all leak emissive (only those we touched)
+        if (!VR._glowedLeaks) VR._glowedLeaks = [];
+        VR._glowedLeaks.forEach(function(lk){
+          if (lk && lk.mesh && lk.mesh.material && lk._origEmissiveIntensity !== undefined) {
+            lk.mesh.material.emissiveIntensity = lk._origEmissiveIntensity;
+          }
+        });
+        VR._glowedLeaks = [];
+
+        if (spraying && signalEMA > 5e-9) {
+          // find the leak closest to spray tip
+          const tip = new THREE.Vector3();
+          getSprayTipWorld(tip);
+          let best = null, bestD = 99;
+          for (const lk of leaks) {
+            if (lk.found || lk.isSprayCheck) continue;
+            const d = tip.distanceTo(lk.mesh.position);
+            if (d < bestD && d < 2.5) { bestD = d; best = lk; }
+          }
+          if (best && best.mesh && best.mesh.material) {
+            if (best._origEmissiveIntensity === undefined) {
+              best._origEmissiveIntensity = best.mesh.material.emissiveIntensity || 0;
+            }
+            // Glow proportional to signal strength
+            const intensity = 0.5 + Math.min(3.0, Math.log10(signalEMA) / 4 + 2.5);
+            best.mesh.material.emissiveIntensity = intensity;
+            if (best.mesh.material.emissive) best.mesh.material.emissive.setHex(0x9DDCEE);
+            VR._glowedLeaks.push(best);
+
+            // 3D-Halo: cyan ring pulsing around the leak
+            if (!VR._leakHalo) {
+              const ring = new THREE.Mesh(
+                new THREE.TorusGeometry(0.20, 0.04, 10, 24),
+                new THREE.MeshBasicMaterial({ color: 0x9DDCEE, transparent: true, opacity: 0.85, depthTest: false })
+              );
+              ring.renderOrder = 90;
+              scene.add(ring);
+              VR._leakHalo = ring;
+            }
+            VR._leakHalo.visible = true;
+            VR._leakHalo.position.copy(best.mesh.position);
+            const t = performance.now() / 1000;
+            const pulse = 0.20 + Math.sin(t * 6) * 0.06;
+            VR._leakHalo.scale.setScalar(pulse / 0.20);
+            VR._leakHalo.material.opacity = 0.5 + 0.4 * Math.min(1, signalEMA / 1e-7);
+          } else if (VR._leakHalo) {
+            VR._leakHalo.visible = false;
+          }
+        } else if (VR._leakHalo) {
+          VR._leakHalo.visible = false;
+        }
+      }
+    } catch(e) {}
+
     // r165: Progress-Ring zeichnen (zeigt aktuelles Detection-Signal als Füll-Kreis)
     if (VR._progressRing && VR._ringCtx) {
       const c = VR._ringCtx, W = 256, H = 256;
@@ -7827,9 +7896,17 @@ renderer.domElement.addEventListener('click', () => {
           log('locomotion →', VR.locomotion);
           btn[1]._was = true;
         } else if (btn[1] && !btn[1].pressed) btn[1]._was = false;
-        // r164: Y-Button (left btn[5]) — Cheat-Menü öffnen/schließen
+        // r168: Y-Button — wenn Endgame offen: Restart, sonst Cheat-Menü
         if (btn[5] && btn[5].pressed && !btn[5]._was) {
-          VR_toggleCheatMenu();
+          if (window._vrEndgameShown) {
+            console.log('[r168] Y → restart from endgame');
+            if (typeof hideVR_Endgame === 'function') hideVR_Endgame();
+            if (typeof restartGame3D === 'function') {
+              setTimeout(() => location.reload(), 50);   // einfache aber zuverlässige restart
+            }
+          } else {
+            VR_toggleCheatMenu();
+          }
           btn[5]._was = true;
         } else if (btn[5] && !btn[5].pressed) btn[5]._was = false;
         // r164: Im Cheat-Menü: linker Stick Y zum Scrollen
@@ -7915,6 +7992,81 @@ renderer.domElement.addEventListener('click', () => {
 // END VR EDITION v1
 // =====================================================================
 
+
+// ════════════════════════════════════════════════════════════════════
+//  r168: VR-ENDGAME 3D-OVERLAY
+// ════════════════════════════════════════════════════════════════════
+window.showVR_Endgame = function() {
+  if (!window.VR || !window.VR.inXR) return;
+  if (window._vrEndgameShown) return;
+  window._vrEndgameShown = true;
+  try {
+    const cv = document.createElement('canvas');
+    cv.width = 1024; cv.height = 768;
+    const c = cv.getContext('2d');
+    // Background
+    c.fillStyle = 'rgba(11,22,38,0.95)'; c.fillRect(0,0,1024,768);
+    c.strokeStyle = '#FFE298'; c.lineWidth = 6; c.strokeRect(3,3,1018,762);
+    // Title
+    c.fillStyle = '#FFE298'; c.font = 'bold 70px Arial'; c.textAlign = 'center';
+    c.fillText('🎉 ALLE LECKS GEFUNDEN!', 512, 90);
+    // Stats
+    c.fillStyle = '#7CFF7C'; c.font = 'bold 120px Arial';
+    const _score = (typeof score !== 'undefined') ? Math.round(score) : 0;
+    c.fillText(_score.toLocaleString('de-DE') + ' Pkt', 512, 230);
+    c.fillStyle = '#9DDCEE'; c.font = '32px Arial';
+    const _elapsed = (performance.now() - (window._freeplayStartedAt || performance.now())) / 1000;
+    const mins = Math.floor(_elapsed / 60), secs = Math.floor(_elapsed % 60);
+    c.fillText('Zeit: ' + mins + ':' + String(secs).padStart(2,'0') + '   Lecks: ' + (typeof leakFoundCount !== 'undefined' ? leakFoundCount : 0), 512, 290);
+    // Top 5 highscores
+    c.fillStyle = '#FFB347'; c.font = 'bold 36px Arial';
+    c.fillText('🏆 TOP 5', 512, 360);
+    try {
+      const hs = JSON.parse(localStorage.getItem('leakhunter_3d_highscores_v1') || '[]')
+        .sort((a,b) => (b.score||0) - (a.score||0)).slice(0,5);
+      c.fillStyle = '#C8D2DC'; c.font = '26px monospace'; c.textAlign = 'left';
+      let y = 410;
+      hs.forEach(function(h, i){
+        const name = (h.name || 'ANON').padEnd(10).slice(0,10);
+        const sc = (h.score || 0).toString().padStart(7);
+        const isCurrent = h.score === _score;
+        c.fillStyle = isCurrent ? '#7CFF7C' : '#C8D2DC';
+        c.fillText((i+1) + '. ' + name + sc, 220, y);
+        y += 38;
+      });
+      if (hs.length === 0) {
+        c.fillStyle = '#7A8FA8'; c.fillText('(noch keine Highscores)', 380, y);
+      }
+    } catch(e) { console.warn('hs render err', e); }
+    c.textAlign = 'center';
+    c.fillStyle = '#FFE298'; c.font = 'bold 28px Arial';
+    c.fillText('🎮 Y-Button drücken für NEUES SPIEL', 512, 720);
+
+    const tex = new THREE.CanvasTexture(cv);
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthTest: false });
+    const plane = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 1.5), mat);
+    // Vor dem Spieler, in Augenhöhe
+    plane.position.set(VR.dolly.position.x, 1.7, VR.dolly.position.z - 2.5);
+    plane.renderOrder = 999;
+    plane.lookAt(VR.dolly.position.x, 1.7, VR.dolly.position.z);
+    plane.userData._isEndgame = true;
+    scene.add(plane);
+    window._vrEndgamePlane = plane;
+    console.log('[r168] VR endgame shown');
+  } catch(e) { console.error('[r168] showVR_Endgame err', e); }
+};
+window.hideVR_Endgame = function() {
+  if (window._vrEndgamePlane) {
+    scene.remove(window._vrEndgamePlane);
+    if (window._vrEndgamePlane.material) {
+      if (window._vrEndgamePlane.material.map) window._vrEndgamePlane.material.map.dispose();
+      window._vrEndgamePlane.material.dispose();
+    }
+    window._vrEndgamePlane.geometry.dispose();
+    window._vrEndgamePlane = null;
+  }
+  window._vrEndgameShown = false;
+};
 
 // ════════════════════════════════════════════════════════════════════
 //  v3 EXTRAS BLOCK — Pickup-Phase, Radar, Musik. Alles top-level.
