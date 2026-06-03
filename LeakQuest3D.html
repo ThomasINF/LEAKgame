@@ -835,8 +835,8 @@
       <label for="leakCountSelect" style="color:#9DDCEE; font-size:12px; letter-spacing:2.5px; font-weight:bold;">NUMBER OF LEAKS</label>
       <select id="leakCountSelect" style="background:#11233a; border:2px solid var(--inf-cyan); color:#fff; padding:10px 22px; font-size:24px; font-weight:bold; border-radius:10px; letter-spacing:1px;">
         <option value="3">3</option>
-        <option value="5" selected>5</option>
-        <option value="8">8</option>
+        <option value="5">5</option>
+        <option value="9" selected>9</option>
         <option value="12">12</option>
       </select>
     </div>
@@ -4569,7 +4569,6 @@ function markLeakFound(lk) {
     iBoostMaxAllowed = computeIBoostMax3D();
     if (iBoostMaxAllowed > oldMax) {
       try { playIBoostUnlock(iBoostMaxAllowed); } catch(e){}
-      try { setIBoostLevel3D(iBoostMaxAllowed); } catch(e){}
       // v8 R2: oberen Banner kurz flashen (Freischaltungs-Indikator)
       try { window._iboostFlashUnlock(iBoostMaxAllowed); } catch(e){}
     }
@@ -5098,7 +5097,7 @@ window.enterVR = function() {
 //  iBoost / He-Background MECHANICS — 2026-05-24 evening
 //  Mirrors the V4 2D version. Activated in Free Play and Training.
 // ============================================================
-const BOOST_FACTORS_3D = [1, 1.5, 2.5, 4, 8, 32];   // each iBoost step ~50% weaker than before — more realistic
+const BOOST_FACTORS_3D = [1, 1.5, 2.5, 4, 8, 32, 64];   // v11: Stufe 6 (versteckt) = 64×
 
 // ════════════════════════════════════════════════════════════════════════════
 //  HELICAN-PICKUPS — 3 Aufladepunkte im Spielfeld
@@ -5188,7 +5187,6 @@ function _updateHelicanPickups(dt, t) {
       window._iBoostBonus = (window._iBoostBonus || 0) + 1;
       if (typeof computeIBoostMax3D === 'function') {
         iBoostMaxAllowed = computeIBoostMax3D();
-        if (typeof setIBoostLevel3D === 'function') setIBoostLevel3D(iBoostMaxAllowed);
         if (typeof updateIBoostUI3D === 'function') updateIBoostUI3D();
       }
       const flash = document.getElementById('helicanPickupFlash');
@@ -5247,8 +5245,8 @@ function computeIBoostMax3D() {
     if (lvl === 5) return 5;
     return 1;
   }
-  // v11: FREE-PLAY — ALLE iBoost-Stufen sofort verfügbar (der Speedup soll sofort spürbar sein)
-  return 5;
+  // v11: alle Stufen sofort verfügbar; Stufe 6 NUR über verstecktes Stern-Gadget
+  return window._iBoost6Unlocked ? 6 : 5;
 }
 function _updateIBoostOverlay() {
   // v8 R2: oberen Banner nur kurz bei FREISCHALTUNG (nicht permanent).
@@ -5268,7 +5266,7 @@ window._iboostFlashUnlock = function(newMax) {
   }, 2500);
 };
 function setIBoostLevel3D(lvl) {
-  lvl = Math.max(0, Math.min(5, lvl | 0));
+  lvl = Math.max(0, Math.min(6, lvl | 0));
   if (lvl > iBoostMaxAllowed && !trainingState) lvl = iBoostMaxAllowed;
   if (iBoostLevel !== lvl) {
     iBoostLevel = lvl;
@@ -6551,7 +6549,7 @@ window.resumeGame    = function() {
 // can pause cleanly.
 document.addEventListener('keydown', e => {
   // iBoost numeric keys (0..5) — only while game is started
-  if (gameStarted && /^Digit[0-5]$/.test(e.code)) {
+  if (gameStarted && /^Digit[0-6]$/.test(e.code)) {
     const lvl = parseInt(e.code.slice(5), 10);
     setIBoostLevel3D(lvl);
     e.preventDefault();
@@ -9816,6 +9814,7 @@ window._showAchievement = _showAchievement;
       /* v11: Start-Controls subtil — kein großes Panel mehr beim Start (Controls erscheinen im Spiel; G öffnet sie) */
       const ti=performance.now()*0.001;
       try{ _iboostHintTick(); }catch(e){}
+      try{ _starTick(); }catch(e){}
       // unicorn sparkle bob + Herzchen-Spray (fliegen wie das Gas)
       if(UNI.on){
         for(let i=0;i<UNI.sprites.length;i++){ const sp=UNI.sprites[i]; sp.material.opacity=0.7+0.3*Math.sin(ti*4+sp.userData.ph); }
@@ -9837,8 +9836,8 @@ window._showAchievement = _showAchievement;
   // v11: iBoost-Hinweise
   let _ibBanner=null,_ibHint=null,_ibStartAt=0;
   function _ibBig(show){ if(!_ibBanner){ _ibBanner=document.createElement('div');
-      _ibBanner.style.cssText='position:fixed;top:23%;left:50%;transform:translateX(-50%);z-index:65;padding:16px 34px;border-radius:12px;font:bold 26px Arial;color:#fff;background:linear-gradient(180deg,rgba(99,149,189,0.95),rgba(44,72,102,0.95));border:2px solid #9DDCEE;box-shadow:0 8px 28px rgba(0,0,0,0.5);pointer-events:none;text-align:center;';
-      _ibBanner.innerHTML='Press number <span style="color:#FFE298;font-size:34px;">3</span> to activate iBoost<br><span style="font-size:16px;font-weight:normal;color:#C8D2DC;">for a faster search</span>';
+      _ibBanner.style.cssText='position:fixed;top:42%;left:50%;transform:translate(-50%,-50%);z-index:65;padding:24px 48px;border-radius:16px;font:bold 36px Arial;color:#fff;background:linear-gradient(180deg,rgba(99,149,189,0.95),rgba(44,72,102,0.95));border:2px solid #9DDCEE;box-shadow:0 8px 28px rgba(0,0,0,0.5);pointer-events:none;text-align:center;';
+      _ibBanner.innerHTML='Press number <span style="color:#FFE298;font-size:56px;">3</span> to activate iBoost<br><span style="font-size:20px;font-weight:normal;color:#C8D2DC;">for a much faster search</span>';
       document.body.appendChild(_ibBanner); } _ibBanner.style.display=show?'block':'none'; }
   function _ibSmall(show){ if(!_ibHint){ _ibHint=document.createElement('div');
       _ibHint.style.cssText='position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:64;padding:8px 18px;border-radius:9px;font:bold 14px Arial;color:#9DDCEE;background:rgba(14,22,32,0.85);border:1px solid rgba(99,149,189,0.5);pointer-events:none;';
@@ -9851,6 +9850,30 @@ window._showAchievement = _showAchievement;
     const lf=(typeof leakFoundCount!=='undefined')?leakFoundCount:0;
     const ib=(typeof iBoostLevel!=='undefined')?iBoostLevel:0;
     _ibBig(lf>=1 && ib===0);
+  }
+  // v11: verstecktes Stern-Gadget hinten im Raum → iBoost Stufe 6
+  let _star=null,_starDone=false;
+  function buildStar(){
+    const cv=document.createElement('canvas'); cv.width=128; cv.height=128; const x=cv.getContext('2d');
+    x.fillStyle='#FFE070'; x.strokeStyle='#C9A227'; x.lineWidth=4; x.beginPath();
+    for(let i=0;i<5;i++){ const a=-Math.PI/2+i*2*Math.PI/5, a2=a+Math.PI/5;
+      x.lineTo(64+Math.cos(a)*56,64+Math.sin(a)*56); x.lineTo(64+Math.cos(a2)*24,64+Math.sin(a2)*24); }
+    x.closePath(); x.fill(); x.stroke();
+    const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),transparent:true,depthTest:true}));
+    sp.scale.set(0.30,0.30,1); sp.position.set(8.8,1.3,-8.8); scene.add(sp); return sp;
+  }
+  function _starTick(){
+    if(_starDone) return;
+    if(typeof gameStarted==='undefined' || !gameStarted) return;
+    if(!_star){ try{ _star=buildStar(); }catch(e){ return; } }
+    const now=performance.now(); _star.material.rotation+=0.02; _star.position.y=1.3+Math.sin(now*0.002)*0.12;
+    let px,pz; if(window.VR&&window.VR.inXR&&window.VR.dolly){px=VR.dolly.position.x;pz=VR.dolly.position.z;} else {px=camera.position.x;pz=camera.position.z;}
+    const dx=px-_star.position.x, dz=pz-_star.position.z;
+    if(dx*dx+dz*dz<2.2){ _starDone=true; _star.visible=false; window._iBoost6Unlocked=true;
+      try{ if(typeof computeIBoostMax3D==='function') iBoostMaxAllowed=computeIBoostMax3D(); }catch(e){}
+      try{ if(typeof updateIBoostUI3D==='function') updateIBoostUI3D(); }catch(e){}
+      try{ t('⭐ Secret found — iBoost LEVEL 6 unlocked! (press 6)'); }catch(e){}
+    }
   }
   window.startLight3D = function(){
     try{ renderer.setPixelRatio(0.6); renderer.shadowMap.enabled=false; renderer.toneMapping=THREE.NoToneMapping; }catch(e){}

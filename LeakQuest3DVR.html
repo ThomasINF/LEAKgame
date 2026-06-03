@@ -5018,7 +5018,7 @@ window.startGame3D = function() {
     if (el) el.style.display = '';
   }
   const sel = document.getElementById('leakCountSelect');
-  const count = sel ? parseInt(sel.value, 10) || 5 : 5;
+  const count = sel ? parseInt(sel.value, 10) || 9 : 9;   // v11: VR default 9 Lecks
   leakStartCount = count;
   leakFoundCount = 0;
   score = 0; combo = 1; comboTimer = 0; bestCombo = 1;
@@ -7724,6 +7724,8 @@ renderer.domElement.addEventListener('click', () => {
     } catch(e) { warn('startGame3D failed', e); }
 
     log('sessionstart complete');
+    // v11: XR-Render-Loop bei jedem (Wieder-)Eintritt sicher neu setzen
+    try { renderer.setAnimationLoop(window.animate); } catch(e){}
   });
 
   // ───────────────────────────────────────────────────────────────────
@@ -7792,9 +7794,9 @@ renderer.domElement.addEventListener('click', () => {
       VR.versionLabel = null;
     }
 
-    // Stop XR animation loop, fall back to desktop RAF
-    try { renderer.setAnimationLoop(null); } catch(e){}
-    try { if (typeof window.animate === 'function') requestAnimationFrame(window.animate); } catch(e){}
+    // v11 FIX: Loop NICHT nullen — durchgehend window.animate behalten.
+    // Sonst war der Bildschirm beim 2. VR-Eintritt schwarz (XR-Render-Loop fehlte).
+    try { renderer.setAnimationLoop(window.animate); } catch(e){}
 
     log('sessionend cleanup complete');
   });
