@@ -3,133 +3,102 @@
 <head>
 <meta charset="UTF-8" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%228%22%20fill%3D%22%2314263B%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2228%22%20width%3D%2216%22%20height%3D%2228%22%20fill%3D%22%236395BD%22%20rx%3D%223%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2213%22%20r%3D%229%22%20fill%3D%22%236395BD%22%2F%3E%3C%2Fsvg%3E"/>
-<!-- inficon-favicon-marker-v3 -->
 <title>INFICON · LEAK QUEST</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  :root {
-    --inf-cyan:#6395BD; --inf-cyan-hi:#9DDCEE; --inf-blue:#2C4866;
-    --inf-navy:#14263B; --sig-orange:#E8862A;
-  }
-  * { box-sizing:border-box; }
-  html, body { margin:0; padding:0; min-height:100%; background:#0E1620; color:#fff; font-family:'Segoe UI',Arial,sans-serif; }
-  body {
+  :root{ --inf-cyan:#6395BD; --inf-cyan-hi:#9DDCEE; --inf-navy:#14263B; --sig-orange:#E8862A; }
+  *{ box-sizing:border-box; }
+  html,body{ margin:0; padding:0; min-height:100%; }
+  body{
+    font-family:'Segoe UI',Arial,sans-serif; color:#fff; min-height:100vh;
     background:
-      radial-gradient(1200px 600px at 50% 8%, rgba(99,149,189,0.18), transparent 60%),
-      radial-gradient(900px 500px at 80% 90%, rgba(232,134,42,0.08), transparent 60%),
-      linear-gradient(180deg, #0E1620 0%, #14263B 100%);
-    min-height:100vh; display:flex; align-items:center; justify-content:center;
-    flex-direction:column; padding:30px 20px;
+      radial-gradient(1200px 600px at 50% 6%, rgba(99,149,189,0.20), transparent 60%),
+      radial-gradient(900px 500px at 82% 92%, rgba(157,220,238,0.08), transparent 60%),
+      linear-gradient(180deg,#0E1620 0%,#14263B 100%);
+    display:flex; flex-direction:column; align-items:center; padding:40px 20px;
   }
-  header { text-align:center; margin-bottom:20px; }
-  header .logo { font-size:46px; font-weight:700; letter-spacing:2px; color:var(--inf-cyan); }
-  header .logo .dot { color:var(--inf-cyan); }  /* r174: INFICON komplett blau, kein oranger i-Punkt */
-  header h1 { margin:10px 0 4px 0; font-size:48px; letter-spacing:4px;
-    background:linear-gradient(180deg, #fff 0%, #B8D6E8 100%);
-    -webkit-background-clip:text; -webkit-text-fill-color:transparent; color:transparent; }
-  header .subtitle { font-size:13px; color:#9DDCEE; letter-spacing:3px; }
-
-  .section-title {
-    text-align:center; margin:24px 0 14px 0; color:#FFE298;
-    font-size:13px; letter-spacing:4px; font-weight:bold;
-    padding: 8px 16px;
-    border-top: 1px solid rgba(255,226,152,0.3);
-    border-bottom: 1px solid rgba(255,226,152,0.3);
-    width:100%; max-width:1100px;
+  header{ text-align:center; margin-bottom:30px; }
+  .logo{ font-size:42px; font-weight:700; letter-spacing:3px; color:var(--inf-cyan); }
+  h1{ margin:8px 0 4px; font-size:52px; letter-spacing:5px;
+    background:linear-gradient(180deg,#fff,#B8D6E8); -webkit-background-clip:text;
+    -webkit-text-fill-color:transparent; }
+  .subtitle{ font-size:13px; color:var(--inf-cyan-hi); letter-spacing:4px; }
+  .grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
+    max-width:840px; width:100%; }
+  .card{
+    background:linear-gradient(180deg,rgba(22,33,48,0.92),rgba(14,22,32,0.95));
+    border:2px solid var(--inf-cyan); border-radius:14px; padding:24px 22px;
+    text-decoration:none; color:#fff; transition:transform .16s,box-shadow .16s,border-color .16s;
+    box-shadow:0 6px 20px rgba(0,0,0,0.4); display:flex; flex-direction:column; min-height:150px;
   }
-
-  .grid {
-    display:grid; gap:14px;
-    grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
-    max-width:1100px; width:100%;
-  }
-  .card {
-    background:linear-gradient(180deg, rgba(20,30,45,0.88), rgba(14,22,32,0.92));
-    border:2px solid var(--inf-cyan); border-radius:10px;
-    padding:16px 14px; cursor:pointer; text-decoration:none; color:#fff;
-    transition:all 0.18s ease;
-    display:flex; flex-direction:column; align-items:flex-start;
-    box-shadow:0 6px 18px rgba(0,0,0,0.4);
-  }
-  .card:hover { transform:translateY(-3px); box-shadow:0 10px 24px rgba(99,149,189,0.35); }
-  .card .icon { font-size:26px; margin-bottom:6px; }
-  .card .title { font-size:14px; font-weight:700; letter-spacing:0.5px; margin:0 0 5px 0; }
-  .card .desc { font-size:11px; line-height:1.4; color:#C8D2DC; margin:0 0 10px 0; }
-  .card .cta { font-size:10px; letter-spacing:2px; font-weight:bold; color:var(--inf-cyan-hi); margin-top:auto; }
-  .badge { display:inline-block; padding:2px 8px; margin-bottom:6px;
-    font-size:9px; letter-spacing:1.5px; border-radius:4px; font-weight:bold; }
-
-  footer { margin-top:30px; max-width:760px; font-size:11px; letter-spacing:1px;
-    color:#7A8FA8; text-align:center; line-height:1.7; }
-  footer b { color:#9DDCEE; }
-  .step { color:#FFE298; }
+  .card:hover{ transform:translateY(-4px); box-shadow:0 12px 28px rgba(99,149,189,0.4); }
+  .card .icon{ font-size:40px; margin-bottom:10px; }
+  .card .title{ font-size:20px; font-weight:700; margin-bottom:6px; }
+  .card .desc{ font-size:13px; line-height:1.5; color:#C8D2DC; }
+  .card .cta{ margin-top:auto; padding-top:12px; font-size:11px; letter-spacing:2px;
+    font-weight:bold; color:var(--inf-cyan-hi); }
+  .card.soon{ border-color:rgba(120,140,160,0.35); cursor:default; pointer-events:none;
+    filter:grayscale(0.85); opacity:0.5; }
+  .card.soon:hover{ transform:none; box-shadow:0 6px 20px rgba(0,0,0,0.4); }
+  .badge{ display:inline-block; align-self:flex-start; font-size:10px; letter-spacing:1.5px;
+    font-weight:bold; padding:3px 10px; border-radius:5px; margin-bottom:10px; }
+  footer{ margin-top:34px; font-size:11px; color:#7A8FA8; letter-spacing:1px; text-align:center; line-height:1.7; }
+  footer b{ color:var(--inf-cyan-hi); }
 </style>
 </head>
 <body>
   <header>
-    <div class="logo">INF<span class="dot">i</span>CON</div>
+    <div class="logo">INFICON</div>
     <h1>LEAK QUEST</h1>
-    <div class="subtitle">VR-Tests · 2. Juni 2026</div>
+    <div class="subtitle">HELIUM LEAK DETECTION GAME</div>
   </header>
 
-  <!-- ============ HAUPT-BUILDS (neueste zuerst) ============ -->
-  <div class="section-title">🎯 AKTUELLE VERSIONEN</div>
   <div class="grid">
-    <a class="card" href="iBoost_Game3D_VR_r175.html" style="border-color:#7CFF7C;">
-      <div class="badge" style="background:#7CFF7C; color:#0E1620;">VR · EMPFOHLEN · NEU</div>
-      <div class="icon">🥽</div>
-      <div class="title">VR r175 — Labels + Bedienung</div>
-      <div class="desc"><b>Bedienungs-Feld</b> oben im Sichtfeld. <b>Mehr Lecks</b> standardmäßig. Pickups beschriftet: <b>Helican</b> (gelb) / <b>Leckradar</b> (blau). Plus alle r174-Fixes (Vignette weg, He-Text-Warnung, INFICON blau, Rainbow per 3× A).</div>
-      <div class="cta" style="color:#7CFF7C;">START r175 →</div>
-    </a>
-    <a class="card" href="iBoost_Game3D_v9_unicorn.html" style="border-color:#FF9CE8;">
-      <div class="badge" style="background:#FF9CE8; color:#0E1620;">3D · BROWSER · FUN</div>
-      <div class="icon">🦄</div>
-      <div class="title">3D Unicorn Edition</div>
-      <div class="desc">Die Desktop-3D-Variante mit Gadgets: <b>U</b> 🦄 Einhornmodus (Regenbogen-Glitzer + Smileys), <b>M</b> 🌙 Mondgravitation, <b>N</b> 📡 Leck-Radar, <b>G</b> Steuerung/Gadgets-Hilfe. Maus + WASD.</div>
-      <div class="cta" style="color:#FF9CE8;">START Unicorn →</div>
-    </a>
-    <a class="card" href="iBoost_Game3D_v8.html" style="border-color:#9DDCEE;">
-      <div class="badge" style="background:#9DDCEE; color:#0E1620;">3D · BROWSER</div>
+    <a class="card" href="iBoost_Game3D_v10.html">
+      <span class="badge" style="background:#7CFF7C;color:#0E1620;">PLAY</span>
       <div class="icon">🖥️</div>
-      <div class="title">3D Standard (v8)</div>
-      <div class="desc">Die normale Desktop-3D-Version im Browser — Maus + WASD, ohne VR-Headset spielbar.</div>
-      <div class="cta" style="color:#9DDCEE;">START 3D →</div>
+      <div class="title">Browser Game</div>
+      <div class="desc">The 3D game — play right here with mouse &amp; keyboard. No headset needed.</div>
+      <div class="cta">START →</div>
     </a>
-  </div>
 
-  <div class="section-title">🗂️ VORGÄNGER (zum Vergleich)</div>
-  <div class="grid">
-    <a class="card" href="iBoost_Game3D_VR_r174.html" style="border-color:#FF6BB5;">
-      <div class="icon">🎨</div>
-      <div class="title">VR r174 — Politur + Rainbow</div>
-      <div class="desc">Comfort-Vignette weg, He-Text-Warnung, näher ans Tool, INFICON blau, Rainbow-Cheat. Basis für r175.</div>
-      <div class="cta">START r174 →</div>
+    <a class="card" href="iBoost_Game3D_VR_r175.html">
+      <span class="badge" style="background:#9DDCEE;color:#0E1620;">VR</span>
+      <div class="icon">🥽</div>
+      <div class="title">VR Game</div>
+      <div class="desc">The immersive version for Meta Quest. Open this on the headset's browser.</div>
+      <div class="cta">START VR →</div>
     </a>
-    <a class="card" href="iBoost_Game3D_VR_r173.html" style="border-color:#FF6BB5;">
-      <div class="icon">✅</div>
-      <div class="title">VR r173 — Kammer + Graph</div>
-      <div class="desc">Kammer zurück, Tisch/Spray/Lichtkegel weg, Leckrate als v8-Verlaufs-Graph auf der Wrist, Helium 1/3 so schnell. Basis für r174.</div>
-      <div class="cta">START r173 →</div>
-    </a>
-    <a class="card" href="iBoost_Game3D_VR_r172.html" style="border-color:#FF6BB5;">
-      <div class="icon">⚠️</div>
-      <div class="title">VR r172 — He-Warnungen</div>
-      <div class="desc">He-Bar weg aus Wrist, roter Vignette-Rahmen + "HELIUM LEER"-Banner. <b>Bekannte Probleme:</b> Kammer fehlte links, Tisch/Spray/Kegel noch drin, rotes Rechteck. → in r173 gefixt.</div>
-      <div class="cta">START r172 →</div>
-    </a>
-    <a class="card" href="iBoost_Game3D_VR_r171.html" style="border-color:#FF6BB5;">
-      <div class="icon">🔨</div>
-      <div class="title">VR r171 — Brute-Force</div>
-      <div class="desc">Basis für r173. Tisch-Kill per Welt-Position (3m-Radius) — hat versehentlich die Kammer mit-gelöscht. INFICON-Logo vor der Kammer schwebend.</div>
-      <div class="cta">START r171 →</div>
-    </a>
-  </div>
 
-  <footer>
-    <b>Quest 3:</b> PC-Server starten (<span class="step">start_server.bat</span>), dann im Meta-Browser
-    <span class="step">http://&lt;PC-IP&gt;:8000/iBoost_Game3D_VR_r175.html</span> öffnen.
-    Details in <b>QUEST_3_QUICKSTART.md</b>. · Ältere Builds liegen jetzt im Ordner <b>_archiv/</b>.
-  </footer>
+    <a class="card" href="iBoost_Game3D_v10.html#highscores">
+      <div class="icon">🏆</div>
+      <div class="title">High Scores</div>
+      <div class="desc">See the top runs and best combos.</div>
+      <div class="cta">VIEW →</div>
+    </a>
+
+    <a class="card" href="iBoost_Game3D_v10.html#settings">
+      <div class="icon">⚙️</div>
+      <div class="title">Settings</div>
+      <div class="desc">Sound, mouse sensitivity, field of view and more.</div>
+      <div class="cta">OPEN →</div>
+    </a>
+
+    <div class="card soon">
+      <span class="badge" style="background:#7A8FA8;color:#0E1620;">COMING SOON</span>
+      <div class="icon">🎓</div>
+      <div class="title">Training</div>
+      <div class="desc">Guided levels for SMART-Spray, iBoost and response time.</div>
+      <div class="cta">SOON</div>
+    </div>
+
+    <div class="card soon">
+      <span class="badge" style="background:#7A8FA8;color:#0E1620;">COMING SOON</span>
+      <div class="icon">🎬</div>
+      <div class="title">Campaign</div>
+      <div class="desc">Story missions through the fab — hunt the hidden leaks.</div>
+      <div class="cta">SOON</div>
+    </div>
+  </div>
 </body>
 </html>

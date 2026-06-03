@@ -1,10 +1,10 @@
 <!DOCTYPE html>
 <html lang="de">
 <head>
-<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%228%22%20fill%3D%22%2314263B%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2228%22%20width%3D%2216%22%20height%3D%2228%22%20fill%3D%22%236395BD%22%20rx%3D%223%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2213%22%20r%3D%229%22%20fill%3D%22%236395BD%22%2F%3E%3C%2Fsvg%3E"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%228%22%20fill%3D%22%2314263B%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2228%22%20width%3D%2216%22%20height%3D%2228%22%20fill%3D%22%23E8862A%22%20rx%3D%223%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2213%22%20r%3D%229%22%20fill%3D%22%23E8862A%22%2F%3E%3C%2Fsvg%3E"/>
 <!-- inficon-favicon-marker-v3 -->
 <meta charset="UTF-8">
-<title>INFICON LEAK QUEST · VR r175 · Labels+Hilfe</title>
+<title>INFICON Leak Hunter — 3D Unicorn Edition 🦄</title>
 <style>
   :root {
     --inf-blue:        #2C4866;
@@ -823,6 +823,7 @@
     box-shadow: 0 0 16px rgba(255,179,71,0.5);
   }
 </style>
+<style>@keyframes ibPop{0%{transform:translateX(-50%) scale(1);}40%{transform:translateX(-50%) scale(1.30);}100%{transform:translateX(-50%) scale(1);}}#iboostBottom.ibpop{animation:ibPop .4s ease;}</style>
 </head>
 <body>
   <div id="startScreen">
@@ -830,7 +831,7 @@
     <h1 style="font-size: 44px; letter-spacing: 6px; margin: 6px 0 2px 0;">LEAK QUEST</h1>
     <h2 style="font-size: 14px; letter-spacing: 3px; color: #C8D2DC; margin: 0 0 14px 0;">3D vacuum leak-hunt prototype</h2>
     <div style="color: var(--inf-cyan); font-size: 11px; letter-spacing: 2.5px; margin-bottom: 14px; opacity: 0.75;">OWNER · THOMAS GRELLMANN</div>
-    <div style="display:inline-block; background:#7CFF7C; color:#0E1620; font-weight:bold; padding:8px 22px; border-radius:6px; font-size:17px; letter-spacing:3px; margin-bottom:10px; box-shadow:0 2px 14px rgba(124,255,124,0.5);">🏷️ VR r175 · LABELS + BEDIENUNG · 2026-06-02</div>
+    <div style="display:inline-block; background:#E8862A; color:#1A2E48; font-weight:bold; padding:6px 16px; border-radius:6px; font-size:14px; letter-spacing:2px; margin-bottom:10px; box-shadow:0 2px 8px rgba(232,134,42,0.4);">BUILD v8 R14 · 2026-06-01</div>
     <div class="badge">EARLY VISUAL PREVIEW</div>
     <div style="height: 22px;"></div>
     <div style="display:flex; gap:14px; flex-wrap:wrap; justify-content:center;">
@@ -858,10 +859,9 @@
       <select id="leakCountSelect" style="background: #fff; border: 1px solid var(--inf-cyan); color: #1A2E48; padding: 8px 12px; font-size: 15px; border-radius: 4px; font-weight: 600;">
         <option value="1">1 (Tutorial)</option>
         <option value="3">3 (Easy)</option>
-        <option value="5">5 (Normal)</option>
+        <option value="5" selected>5 (Normal)</option>
         <option value="7">7 (Hard)</option>
-        <option value="9" selected>9 (Default — viele Lecks)</option>
-        <option value="12">12 (Extreme)</option>
+        <option value="10">10 (Extreme)</option>
       </select>
     </div>
     <div style="margin-bottom: 18px; display: flex; gap: 10px; align-items: center;">
@@ -906,13 +906,13 @@
   
   
   <!-- v7: iBoost-Status zentral unten -->
-  <div id="iboostBottom" style="display:none; position:absolute; bottom:18px; left:50%; transform:translateX(-50%); padding:10px 22px; background:linear-gradient(180deg, rgba(20,30,45,0.92), rgba(14,22,32,0.96)); border:2px solid var(--inf-cyan); border-radius:10px; color:#fff; font:bold 14px Arial; letter-spacing:1.5px; z-index:7; pointer-events:none; box-shadow:0 4px 14px rgba(0,0,0,0.5);">
-    <span style="color:#9DCDED;">iBOOST</span> <span style="font-family:monospace; color:#FFE0A8; margin-left:8px;">LEVEL <span id="iboostBottomLvl">0</span></span>
-    <span style="color:#888; font-size:11px; margin-left:14px;">[ 0 – 5 ]</span>
+  <div id="iboostBottom" style="display:none; position:absolute; bottom:18px; left:50%; transform:translateX(-50%); padding:12px 28px; background:linear-gradient(180deg, rgba(20,30,45,0.94), rgba(14,22,32,0.97)); border:2px solid var(--inf-cyan); border-radius:14px; color:#fff; font:bold 24px Arial; letter-spacing:1.5px; z-index:7; pointer-events:none; box-shadow:0 4px 18px rgba(0,0,0,0.55);">
+    <span style="color:#9DCDED;">iBOOST</span> <span style="font-family:monospace; color:#FFE0A8; margin-left:10px;">LEVEL <span id="iboostBottomLvl">0</span></span>
+    <span style="color:#9DCDED; font-size:13px; font-weight:normal; margin-left:20px;">⌨ Press <b>G</b> — Controls</span>
   </div>
 
   <!-- v7: Helican-Symbole unten — drei Vorräte mit Füllgrad -->
-  <div id="helicanSymbols" style="display:none; position:absolute; left:18px; bottom:200px; padding:10px 14px; background:rgba(20,30,45,0.88); border:1px solid rgba(99,149,189,0.50); border-radius:10px; color:#fff; z-index:7; pointer-events:none; box-shadow:0 4px 14px rgba(0,0,0,0.5);">
+  <div id="helicanSymbols" style="display:none; position:absolute; right:18px; bottom:20px; padding:10px 14px; background:rgba(20,30,45,0.88); border:1px solid rgba(99,149,189,0.50); border-radius:10px; color:#fff; z-index:7; pointer-events:none; box-shadow:0 4px 14px rgba(0,0,0,0.5);">
     <div style="font-size:10px; color:#9DCDED; letter-spacing:2px; font-weight:bold; margin-bottom:6px;">HELICAN CARTRIDGES</div>
     <div style="display:flex; gap:8px; align-items:flex-end;">
       <svg width="22" height="44" viewBox="0 0 22 44"><defs><clipPath id="clip1"><rect id="clip1r" x="0" y="0" width="22" height="44"/></clipPath></defs><rect x="2" y="2" width="18" height="40" rx="3" fill="none" stroke="#888" stroke-width="1.5"/><rect x="3" y="3" width="16" height="38" rx="2" fill="#FFB347" clip-path="url(#clip1)"/></svg>
@@ -972,7 +972,7 @@
       </div>
       <div style="display:flex; gap:12px; justify-content:center; margin-top:22px; flex-wrap:wrap;">
         <button onclick="location.reload()" style="background: linear-gradient(180deg, #2C8B47, #1E5E32); color:#fff; border:2px solid #7CFF7C; padding:13px 28px; font-size:14px; font-weight:600; border-radius:8px; cursor:pointer; letter-spacing:1.5px;">🔁  NEW ROUND</button>
-        <button id="egScreenshot" style="background: rgba(99,149,189,0.20); color:#9DCDED; border:2px solid #6395BD; padding:13px 28px; font-size:14px; font-weight:600; border-radius:8px; cursor:pointer; letter-spacing:1.5px;">📷  SCREENSHOT</button>
+        <button id="egScreenshot" style="background: rgba(99,149,189,0.20); color:#9DCDED; border:2px solid #6395BD; padding:13px 28px; font-size:14px; font-weight:600; border-radius:8px; cursor:pointer; letter-spacing:1.5px;">📤  SHARE CARD</button>
         <button onclick="location.reload()" style="background: rgba(60,60,70,0.20); color:#C8D2DC; border:2px solid #6395BD; padding:13px 28px; font-size:14px; font-weight:600; border-radius:8px; cursor:pointer; letter-spacing:1.5px;">🏠  MAIN MENU</button>
       </div>
     </div>
@@ -1236,8 +1236,8 @@
     </div>
   </div>
 
-<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/build/three.min.js"></script>  <!-- r147: letzte Version mit examples/js/ -->
-<script src="https://cdn.jsdelivr.net/npm/three@0.147.0/examples/js/loaders/GLTFLoader.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/loaders/GLTFLoader.js"></script>
 <!-- Embedded GLB data — works without HTTP server (file:// XHR is blocked but
      <script src> for local JS works fine). Both files contain `window.X_GLB_B64`
      globals which we decode at runtime and parse with GLTFLoader.parse(). -->
@@ -1259,11 +1259,13 @@ scene.fog = new THREE.Fog(0x8E98A4, 20, 60);
 const camera = new THREE.PerspectiveCamera(72, window.innerWidth / window.innerHeight, 0.05, 100);
 camera.position.set(0, 1.7, 8);   // 2m weiter zurück (war 6)
 
-const renderer = new THREE.WebGLRenderer({ antialias: false, preserveDrawingBuffer: true });  // v2: AA off — Quest foveation/MSAA-Konflikt
+const renderer = new THREE.WebGLRenderer({ antialias: true, preserveDrawingBuffer: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
 renderer.shadowMap.enabled = true;
 renderer.shadowMap.type = THREE.PCFSoftShadowMap;
-// v2: setPixelRatio() weggelassen — Default 1.0 stabiler in Quest-WebXR
+renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+renderer.toneMapping = THREE.ACESFilmicToneMapping;   // r: etwas mehr Bildqualität/Kontrast
+renderer.toneMappingExposure = 1.15;
 renderer.xr.enabled = true;  // enable WebXR
 document.body.appendChild(renderer.domElement);
 
@@ -1303,7 +1305,7 @@ scene.add(new THREE.AmbientLight(0x9AA8C0, 0.28));
 const sun = new THREE.DirectionalLight(0xffffff, 1.10);
 sun.position.set(6, 12, 8);
 sun.castShadow = true;
-sun.shadow.mapSize.set(2048, 2048);
+sun.shadow.mapSize.set(4096, 4096);
 sun.shadow.camera.left = -16; sun.shadow.camera.right = 16;
 sun.shadow.camera.top = 16; sun.shadow.camera.bottom = -16;
 sun.shadow.camera.near = 0.5; sun.shadow.camera.far = 45;
@@ -3031,15 +3033,7 @@ if (typeof THREE.GLTFLoader === 'function') {
   // Try embedded base64 first (works under file://)
   if (window.UL3000_GLB_B64) {
     try {
-      gltfLoader.parse(_b64ToArrayBuffer(window.UL3000_GLB_B64), '', function(gltf){
-        window._ulLoaded = true;
-        console.log('[r161] UL3000 GLB loaded, children:', gltf.scene.children.length);
-        onULLoaded(gltf);
-      }, function(err){
-        window._ulLoaded = false;
-        console.error('[r161] UL3000 GLB ERROR:', err);
-        onULError(err);
-      });
+      gltfLoader.parse(_b64ToArrayBuffer(window.UL3000_GLB_B64), '', onULLoaded, onULError);
     } catch (e) { onULError(e); }
   } else {
     // Fallback to file fetch (works under http://, blocked under file://)
@@ -3907,7 +3901,7 @@ const _leakCandidatesAll = flangeList.filter(f => f.pos.y >= 0.70 && f.pos.y < 2
 const leakCandidates = _leakCandidatesAll.filter(_flangeReachable);
 console.log('[leak-filter] ' + leakCandidates.length + ' reachable of ' + _leakCandidatesAll.length + ' candidates');
 
-let leakStartCount = 9;
+let leakStartCount = 5;
 let leakFoundCount = 0;
 
 function clearLeaks() {
@@ -4227,17 +4221,31 @@ const chainsawContainer = new THREE.Group();
     c.moveTo(xx, 310); c.lineTo(xx + 14, 330); c.lineTo(xx + 18, 310); c.closePath(); c.fill();
   }
 
-  const tex = new THREE.CanvasTexture(cv);
-  tex.minFilter = THREE.LinearFilter;
-  tex.magFilter = THREE.LinearFilter;
-  const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false });
-  const plane = new THREE.Mesh(new THREE.PlaneGeometry(0.50, 0.25), mat);
-  plane.renderOrder = 998;
-  // wie spray-container, vorne rechts in der Hand
-  chainsawContainer.add(plane);
-  chainsawContainer.userData.spritePlane = plane;
-  chainsawContainer.userData.spriteTex = tex;
-  chainsawContainer.userData.spriteCv = cv;
+  // r9 (Doom): 3D-Kettensäge statt Sprite — rostig, blutig, Bar mit Zähnen
+  const saw = new THREE.Group();
+  const mBody  = new THREE.MeshStandardMaterial({ color:0xB5651D, metalness:0.5, roughness:0.55 });
+  const mDark  = new THREE.MeshStandardMaterial({ color:0x3a2a18, metalness:0.4, roughness:0.7 });
+  const mBar   = new THREE.MeshStandardMaterial({ color:0x70757b, metalness:0.85, roughness:0.35 });
+  const mTeeth = new THREE.MeshStandardMaterial({ color:0x262626, metalness:0.7, roughness:0.4 });
+  const mBlood = new THREE.MeshStandardMaterial({ color:0x6e1410, metalness:0.2, roughness:0.6 });
+  const mGrip  = new THREE.MeshStandardMaterial({ color:0x1c1c1c, metalness:0.3, roughness:0.75 });
+  const body = new THREE.Mesh(new THREE.BoxGeometry(0.15,0.17,0.21), mBody); body.position.set(0,0,0.03); saw.add(body);
+  const cover = new THREE.Mesh(new THREE.BoxGeometry(0.11,0.07,0.17), mDark); cover.position.set(0,0.11,0.03); saw.add(cover);
+  const knob = new THREE.Mesh(new THREE.CylinderGeometry(0.018,0.018,0.03,12), mBlood); knob.rotation.z=Math.PI/2; knob.position.set(0.078,0.02,0.06); saw.add(knob);
+  const handle = new THREE.Mesh(new THREE.TorusGeometry(0.075,0.013,8,18,Math.PI), mGrip); handle.position.set(0,0.13,0.05); handle.rotation.x=Math.PI/2; saw.add(handle);
+  const rear = new THREE.Mesh(new THREE.BoxGeometry(0.05,0.12,0.05), mGrip); rear.position.set(0,-0.02,0.16); rear.rotation.x=0.3; saw.add(rear);
+  const bar = new THREE.Mesh(new THREE.BoxGeometry(0.075,0.026,0.46), mBar); bar.position.set(0,0,-0.30); saw.add(bar);
+  const blood = new THREE.Mesh(new THREE.BoxGeometry(0.078,0.006,0.34), mBlood); blood.position.set(0,0.015,-0.33); saw.add(blood);
+  for (let i=0;i<12;i++){ const z=-0.12-i*0.034;
+    const tT=new THREE.Mesh(new THREE.BoxGeometry(0.013,0.022,0.014),mTeeth); tT.position.set(0.045,0,z); saw.add(tT);
+    const tB=new THREE.Mesh(new THREE.BoxGeometry(0.013,0.022,0.014),mTeeth); tB.position.set(-0.045,0,z); saw.add(tB);
+  }
+  const tip = new THREE.Mesh(new THREE.CylinderGeometry(0.04,0.04,0.075,12), mBar); tip.rotation.x=Math.PI/2; tip.position.set(0,0,-0.52); saw.add(tip);
+  saw.rotation.set(0.16, -1.18, 0);
+  saw.position.set(0.05, 0.02, 0.10);
+  saw.scale.set(1.3,1.3,1.3);
+  chainsawContainer.add(saw);
+  chainsawContainer.userData.saw = saw;
 })();
 chainsawContainer.position.set(0.08, -0.20, -0.45);
 chainsawContainer.rotation.y = 0;
@@ -4270,17 +4278,6 @@ const _camRight = new THREE.Vector3();
 const _camUp    = new THREE.Vector3();
 function getSprayTipWorld(out) {
   out = out || new THREE.Vector3();
-  // r166: in VR die rechte Controller-Pose nutzen statt Camera
-  if (window.VR && window.VR.inXR && VR.controllers && VR.controllers[1]) {
-    const ctrl = VR.controllers[1];
-    ctrl.getWorldPosition(out);
-    const q = new THREE.Quaternion();
-    ctrl.getWorldQuaternion(q);
-    const fwd = new THREE.Vector3(0, 0, -1).applyQuaternion(q);
-    // Spray-Düse ist ca. 30cm vor dem Controller
-    return out.addScaledVector(fwd, 0.30);
-  }
-  // Browser-Fallback (alte Camera-Berechnung)
   _camFwd.set(0, 0, -1).applyQuaternion(camera.quaternion);
   _camRight.set(1, 0, 0).applyQuaternion(camera.quaternion);
   _camUp.set(0, 1, 0).applyQuaternion(camera.quaternion);
@@ -4291,11 +4288,6 @@ function getSprayTipWorld(out) {
 }
 function getSprayDirWorld(out) {
   out = out || new THREE.Vector3();
-  if (window.VR && window.VR.inXR && VR.controllers && VR.controllers[1]) {
-    const q = new THREE.Quaternion();
-    VR.controllers[1].getWorldQuaternion(q);
-    return out.set(0, 0, -1).applyQuaternion(q);
-  }
   return out.set(0, 0, -1).applyQuaternion(camera.quaternion);
 }
 
@@ -4333,15 +4325,7 @@ if (typeof THREE.GLTFLoader === 'function') {
     console.warn('SmartSpray GLB failed to load — using hand-built fallback.', err);
   };
   if (window.SMARTSPRAY_GLB_B64) {
-    try { gl.parse(_b64ToArrayBuffer(window.SMARTSPRAY_GLB_B64), '', function(gltf){
-      window._spLoaded = true;
-      console.log('[r161] SmartSpray GLB loaded');
-      onSSLoaded(gltf);
-    }, function(err){
-      window._spLoaded = false;
-      console.error('[r161] SmartSpray GLB ERROR:', err);
-      onSSError(err);
-    }); }
+    try { gl.parse(_b64ToArrayBuffer(window.SMARTSPRAY_GLB_B64), '', onSSLoaded, onSSError); }
     catch (e) { onSSError(e); }
   } else {
     gl.load('smartspray.glb', onSSLoaded, undefined, onSSError);
@@ -4684,13 +4668,8 @@ function markLeakFound(lk) {
   if (!trainingState && leakFoundCount >= leakStartCount) {
     console.log('[victory] all leaks found — show overlay NOW');
     if (document.exitPointerLock) document.exitPointerLock();
+    // Direkt aufrufen — kein setTimeout (das wurde bisher manchmal verschluckt)
     try { showVictory(); } catch(e) { console.error('[victory] showVictory threw', e); }
-    // r168: VR-Endgame als 3D-Plane vor Spieler
-    try {
-      if (window.VR && window.VR.inXR && typeof showVR_Endgame === 'function') {
-        showVR_Endgame();
-      }
-    } catch(e) {}
   }
 }
 
@@ -4884,21 +4863,36 @@ function showVictory() {
       egShot._wired = true;
       egShot.onclick = () => {
         try {
-          // Force-render damit der Buffer aktuell ist (preserveDrawingBuffer:true
-          // alleine reicht nicht, wenn das overlay schon offen ist und kein
-          // render-Frame seither lief).
-          renderer.render(scene, camera);
-          const dataUrl = renderer.domElement.toDataURL('image/png');
-          const a = document.createElement('a');
-          a.href = dataUrl;
-          a.download = 'LeakQuest_Score' + score + '.png';
-          document.body.appendChild(a); a.click(); document.body.removeChild(a);
-          egShot.textContent = '✓ PNG saved';
-          setTimeout(() => { egShot.textContent = '📷  SCREENSHOT'; }, 2000);
+          const nm = (((document.getElementById('egName')||{}).value)||'Player').trim().slice(0,16) || 'Player';
+          const pts = (typeof score!=='undefined')?Math.round(score):0;
+          const leaksTxt = ((document.getElementById('egLeaks')||{}).textContent)||'';
+          const timeTxt = ((document.getElementById('egTime')||{}).textContent)||'';
+          const comboTxt = ((document.getElementById('egCombo')||{}).textContent)||'';
+          let res='Nice run!'; if(pts>=8000)res='Leak-hunting legend!'; else if(pts>=4000)res='Great hunt!'; else if(pts>=1500)res='Solid run!';
+          const cv=document.createElement('canvas'); cv.width=640; cv.height=360; const x=cv.getContext('2d');
+          const g=x.createLinearGradient(0,0,0,360); g.addColorStop(0,'#0E1620'); g.addColorStop(1,'#14263B'); x.fillStyle=g; x.fillRect(0,0,640,360);
+          x.strokeStyle='#6395BD'; x.lineWidth=5; x.strokeRect(10,10,620,340); x.textAlign='left';
+          x.fillStyle='#6395BD'; x.font='bold 24px Arial'; x.fillText('INFICON', 40, 60);
+          x.fillStyle='#9DDCEE'; x.font='bold 30px Arial'; x.fillText('LEAK QUEST', 40, 96);
+          x.fillStyle='#FFE298'; x.font='bold 19px Arial'; x.fillText(res, 40, 132);
+          x.fillStyle='#7A8FA8'; x.font='bold 14px Arial'; x.fillText('SCORE', 40, 176);
+          x.fillStyle='#FFE298'; x.font='bold 92px Arial'; x.fillText(pts.toLocaleString('en-US'), 40, 260);
+          x.fillStyle='#C8D2DC'; x.font='20px Arial'; x.fillText('points', 44, 290);
+          x.fillStyle='#C8D2DC'; x.font='18px Arial';
+          x.fillText('Player: '+nm, 360, 196); x.fillText('Leaks: '+leaksTxt, 360, 226);
+          x.fillText('Combo: '+comboTxt, 360, 256); x.fillText('Time: '+timeTxt, 360, 286);
+          x.fillStyle='#7A8FA8'; x.font='13px Arial'; x.fillText('Can you beat it?  ·  INFICON Leak Quest', 40, 330);
+          cv.toBlob(function(blob){ if(!blob) return; const url=URL.createObjectURL(blob);
+            const a=document.createElement('a'); a.href=url; a.download='LeakQuest_'+nm+'_'+pts+'.png';
+            document.body.appendChild(a); a.click(); document.body.removeChild(a); setTimeout(function(){URL.revokeObjectURL(url);},3000);
+            try{ if(navigator.clipboard && window.ClipboardItem) navigator.clipboard.write([new ClipboardItem({'image/png':blob})]); }catch(e){}
+          }, 'image/png');
+          egShot.textContent = '✓ Card saved';
+          setTimeout(() => { egShot.textContent = '📤  SHARE CARD'; }, 2000);
         } catch(err){
-          console.warn('screenshot failed', err);
+          console.warn('share card failed', err);
           egShot.textContent = '✗ Failed';
-          setTimeout(() => { egShot.textContent = '📷  SCREENSHOT'; }, 2000);
+          setTimeout(() => { egShot.textContent = '📤  SHARE CARD'; }, 2000);
         }
       };
     }
@@ -5054,7 +5048,7 @@ window.startGame3D = function() {
   leakFoundCount = 0;
   score = 0; combo = 1; comboTimer = 0; bestCombo = 1;
   displayedScore = 0;
-  helicansLeft = 9;   // r167: 3 Kartuschen Start (90 spray-seconds)
+  helicansLeft = 3;   // v8 R2: nur 1 Kartusche (3 spray-seconds) zum Start
   window._helicanWarned = false;
   window._helicanEmptyWarned = false;
   heBg = 0;
@@ -5094,7 +5088,21 @@ window.startGame3D = function() {
   if (renderer.domElement.requestPointerLock) renderer.domElement.requestPointerLock();
 };
 
-// Phase-1 enterVR removed in VR EDITION — handled by new VR block at end
+window.enterVR = function() {
+  // Minimal WebXR entry — fall through to desktop if not available
+  if (navigator.xr && navigator.xr.isSessionSupported) {
+    navigator.xr.isSessionSupported('immersive-vr').then(supported => {
+      if (!supported) { alert('VR-Modus nicht verfügbar.'); return; }
+      navigator.xr.requestSession('immersive-vr', { optionalFeatures: ['local-floor'] })
+        .then(session => {
+          renderer.xr.setSession(session);
+          window.startGame3D();
+        }).catch(err => { console.warn(err); alert('VR-Start fehlgeschlagen.'); });
+    });
+  } else {
+    alert('WebXR nicht unterstützt — bitte Desktop-Modus verwenden.');
+  }
+};
 
 
 // ============================================================
@@ -5106,18 +5114,6 @@ const BOOST_FACTORS_3D = [1, 1.5, 2.5, 4, 8, 32];   // each iBoost step ~50% wea
 // ════════════════════════════════════════════════════════════════════════════
 //  HELICAN-PICKUPS — 3 Aufladepunkte im Spielfeld
 // ════════════════════════════════════════════════════════════════════════════
-// r175: kleines Text-Label über Pickups
-function _makePickupLabel(text, color, y){
-  const cv=document.createElement('canvas'); cv.width=256; cv.height=64;
-  const x=cv.getContext('2d');
-  x.font='bold 40px Arial'; x.textAlign='center'; x.textBaseline='middle';
-  x.lineWidth=7; x.strokeStyle='rgba(0,0,0,0.9)'; x.strokeText(text,128,34);
-  x.fillStyle=color||'#fff'; x.fillText(text,128,34);
-  const tex=new THREE.CanvasTexture(cv);
-  const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:false}));
-  sp.scale.set(0.55,0.137,1); sp.position.set(0, (y!==undefined?y:0.58), 0); sp.renderOrder=60;
-  return sp;
-}
 const _helicanPickups = [];
 function _spawnHelicanPickup(x, z) {
   const g = new THREE.Group();
@@ -5162,18 +5158,16 @@ function _spawnHelicanPickup(x, z) {
   g.userData.bobPhase = Math.random() * Math.PI * 2;
   g.userData.consumed = false;
   scene.add(g);
-  g.add(_makePickupLabel("Helican", "#FFD27A", 0.60));
   _helicanPickups.push(g);
   return g;
 }
 // v7 R11: 2 leicht zu findende Helicans + 7 versteckt am Rand
 // EINFACH (gut sichtbar, nahe vom Spawn):
-// r170: Helican-Spawns alle 4m+ vom Tool weg, NICHT unter Tool
-_spawnHelicanPickup(5.5, 3.0);
-_spawnHelicanPickup(-5.5, -3.0);
+_spawnHelicanPickup(2.5, 1.0);   // v8 R2: nahe UL3000 (1.0, _, 1.85)
+_spawnHelicanPickup(-3.5, -5.5);
 // VERSTECKT (Hallen-Rand, hinter Säulen/Modulen):
-_spawnHelicanPickup(-8.0, -7.0);
-_spawnHelicanPickup( 8.0, -7.0);
+_spawnHelicanPickup(-8.0, -7.5);
+_spawnHelicanPickup( 8.0, -7.5);
 _spawnHelicanPickup(-8.5,  3.0);
 _spawnHelicanPickup( 8.5,  3.0);
 _spawnHelicanPickup(-8.5,  7.5);
@@ -5181,7 +5175,7 @@ _spawnHelicanPickup( 8.5,  7.5);
 _spawnHelicanPickup( 0.0,  8.5);
 
 function _updateHelicanPickups(dt, t) {
-  // r163: gameStarted-Check raus — Pickup-Loop läuft auch in VR vor startGame3D
+  if (!gameStarted) return;
   for (const p of _helicanPickups) {
     if (p.userData.consumed) continue;
     // Bob + spin
@@ -5192,45 +5186,15 @@ function _updateHelicanPickups(dt, t) {
       }
     });
     p.children[1].rotation.y += dt * 1.6;
-    // r163: dolly-pos für VR, camera-pos für desktop
-    let _pickupX = 0, _pickupZ = 0;
-    if (window.VR && window.VR.dolly && window.VR.inXR) {
-      _pickupX = window.VR.dolly.position.x; _pickupZ = window.VR.dolly.position.z;
-    } else { _pickupX = camera.position.x; _pickupZ = camera.position.z; }
-    const dx = _pickupX - p.position.x;
-    const dz = _pickupZ - p.position.z;
-    const dist2 = dx*dx + dz*dz;
-    // r163: VERBOSE log alle 60 Frames wenn nahe
-    if (!window._heliLogAcc) window._heliLogAcc = 0;
-    window._heliLogAcc += dt;
-    if (dist2 < 9.0 && window._heliLogAcc > 0.5) {
-      window._heliLogAcc = 0;
-      console.log('[r163-helican] dist=' + Math.sqrt(dist2).toFixed(2) + 'm  player=(' + _pickupX.toFixed(2) + ',' + _pickupZ.toFixed(2) + ')  helican=(' + p.position.x.toFixed(2) + ',' + p.position.z.toFixed(2) + ')');
-    }
-    if (dist2 < 2.25) {  // ~1.5m Radius
-      // r163: 3D-Banner sichtbar in VR
-      try {
-        const cv = document.createElement('canvas'); cv.width=1024; cv.height=256;
-        const cx = cv.getContext('2d');
-        cx.fillStyle='rgba(124,255,124,0.95)'; cx.fillRect(0,0,1024,256);
-        cx.fillStyle='#0E1620'; cx.font='bold 110px Arial';
-        cx.textAlign='center'; cx.textBaseline='middle';
-        cx.fillText('+1 HELICAN', 512, 90);
-        cx.font='bold 50px Arial';
-        cx.fillText('PICKUP OK!', 512, 180);
-        const tex=new THREE.CanvasTexture(cv);
-        const mat=new THREE.MeshBasicMaterial({map:tex, transparent:true, side:THREE.DoubleSide, depthTest:false});
-        const plane=new THREE.Mesh(new THREE.PlaneGeometry(2.0, 0.5), mat);
-        plane.position.copy(p.position); plane.position.y += 1.5;
-        plane.renderOrder = 99;
-        scene.add(plane);
-        setTimeout(() => { if(plane.parent) scene.remove(plane); mat.dispose(); tex.dispose(); plane.geometry.dispose(); }, 2000);
-      } catch(e) {}
-      console.log('[r163-helican] PICKUP! player=(' + _pickupX.toFixed(2) + ',' + _pickupZ.toFixed(2) + ')');
+    // Pickup-check (XZ Abstand)
+    const dx = camera.position.x - p.position.x;
+    const dz = camera.position.z - p.position.z;
+    const dy = camera.position.y - 1.4;     // approx player feet
+    if (dx*dx + dz*dz < 1.0 && Math.abs(dy) < 1.8) {
       // Pickup!
       p.userData.consumed = true;
       p.visible = false;
-      helicansLeft = Math.max(helicansLeft, Math.min(15, helicansLeft + 3));   // r167: respect ∞Helium high values
+      helicansLeft = Math.min(15, helicansLeft + 3);   // +1 cartridge worth
       // iBoost-Stufen-Bonus: jedes Pickup hebt max-Stufe um 1 (bis 5)
       window._iBoostBonus = (window._iBoostBonus || 0) + 1;
       if (typeof computeIBoostMax3D === 'function') {
@@ -5354,7 +5318,14 @@ function updateIBoostUI3D() {
   const lbl = document.getElementById('hudIBoostLbl');
   if (lbl) lbl.textContent = 'iBOOST: Level ' + iBoostLevel + '  (Keys 0–5)';
   const ibBot = document.getElementById('iboostBottomLvl');
-  if (ibBot) ibBot.textContent = iBoostLevel;
+  if (ibBot) {
+    ibBot.textContent = iBoostLevel;
+    const _ibEl = document.getElementById('iboostBottom');
+    if (_ibEl && window._lastIbLvl !== iBoostLevel) {
+      window._lastIbLvl = iBoostLevel;
+      _ibEl.classList.remove('ibpop'); void _ibEl.offsetWidth; _ibEl.classList.add('ibpop');
+    }
+  }
   const hePanel = document.getElementById('heBgPanel');
   if (hePanel) {
     // Visibility: dezent unter 0.6, voll sichtbar ab 0.6 (Trigger-Schwelle)
@@ -5364,7 +5335,7 @@ function updateIBoostUI3D() {
   const heVig = document.getElementById('heBgVignette');
   if (heVig) {
     // Red overlay fade in: only above 0.6 — clear warning, not a soft alarm
-    const vigAlpha = 0;   // r174: He-Vignette aus — Warnung jetzt als Text "background too high"
+    const vigAlpha = (heBg < 0.60) ? 0 : Math.min(1, (heBg - 0.60) / 0.35);
     heVig.style.opacity = vigAlpha.toFixed(2);
   }
   const heBar = document.getElementById('heBgFill');
@@ -6729,17 +6700,16 @@ function animate() {
     // v6 R9: AABB-Collider gegen Kammer-Bestandteile (kein Durchlaufen)
     if (!window._gameBoxes) {
       window._gameBoxes = [
-        // r174: Front + Innenkanten leicht zurückgenommen → man kommt näher ans Tool/UL3000
-        // Hauptkammer
-        { x: [-3.20, 3.20], z: [-0.82, 0.82], top: 2.35 },
-        // L-Schenkel rechts
-        { x: [ 2.18, 3.55], z: [ 1.35, 4.75], top: 2.35 },
+        // Hauptkammer (6.5 × 1.7 × 1.7, centered x=0, y=1.5, z=0)
+        { x: [-3.30, 3.30], z: [-0.90, 0.90], top: 2.35 },
+        // L-Schenkel rechts (1.5 × 1.7 × 3.5, centered 2.8, 1.5, 3.0)
+        { x: [ 2.05, 3.55], z: [ 1.25, 4.75], top: 2.35 },
         // L-Schenkel links (symmetrisch)
-        { x: [-3.55,-2.18], z: [ 1.35, 4.75], top: 2.35 },
-        // Connect-Tube rechts
-        { x: [ 2.05, 3.10], z: [ 0.92, 1.20], top: 2.15 },
+        { x: [-3.55,-2.05], z: [ 1.25, 4.75], top: 2.35 },
+        // Connect-Tube zum L-Schenkel rechts (1.2 × 1.3 × 0.4 bei 2.5, 1.5, 1.05)
+        { x: [ 1.90, 3.10], z: [ 0.85, 1.25], top: 2.15 },
         // Connect-Tube links
-        { x: [-3.10,-2.05], z: [ 0.92, 1.20], top: 2.15 },
+        { x: [-3.10,-1.90], z: [ 0.85, 1.25], top: 2.15 },
       ];
     }
     // Spieler-Höhe für Collision: nur wenn unter top der Box
@@ -6754,7 +6724,7 @@ function animate() {
         const dzL = camera.position.z - b.z[0];
         const dzR = b.z[1] - camera.position.z;
         const minD = Math.min(dxL, dxR, dzL, dzR);
-        const margin = 0.02;   // r174: kleinerer Push-out
+        const margin = 0.05;
         if (minD === dxL)      camera.position.x = b.x[0] - margin;
         else if (minD === dxR) camera.position.x = b.x[1] + margin;
         else if (minD === dzL) camera.position.z = b.z[0] - margin;
@@ -6773,8 +6743,8 @@ function animate() {
   // Spawn spray particles while LMB held and helicans available
   if (gameStarted && spraying && helicansLeft > 0) {
     for (let k = 0; k < 5; k++) spawnSprayParticle();
-    if (!window._infiniteHelium) helicansLeft = Math.max(0, helicansLeft - dt * 0.30);  // 30 s/cartridge
-    heBg = Math.min(1, heBg + dt / 5.4);   // r173: 1/3 Anstieg (nur Dauer-Sprühen relevant)
+    if (!window._infiniteHelium) helicansLeft = Math.max(0, helicansLeft - dt * 0.24);  // r9: +25% Laufzeit (~37.5 s/cartridge)
+    heBg = Math.min(1, heBg + dt / 1.8);
     if (!_sprayNoiseSrc) playSpraySoundStart();
   } else {
     heBg = Math.max(0, heBg - dt / 3.2);   // half-speed decay so He-BG actually matters
@@ -7067,1212 +7037,1272 @@ renderer.domElement.addEventListener('click', () => {
 // =====================================================================
 
 // =====================================================================
-// VR EDITION v1 — sauberer Rebuild (2026-06-01)
+// VR PHASE 3 — INTEGRATION (2026-05-26 reapply)
 // =====================================================================
-//  Ersetzt den alten VR3-Block komplett. Drei Säulen:
-//    1. dolly als camera-parent (KRITISCH für korrekte Locomotion)
-//    2. saubere Controller-Init bei sessionstart
-//    3. großes Wrist-Tablet mit allen wichtigen HUD-Werten
-//
-//  Bedienung:
-//    Linker Stick     = Laufen (smooth walk)
-//    Rechter Stick X  = Snap-Turn (30°)
-//    Rechter Trigger  = Sprühen
-//    Rechter Grip     = Hint-Ringe (Lecks zeigen)
-//    Linker Grip      = Locomotion-Modus umschalten (Smooth ↔ Teleport)
-//    Linker Trigger   = iBoost-Stufe weiter
+//  Self-contained IIFE. Adds full VR3 namespace, Quest-3 specials,
+//  3D pause menu, hand-tracking, comfort vignette, achievements,
+//  cross-save, wrist-tablet, laser-pointer, teleport-arc, onboarding.
+//  Function-shadowing for: enterVR, animate, vrPollInput, vrSetupControllers,
+//  markLeakFound, startGame3D.  setAnimationLoop is re-registered after wrap.
 // =====================================================================
-(function VR_EDITION_v1(){
-  if (typeof THREE === 'undefined') { console.error('[VR-EDITION] THREE missing'); return; }
-  if (typeof renderer === 'undefined' || !renderer.xr) { console.error('[VR-EDITION] renderer.xr missing'); return; }
+(function VR3_Integration(){
+  if (typeof THREE === 'undefined') { console.warn('[VR3] THREE missing'); return; }
+  if (typeof renderer === 'undefined' || !renderer.xr) { console.warn('[VR3] renderer.xr missing'); return; }
 
-  const log  = function(){ const args = ['[VR-EDITION]'].concat([].slice.call(arguments)); console.log.apply(console, args); };
-  const warn = function(){ const args = ['[VR-EDITION]'].concat([].slice.call(arguments)); console.warn.apply(console, args); };
-
+  // ---------------------------------------------------------------------
+  // 0. Namespace & utility
+  // ---------------------------------------------------------------------
   const UA       = (navigator.userAgent || '').toLowerCase();
   const IS_QUEST = UA.includes('oculusbrowser') || UA.includes('quest');
-  log('init — Quest:', IS_QUEST, 'UA:', UA.slice(0, 80));
+  const LS       = (typeof localStorage !== 'undefined') ? localStorage : null;
+  const csGet    = (k, dflt) => { try { const v = LS && LS.getItem('iboost_cs_' + k); return v == null ? dflt : JSON.parse(v); } catch (e) { return dflt; } };
+  const csSet    = (k, v)    => { try { LS && LS.setItem('iboost_cs_' + k, JSON.stringify(v)); } catch (e) {} };
 
-  // ───────────────────────────────────────────────────────────────────
-  // State
-  // ───────────────────────────────────────────────────────────────────
-  const VR = {
-    inXR: false,
-    session: null,
-    refSpace: null,
-    refSpaceType: 'unknown',     // 'local-floor' | 'local'
-    dolly: null,
-    controllers: [null, null],   // index 0=left, 1=right
-    grips: [null, null],
-    wrist: null,                  // { mesh, ctx, tex }
-    versionLabel: null,           // 3D plane visible in VR
-    locomotion: 'smooth',         // 'smooth' | 'teleport'
-    snapArmed: true,
-    teleArc: null,
-    lastDt: 1/72,
-    _spawnUntil: 0,
-    _origCameraParent: null,
-    _origSprayParent: null,
-    _origSprayPos: null,
-    _origSprayRot: null,
-    _hudHidden: [],
-    // r164: cheat state
-    cheatMenuOpen: false,
-    cheatIdx: 0
+  const DEFAULT_SETTINGS = {
+    locomotion:       'smooth',    // R11: smooth statt teleport — Stick = Laufen
+    snapTurnDeg:      30,          // 30 / 45 / 60
+    comfortVignette:  'sanft',     // aus | sanft | stark
+    handTracking:     'auto',      // auto | on | off
+    passthrough:      false,
+    foveation:        IS_QUEST ? 'high' : 'off',
+    framebufferScale: IS_QUEST ? 1.2 : 1.0,
+    quality:          IS_QUEST ? 'medium' : 'high'
   };
-  window.VR = VR;
 
-  // r164: Cheat-Menü Funktionen
-  const VR_CHEATS = [
-    { code: 'ii',    name: '📡 RADAR',       desc: 'Zeigt alle Lecks 3s' },
-    { code: 'gg',    name: '🌙 MOON GRAVITY', desc: 'Niedrige Schwerkraft' },
-    { code: 'xx',    name: '∞ HELIUM',       desc: 'Unendliche Helium-Patronen' },
-    { code: 'kk',    name: '🪚 CHAINSAW',    desc: 'SmartSpray-Hack' }
-  ];
-  function VR_toggleCheatMenu() {
-    VR.cheatMenuOpen = !VR.cheatMenuOpen;
-    log('Cheat-Menü: ' + (VR.cheatMenuOpen ? 'OFFEN' : 'ZU'));
+  function loadSettings() {
+    try {
+      const raw = LS && LS.getItem('iboost_vr_settings_v2');
+      const obj = raw ? JSON.parse(raw) : {};
+      const out = Object.assign({}, DEFAULT_SETTINGS, obj);
+      return out;
+    } catch (e) { return Object.assign({}, DEFAULT_SETTINGS); }
   }
-  function VR_activateCheat(idx) {
-    const ch = VR_CHEATS[idx];
-    if (!ch) return;
-    log('Cheat aktiviert: ' + ch.name);
-    // r175: NUR direkt aktivieren — synthetische Key-Events entfernt (sie haben
-    // mit den direkten Toggles DOPPELT geschaltet → Chainsaw/Helium hoben sich auf).
-    if (ch.code === 'ii') {
-      if (typeof _activateRadar === 'function') _activateRadar();
-    }
-    if (ch.code === 'gg') {
-      window._gravity = (window._gravity && window._gravity < 5) ? 9.8 : 1.6;
-      VR._gravityScale = window._gravity < 5 ? 0.16 : 1.0;
-    }
-    if (ch.code === 'xx') {
-      window._infiniteHelium = !window._infiniteHelium;
-    }
-    if (ch.code === 'kk') {
-      window._chainsawMode = !window._chainsawMode;
+  function saveSettings() {
+    try { LS && LS.setItem('iboost_vr_settings_v2', JSON.stringify(VR3.settings)); } catch (e) {}
+  }
+
+  const VR3 = window.VR3 = {
+    settings:    loadSettings(),
+    session:     null,
+    inXR:        false,
+    isQuest:     IS_QUEST,
+    refSpace:    null,
+    dolly:       null,
+    audioCtx:    null,
+    audioListener: null,
+    hum:         null,
+    pulse:       function(handedness, strength, ms) {
+      if (!VR3.session) return;
       try {
-        if (window._chainsawMode) {
-          if (typeof sprayContainer !== 'undefined' && sprayContainer) sprayContainer.visible = false;
-          if (window._chainsawContainer) window._chainsawContainer.visible = true;
-          if (typeof sprayPointsMat !== 'undefined' && sprayPointsMat) sprayPointsMat.color.setHex(0xFF6B3A);
-          VR._sprayForceUntil = 0;   // Force-Equip stoppen, sonst übermalt es die Säge
-        } else {
-          if (window._chainsawContainer) window._chainsawContainer.visible = false;
-          if (typeof sprayContainer !== 'undefined' && sprayContainer) sprayContainer.visible = true;
-          if (typeof sprayPointsMat !== 'undefined' && sprayPointsMat) sprayPointsMat.color.setHex(0xCFEAFF);
+        for (const src of VR3.session.inputSources) {
+          if (handedness && src.handedness !== handedness) continue;
+          const gp = src.gamepad;
+          if (gp && gp.hapticActuators && gp.hapticActuators[0]) {
+            gp.hapticActuators[0].pulse(Math.max(0, Math.min(1, strength)), Math.max(1, ms));
+          }
         }
-      } catch(e) { try{ warn('chainsaw VR', e); }catch(_){} }
-      log('Chainsaw → ' + window._chainsawMode);
+      } catch (e) {}
+    },
+    achievementsUnlocked: csGet('achievements', {}),
+    settingsSaved: false,
+    inputMode:   'controller',
+    pinchR:      false,
+    pinchL:      false,
+    pinchRArm:   true,
+    pinchLArm:   true,
+    menuOpen:    false,
+    onboarded:   csGet('vr_onboarded', false),
+    onboardStep: 0,
+    onboardActive: false,
+    teleportActive: false,
+    teleportTarget: null,
+    teleportValid:  false,
+    snapTurnArmed:  true,
+    helicanSpawnPending: false,
+    vignetteLevel: 0,
+    lastDt:        1/60,
+    _wristHz:      0,
+    _passthroughHidden: [],
+    bannerQueue:   []
+  };
+
+  // ---------------------------------------------------------------------
+  // 1. Comfort Vignette (CSS layer)
+  // ---------------------------------------------------------------------
+  (function setupVignette(){
+    let v = document.getElementById('vr3Vignette');
+    if (!v) {
+      v = document.createElement('div');
+      v.id = 'vr3Vignette';
+      v.style.cssText = 'position:fixed;inset:0;pointer-events:none;z-index:9998;'
+                      + 'background:radial-gradient(ellipse at center, transparent 50%, rgba(0,0,0,0.92) 100%);'
+                      + 'opacity:0;transition:opacity 220ms ease-out;display:none;';
+      document.body.appendChild(v);
     }
-    VR.cheatMenuOpen = false;
+    VR3.vignetteEl = v;
+  })();
+  VR3.setVignette = function(amount){
+    const el = VR3.vignetteEl; if (!el) return;
+    const a = Math.max(0, Math.min(1, amount));
+    if (a <= 0.001) { el.style.opacity = 0; setTimeout(()=>{ if (parseFloat(el.style.opacity) <= 0.01) el.style.display = 'none'; }, 250); return; }
+    el.style.display = 'block';
+    el.style.opacity = a.toFixed(3);
+  };
+  VR3.flashVignette = function(ms){
+    if (VR3.settings.comfortVignette === 'aus') return;
+    const peak = (VR3.settings.comfortVignette === 'stark') ? 0.85 : 0.55;
+    VR3.setVignette(peak);
+    setTimeout(()=>VR3.setVignette(0), ms || 200);
+  };
+
+  // ---------------------------------------------------------------------
+  // 2. Player Dolly + Controller setup
+  // ---------------------------------------------------------------------
+  function ensureDolly() {
+    if (VR3.dolly) return VR3.dolly;
+    const d = new THREE.Group();
+    d.name = 'vr3_playerDolly';
+    d.position.set(0, 0, 5);
+    scene.add(d);
+    VR3.dolly = d;
+    return d;
   }
 
-  // ───────────────────────────────────────────────────────────────────
-  // On-screen status overlay (so user can see what's happening in browser)
-  // ───────────────────────────────────────────────────────────────────
-  function status(text, isError) {
-    let el = document.getElementById('vrEdStatus');
+  let xrController1, xrController2, xrGrip1, xrGrip2, xrSprayHost;
+  function vrSetupControllers() {
+    const d = ensureDolly();
+    if (!xrController1) {
+      xrController1 = renderer.xr.getController(0);
+      xrController2 = renderer.xr.getController(1);
+      xrGrip1       = renderer.xr.getControllerGrip(0);
+      xrGrip2       = renderer.xr.getControllerGrip(1);
+      d.add(xrController1, xrController2, xrGrip1, xrGrip2);
+      // simple Box+Torus stub for each grip — Quest will overlay its own models if available
+      function makeStub(color){
+        const g = new THREE.Group();
+        const box = new THREE.Mesh(new THREE.BoxGeometry(0.04,0.06,0.10),
+                                   new THREE.MeshStandardMaterial({color: color, metalness: 0.3, roughness: 0.6}));
+        g.add(box);
+        const torus = new THREE.Mesh(new THREE.TorusGeometry(0.035, 0.005, 8, 18),
+                                     new THREE.MeshStandardMaterial({color: 0x333a45, metalness: 0.6, roughness: 0.4}));
+        torus.rotation.x = Math.PI/2;
+        torus.position.z = 0.03;
+        g.add(torus);
+        return g;
+      }
+      xrGrip1.add(makeStub(0xA0C8FF));
+      xrGrip2.add(makeStub(0xFFB070));
+    }
+  }
+  window.vrSetupControllers = vrSetupControllers;
+
+  // ---------------------------------------------------------------------
+  // 3. Laser pointer (right controller)
+  // ---------------------------------------------------------------------
+  function buildLaser() {
+    if (VR3.laser) return VR3.laser;
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute([0,0,0, 0,0,-4], 3));
+    const mat = new THREE.LineBasicMaterial({ color: 0xFF4040, transparent: true, opacity: 0.85 });
+    const line = new THREE.Line(geo, mat);
+    line.name = 'vr3_laser';
+    line.visible = false;
+    line.frustumCulled = false;
+    VR3.laser = line;
+    return line;
+  }
+
+  // ---------------------------------------------------------------------
+  // 4. Wrist tablet (left wrist canvas)
+  // ---------------------------------------------------------------------
+  function buildWristTablet() {
+    if (VR3.wrist) return VR3.wrist;
+    const cnv = document.createElement('canvas');
+    cnv.width = 384; cnv.height = 256;
+    const tex = new THREE.CanvasTexture(cnv);
+    // R13: DoubleSide damit auch von oben sichtbar, opacity hoch, kein depthWrite-Trick
+    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.98, side: THREE.DoubleSide });
+    // R13: 21cm × 14cm — deutlich größer für gute Lesbarkeit
+    const geo = new THREE.PlaneGeometry(0.21, 0.14);
+    const mesh = new THREE.Mesh(geo, mat);
+    // R13: 8cm über dem Grip, 4cm vor der Hand, 50° gekippt — wie Smartwatch beim Blick aufs Handgelenk
+    mesh.position.set(0, 0.05, -0.04);
+    mesh.rotation.x = -Math.PI * 0.42;
+    mesh.renderOrder = 10;
+    VR3.wrist = { mesh, canvas: cnv, tex, ctx: cnv.getContext('2d'), _attached: false };
+    return VR3.wrist;
+  }
+  // v8 R12: Komplettes Wrist-Tablet HUD — alle wichtigen Werte aus dem 2D-HUD
+  VR3.drawWrist = function(){
+    const w = VR3.wrist; if (!w) return;
+    const c = w.ctx, W = w.canvas.width, H = w.canvas.height;
+
+    // ---- Background + Frame ----
+    c.fillStyle = '#0B1626'; c.fillRect(0,0,W,H);
+    // Header strip
+    c.fillStyle = '#142540'; c.fillRect(0,0,W,30);
+    c.fillStyle = '#6395BD'; c.font = 'bold 15px Inter, sans-serif';
+    c.fillText('LEAK HUNTER VR', 8, 21);
+    // Mode label (top right)
+    let modeLabel = 'FREE PLAY';
+    if (typeof trainingState !== 'undefined' && trainingState) modeLabel = 'TRAINING L' + trainingState.level;
+    if (typeof window._missionId !== 'undefined' && window._missionId) modeLabel = 'MISSION ' + window._missionId;
+    c.fillStyle = '#9DDCEE'; c.font = 'bold 11px Inter';
+    c.textAlign = 'right'; c.fillText(modeLabel, W - 8, 20); c.textAlign = 'left';
+
+    // ---- Row 1: SCORE + LECKS ----
+    // Score block
+    const sc = (typeof score !== 'undefined') ? Math.round(score) : 0;
+    c.fillStyle = '#7A8FA8'; c.font = '10px Inter';
+    c.fillText('SCORE', 8, 46);
+    c.fillStyle = '#FFE298'; c.font = 'bold 26px Inter';
+    c.fillText(sc.toLocaleString('de-DE'), 8, 70);
+
+    // Lecks block (right column)
+    const lf = (typeof leakFoundCount !== 'undefined') ? leakFoundCount : 0;
+    const lt = (typeof leakStartCount !== 'undefined') ? leakStartCount : 5;
+    c.fillStyle = '#7A8FA8'; c.font = '10px Inter';
+    c.fillText('LECKS', 200, 46);
+    c.fillStyle = '#7CFF7C'; c.font = 'bold 26px Inter';
+    c.fillText(lf + ' / ' + lt, 200, 70);
+    // Leak progress bar
+    const lpFrac = Math.min(1, lf / Math.max(1, lt));
+    c.fillStyle = '#1d3050'; c.fillRect(200, 76, 170, 6);
+    c.fillStyle = '#7CFF7C'; c.fillRect(200, 76, 170 * lpFrac, 6);
+
+    // ---- Row 2: HELIUM-BACKGROUND BAR ----
+    const he = (typeof heBg !== 'undefined') ? heBg : 0;
+    c.fillStyle = '#7A8FA8'; c.font = '10px Inter';
+    c.fillText('HELIUM-BACKGROUND', 8, 102);
+    c.fillStyle = '#1d3050'; c.fillRect(8, 108, W-16, 14);
+    // Color: green<0.4, yellow<0.7, red>=0.7
+    const heColor = he < 0.4 ? '#7CFF7C' : he < 0.7 ? '#FFB347' : '#FF5C5C';
+    c.fillStyle = heColor; c.fillRect(8, 108, (W-16) * Math.min(1, he), 14);
+    c.fillStyle = '#0B1626'; c.font = 'bold 10px Inter';
+    c.fillText(Math.round(he * 100) + '%', 14, 119);
+    if (he >= 0.7) {
+      c.fillStyle = '#FF5C5C'; c.font = 'bold 11px Inter';
+      c.textAlign = 'right'; c.fillText('! HE-WARNUNG !', W - 12, 119); c.textAlign = 'left';
+    }
+
+    // ---- Row 3: HELICAN + iBOOST side by side ----
+    const hl = (typeof helicansLeft !== 'undefined') ? helicansLeft : 0;
+    c.fillStyle = '#7A8FA8'; c.font = '10px Inter';
+    c.fillText('HELICAN', 8, 142);
+    c.fillStyle = '#9DDCEE'; c.font = 'bold 16px Inter';
+    c.fillText(Math.ceil(hl) + ' Patr.', 8, 160);
+    c.fillStyle = '#1d3050'; c.fillRect(8, 166, 170, 8);
+    c.fillStyle = '#9DDCEE'; c.fillRect(8, 166, 170 * Math.min(1, hl / 9), 8);
+
+    const ib = (typeof iBoostLevel !== 'undefined') ? iBoostLevel : 0;
+    const ibMax = (typeof iBoostMaxAllowed !== 'undefined') ? iBoostMaxAllowed : 5;
+    const ibFactor = (typeof BOOST_FACTORS_3D !== 'undefined' && BOOST_FACTORS_3D[ib]) ? BOOST_FACTORS_3D[ib] : ib;
+    c.fillStyle = '#7A8FA8'; c.font = '10px Inter';
+    c.fillText('iBOOST', 200, 142);
+    c.fillStyle = ib >= 4 ? '#FF5C5C' : ib >= 2 ? '#FFB347' : '#7CFF7C';
+    c.font = 'bold 16px Inter';
+    c.fillText('x' + ibFactor + ' (L' + ib + ')', 200, 160);
+    c.fillStyle = '#1d3050'; c.fillRect(200, 166, 170, 8);
+    // iBoost bar colour escalates with level
+    const ibCol = ib >= 4 ? '#FF5C5C' : ib >= 2 ? '#FFB347' : '#7CC8FF';
+    c.fillStyle = ibCol; c.fillRect(200, 166, 170 * (ib / Math.max(1, ibMax)), 8);
+
+    // ---- Row 4: Aktuelle Leckrate ----
+    const sig = (typeof signalEMA !== 'undefined') ? signalEMA : 5e-12;
+    c.fillStyle = '#7A8FA8'; c.font = '10px Inter';
+    c.fillText('AKTUELLE LECKRATE', 8, 194);
+    // Format: 4.2e-7 mbar·L/s, colour-coded
+    let sigStr;
+    if (sig >= 1) sigStr = sig.toFixed(2);
+    else {
+      const exp = Math.floor(Math.log10(sig));
+      const mant = sig / Math.pow(10, exp);
+      sigStr = mant.toFixed(1) + 'e' + exp;
+    }
+    const sigCol = sig > 1e-6 ? '#7CFF7C' : sig > 5e-9 ? '#FFB347' : '#9DDCEE';
+    c.fillStyle = sigCol; c.font = 'bold 18px monospace';
+    c.fillText(sigStr + ' mbar·L/s', 8, 215);
+
+    // ---- Row 5: Cheat indicators (only if active) ----
+    const cheats = [];
+    if (typeof _radarActive !== 'undefined' && _radarActive > 0) cheats.push({l:'RADAR', c:'#A6F6FF'});
+    if (window._gravity && window._gravity < 5) cheats.push({l:'MOON', c:'#E8E2FF'});
+    if (window._infiniteHelium) cheats.push({l:'∞HE', c:'#7CFF7C'});
+    if (window._chainsawMode) cheats.push({l:'SAW', c:'#FF8C5C'});
+    let cx = 8;
+    c.font = 'bold 10px Inter';
+    cheats.forEach(function(ch){
+      const tw = c.measureText(ch.l).width + 10;
+      c.fillStyle = ch.c; c.fillRect(cx, 232, tw, 16);
+      c.fillStyle = '#0B1626'; c.fillText(ch.l, cx + 5, 244);
+      cx += tw + 4;
+    });
+    // Locomotion indicator (right side)
+    if (cheats.length === 0) {
+      c.fillStyle = '#5A7090'; c.font = '10px Inter';
+      c.fillText('Loco: ' + VR3.settings.locomotion, 8, 244);
+    }
+    c.fillStyle = '#5A7090'; c.font = '10px Inter';
+    c.textAlign = 'right';
+    const cb = (typeof bestCombo !== 'undefined') ? bestCombo : 0;
+    c.fillText('Best-Combo ' + cb, W - 8, 244);
+    c.textAlign = 'left';
+
+    w.tex.needsUpdate = true;
+  };
+
+  // ---------------------------------------------------------------------
+  // 5. 3D Pause menu (9 buttons)
+  // ---------------------------------------------------------------------
+  const MENU_BUTTONS = [
+    { id: 'resume',     label: 'Weiter' },
+    { id: 'passthrough',label: 'Passthrough' },
+    { id: 'locomotion', label: 'Locomotion' },
+    { id: 'vignette',   label: 'Vignette' },
+    { id: 'snapturn',   label: 'Snap-Turn' },
+    { id: 'handtrack',  label: 'Hand-Tracking' },
+    { id: 'spectator',  label: 'Spectator' },
+    { id: 'achieve',    label: 'Achievements' },
+    { id: 'exit',       label: 'VR verlassen' }
+  ];
+
+  function buildMenu() {
+    if (VR3.menu) return VR3.menu;
+    const grp = new THREE.Group();
+    grp.name = 'vr3_menu';
+    grp.visible = false;
+    const backdrop = new THREE.Mesh(
+      new THREE.PlaneGeometry(1.6, 1.1),
+      new THREE.MeshBasicMaterial({ color: 0x0E1A2E, transparent: true, opacity: 0.92 })
+    );
+    grp.add(backdrop);
+    const buttons = [];
+    const COLS = 3, ROWS = 3;
+    const W = 0.46, H = 0.18, GX = 0.04, GY = 0.04;
+    for (let i = 0; i < MENU_BUTTONS.length; i++) {
+      const def = MENU_BUTTONS[i];
+      const col = i % COLS, row = Math.floor(i / COLS);
+      const x = (col - 1) * (W + GX);
+      const y = (1 - row) * (H + GY) - (H * 0.5);
+      const box = new THREE.Mesh(
+        new THREE.BoxGeometry(W, H, 0.02),
+        new THREE.MeshStandardMaterial({ color: 0x163150, metalness: 0.1, roughness: 0.7 })
+      );
+      box.position.set(x, y, 0.012);
+      box.userData.btnId   = def.id;
+      box.userData.baseCol = 0x163150;
+      box.userData.hovCol  = 0x265080;
+      // label
+      const cnv = document.createElement('canvas');
+      cnv.width = 256; cnv.height = 96;
+      const cc = cnv.getContext('2d');
+      cc.fillStyle = 'rgba(0,0,0,0)'; cc.clearRect(0,0,256,96);
+      cc.fillStyle = '#E8F4FF'; cc.font = 'bold 28px Inter, sans-serif';
+      cc.textAlign = 'center'; cc.textBaseline = 'middle';
+      cc.fillText(def.label, 128, 48);
+      const tex = new THREE.CanvasTexture(cnv);
+      const plane = new THREE.Mesh(
+        new THREE.PlaneGeometry(W * 0.95, H * 0.85),
+        new THREE.MeshBasicMaterial({ map: tex, transparent: true })
+      );
+      plane.position.set(x, y, 0.024);
+      grp.add(box, plane);
+      buttons.push({ box, def, labelTex: tex, labelCnv: cnv });
+    }
+    VR3.menu = { grp, buttons, raycaster: new THREE.Raycaster() };
+    scene.add(grp);
+    return VR3.menu;
+  }
+
+  function openMenu() {
+    const m = buildMenu();
+    m.grp.visible = true;
+    VR3.menuOpen = true;
+    if (VR3.laser) VR3.laser.visible = true;
+    // place 1.4 m in front of HMD
+    try {
+      const cam = renderer.xr.getCamera ? renderer.xr.getCamera() : camera;
+      const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
+      m.grp.position.copy(cam.getWorldPosition(new THREE.Vector3())).addScaledVector(fwd, 1.4);
+      m.grp.lookAt(cam.getWorldPosition(new THREE.Vector3()));
+    } catch (e) {}
+  }
+  function closeMenu() {
+    if (VR3.menu) VR3.menu.grp.visible = false;
+    VR3.menuOpen = false;
+    if (VR3.laser) VR3.laser.visible = false;
+  }
+  VR3.openMenu = openMenu; VR3.closeMenu = closeMenu;
+
+  function handleMenuClick(id) {
+    switch (id) {
+      case 'resume':      closeMenu(); break;
+      case 'passthrough': VR3.settings.passthrough = !VR3.settings.passthrough; applyPassthrough(VR3.settings.passthrough); saveSettings(); break;
+      case 'locomotion': {
+        const opts = ['teleport','smooth','mixed'];
+        const cur = opts.indexOf(VR3.settings.locomotion);
+        VR3.settings.locomotion = opts[(cur+1) % opts.length];
+        saveSettings();
+        VR3.showBanner('Locomotion', VR3.settings.locomotion, 2.5);
+        break;
+      }
+      case 'vignette': {
+        const opts = ['aus','sanft','stark'];
+        const cur = opts.indexOf(VR3.settings.comfortVignette);
+        VR3.settings.comfortVignette = opts[(cur+1) % opts.length];
+        saveSettings();
+        VR3.showBanner('Comfort-Vignette', VR3.settings.comfortVignette, 2.5);
+        break;
+      }
+      case 'snapturn': {
+        const opts = [30,45,60];
+        const cur = opts.indexOf(VR3.settings.snapTurnDeg);
+        VR3.settings.snapTurnDeg = opts[(cur+1) % opts.length];
+        saveSettings();
+        VR3.showBanner('Snap-Turn', VR3.settings.snapTurnDeg + '°', 2.5);
+        break;
+      }
+      case 'handtrack': {
+        const opts = ['auto','on','off'];
+        const cur = opts.indexOf(VR3.settings.handTracking);
+        VR3.settings.handTracking = opts[(cur+1) % opts.length];
+        saveSettings();
+        VR3.showBanner('Hand-Tracking', VR3.settings.handTracking, 2.5);
+        break;
+      }
+      case 'spectator': VR3.showBanner('Spectator', 'PC zeigt 2D-View', 2.5); break;
+      case 'achieve':   showAchievementsBoard(); break;
+      case 'exit':      if (VR3.session) VR3.session.end(); break;
+    }
+  }
+  VR3.handleMenuClick = handleMenuClick;
+
+  // ---------------------------------------------------------------------
+  // 6. Achievements (10 IDs)  + 3D floating banner
+  // ---------------------------------------------------------------------
+  const ACHIEVEMENTS = [
+    { id:'first_leak',     name:'Erstes Leck',           desc:'Erstes Leck gefunden' },
+    { id:'quest_start',    name:'Quest gestartet',       desc:'VR-Session betreten' },
+    { id:'combo_5',        name:'5er-Combo',             desc:'5 Lecks in Folge' },
+    { id:'combo_10',       name:'10er-Combo',            desc:'10 Lecks in Folge' },
+    { id:'spray_100s',     name:'Sprüher',               desc:'100 s gesprüht' },
+    { id:'all_levels',     name:'Alles gelernt',         desc:'Alle Trainings-Level' },
+    { id:'no_iboost_win',  name:'Reine Kunst',           desc:'Level ohne iBoost geschafft' },
+    { id:'iboost_5',       name:'Maximal-Boost',         desc:'iBoost Level 5 erreicht' },
+    { id:'leaks_10_round', name:'Zehnender',             desc:'10 Lecks in einer Runde' },
+    { id:'passthrough',    name:'Mixed Reality',         desc:'Passthrough aktiviert' }
+  ];
+  VR3.ACHIEVEMENTS = ACHIEVEMENTS;
+  VR3.unlock = function(id){
+    if (VR3.achievementsUnlocked[id]) return;
+    const def = ACHIEVEMENTS.find(a => a.id === id);
+    if (!def) return;
+    VR3.achievementsUnlocked[id] = Date.now();
+    csSet('achievements', VR3.achievementsUnlocked);
+    showAchievementBanner3D(def);
+  };
+
+  function showAchievementBanner3D(def) {
+    try {
+      const cnv = document.createElement('canvas');
+      cnv.width = 768; cnv.height = 192;
+      const cc = cnv.getContext('2d');
+      cc.fillStyle = '#0E1A2E'; cc.fillRect(0,0,768,192);
+      cc.strokeStyle = '#FFB347'; cc.lineWidth = 5;
+      cc.strokeRect(6,6,756,180);
+      cc.fillStyle = '#FFB347'; cc.font = 'bold 30px Inter';
+      cc.fillText('🏆 ACHIEVEMENT', 28, 50);
+      cc.fillStyle = '#E8F4FF'; cc.font = 'bold 36px Inter';
+      cc.fillText(def.name, 28, 100);
+      cc.fillStyle = '#9DCDED'; cc.font = '22px Inter';
+      cc.fillText(def.desc, 28, 144);
+      const tex = new THREE.CanvasTexture(cnv);
+      const mesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.0, 0.25),
+        new THREE.MeshBasicMaterial({ map: tex, transparent: true })
+      );
+      const cam = renderer.xr.getCamera ? renderer.xr.getCamera() : camera;
+      const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
+      const up  = new THREE.Vector3(0, 0.35, 0);
+      const pos = cam.getWorldPosition(new THREE.Vector3()).addScaledVector(fwd, 1.6).add(up);
+      mesh.position.copy(pos);
+      mesh.lookAt(cam.getWorldPosition(new THREE.Vector3()));
+      scene.add(mesh);
+      const start = performance.now();
+      const dur = 4500;
+      function tick(){
+        const e = performance.now() - start;
+        if (e > dur) { scene.remove(mesh); return; }
+        const a = (e < dur - 800) ? 1 : (1 - (e - (dur - 800)) / 800);
+        mesh.material.opacity = a;
+        mesh.position.y = pos.y + 0.04 * Math.sin(e * 0.004);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+      VR3.pulse('right', 0.45, 100);
+    } catch (e) { console.warn('[VR3] achievement banner err', e); }
+  }
+
+  function showAchievementsBoard() {
+    let txt = 'ACHIEVEMENTS\\n';
+    for (const a of ACHIEVEMENTS) {
+      txt += (VR3.achievementsUnlocked[a.id] ? '✓' : '·') + '  ' + a.name + '\\n';
+    }
+    VR3.showBanner('Achievements', txt, 6);
+  }
+
+  // ---------------------------------------------------------------------
+  // 7. Generic floating banner (vr3 messaging)
+  // ---------------------------------------------------------------------
+  VR3.showBanner = function(title, hint, dur) {
+    try {
+      const cnv = document.createElement('canvas');
+      cnv.width = 768; cnv.height = 256;
+      const cc = cnv.getContext('2d');
+      cc.fillStyle = '#0E1A2E'; cc.fillRect(0,0,768,256);
+      cc.strokeStyle = '#9DCDED'; cc.lineWidth = 4; cc.strokeRect(4,4,760,248);
+      cc.fillStyle = '#FFB347'; cc.font = 'bold 34px Inter';
+      cc.fillText(title, 24, 56);
+      cc.fillStyle = '#D8E6F4'; cc.font = '20px Inter';
+      const lines = String(hint).split('\\n');
+      for (let i = 0; i < lines.length; i++) cc.fillText(lines[i], 24, 100 + i * 28);
+      const tex = new THREE.CanvasTexture(cnv);
+      const mesh = new THREE.Mesh(
+        new THREE.PlaneGeometry(1.2, 0.4),
+        new THREE.MeshBasicMaterial({ map: tex, transparent: true })
+      );
+      const cam = renderer.xr.getCamera ? renderer.xr.getCamera() : camera;
+      const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
+      const pos = cam.getWorldPosition(new THREE.Vector3()).addScaledVector(fwd, 1.4);
+      pos.y += 0.20;
+      mesh.position.copy(pos);
+      mesh.lookAt(cam.getWorldPosition(new THREE.Vector3()));
+      scene.add(mesh);
+      const start = performance.now();
+      const total = (dur || 4) * 1000;
+      function tick(){
+        const e = performance.now() - start;
+        if (e > total) { scene.remove(mesh); return; }
+        const fadeIn = Math.min(1, e / 250);
+        const fadeOut = (e < total - 700) ? 1 : (1 - (e - (total - 700)) / 700);
+        mesh.material.opacity = Math.min(fadeIn, fadeOut);
+        requestAnimationFrame(tick);
+      }
+      requestAnimationFrame(tick);
+    } catch (e) {}
+  };
+
+  // ---------------------------------------------------------------------
+  // 8. Teleport arc
+  // ---------------------------------------------------------------------
+  function buildTeleportArc() {
+    if (VR3.teleArc) return VR3.teleArc;
+    const N = 30;
+    const positions = new Float32Array(N * 3);
+    const geo = new THREE.BufferGeometry();
+    geo.setAttribute('position', new THREE.Float32BufferAttribute(positions, 3));
+    const mat = new THREE.LineBasicMaterial({ color: 0x66FF99, transparent: true, opacity: 0.85 });
+    const line = new THREE.Line(geo, mat);
+    line.name = 'vr3_teleArc';
+    line.frustumCulled = false;
+    line.visible = false;
+    scene.add(line);
+    // landing ring
+    const ringGeo = new THREE.TorusGeometry(0.30, 0.025, 8, 24);
+    const ringMat = new THREE.MeshBasicMaterial({ color: 0x66FF99, transparent: true, opacity: 0.9 });
+    const ring = new THREE.Mesh(ringGeo, ringMat);
+    ring.rotation.x = Math.PI / 2;
+    ring.name = 'vr3_teleRing';
+    ring.visible = false;
+    scene.add(ring);
+    VR3.teleArc = { line, ring, N };
+    return VR3.teleArc;
+  }
+  function updateTeleportArc(origin, dir) {
+    const t = buildTeleportArc();
+    const v0 = 6.0;
+    const vy0 = dir.y * v0;
+    const vxz = Math.hypot(dir.x, dir.z) || 1e-6;
+    const dirXZ = new THREE.Vector3(dir.x / vxz, 0, dir.z / vxz);
+    const speedXZ = v0 * Math.cos(Math.asin(Math.max(-1, Math.min(1, dir.y))));
+    const g = 9.81;
+    const pos = t.line.geometry.attributes.position.array;
+    let landX = origin.x, landZ = origin.z, landY = 0, landed = false;
+    for (let i = 0; i < t.N; i++) {
+      const tt = i * 0.06;
+      const x = origin.x + dirXZ.x * speedXZ * tt;
+      const y = origin.y + vy0 * tt - 0.5 * g * tt * tt;
+      const z = origin.z + dirXZ.z * speedXZ * tt;
+      pos[i*3] = x; pos[i*3+1] = Math.max(0, y); pos[i*3+2] = z;
+      if (!landed && y <= 0.01) { landX = x; landZ = z; landY = 0; landed = true; }
+    }
+    t.line.geometry.attributes.position.needsUpdate = true;
+    t.line.visible = true;
+    // UL3000 footprint exclusion (1m,1.5m,1.25m approx)
+    const ul = new THREE.Vector2(1.0, 1.25);
+    const dxz = new THREE.Vector2(landX - ul.x, landZ - ul.y).length();
+    const valid = landed && dxz > 0.75 && Math.abs(landX) < 12 && Math.abs(landZ) < 12;
+    t.ring.position.set(landX, landY + 0.01, landZ);
+    t.ring.visible = true;
+    t.ring.material.color.setHex(valid ? 0x66FF99 : 0xFF5555);
+    t.line.material.color.setHex(valid ? 0x66FF99 : 0xFF5555);
+    VR3.teleportTarget = new THREE.Vector3(landX, landY, landZ);
+    VR3.teleportValid = valid;
+  }
+  function hideTeleportArc() {
+    if (!VR3.teleArc) return;
+    VR3.teleArc.line.visible = false;
+    VR3.teleArc.ring.visible = false;
+  }
+  function commitTeleport() {
+    if (VR3.teleportValid && VR3.dolly && VR3.teleportTarget) {
+      const d = VR3.dolly;
+      d.position.x = VR3.teleportTarget.x;
+      d.position.z = VR3.teleportTarget.z;
+      VR3.flashVignette(220);
+    }
+    hideTeleportArc();
+    VR3.teleportActive = false;
+  }
+
+  // ---------------------------------------------------------------------
+  // 9. Hand tracking (25 joints per hand, 2.8 cm pinch)
+  // ---------------------------------------------------------------------
+  const HAND_JOINTS = [
+    'wrist',
+    'thumb-metacarpal','thumb-phalanx-proximal','thumb-phalanx-distal','thumb-tip',
+    'index-finger-metacarpal','index-finger-phalanx-proximal','index-finger-phalanx-intermediate','index-finger-phalanx-distal','index-finger-tip',
+    'middle-finger-metacarpal','middle-finger-phalanx-proximal','middle-finger-phalanx-intermediate','middle-finger-phalanx-distal','middle-finger-tip',
+    'ring-finger-metacarpal','ring-finger-phalanx-proximal','ring-finger-phalanx-intermediate','ring-finger-phalanx-distal','ring-finger-tip',
+    'pinky-finger-metacarpal','pinky-finger-phalanx-proximal','pinky-finger-phalanx-intermediate','pinky-finger-phalanx-distal','pinky-finger-tip'
+  ];
+  const PINCH_THRESHOLD = 0.028; // 2.8 cm
+
+  function buildHandVisual(color) {
+    const grp = new THREE.Group();
+    grp.visible = false;
+    const joints = [];
+    const sphereGeo = new THREE.SphereGeometry(0.008, 8, 8);
+    const sphereMat = new THREE.MeshStandardMaterial({ color: color, emissive: color, emissiveIntensity: 0.35, metalness: 0.1, roughness: 0.5 });
+    for (let i = 0; i < HAND_JOINTS.length; i++) {
+      const m = new THREE.Mesh(sphereGeo, sphereMat);
+      m.visible = false;
+      grp.add(m);
+      joints.push(m);
+    }
+    scene.add(grp);
+    return { grp, joints };
+  }
+  VR3.handR = null;
+  VR3.handL = null;
+
+  function updateHandFromSource(source, refSpace, frame, visual, isRight) {
+    if (!source.hand || !frame.getJointPose) {
+      visual.grp.visible = false;
+      return false;
+    }
+    let visible = false;
+    let thumbTip = null, indexTip = null;
+    for (let i = 0; i < HAND_JOINTS.length; i++) {
+      const name = HAND_JOINTS[i];
+      const joint = source.hand.get ? source.hand.get(name) : null;
+      let pose = null;
+      if (joint) { try { pose = frame.getJointPose(joint, refSpace); } catch (e) { pose = null; } }
+      const m = visual.joints[i];
+      if (pose) {
+        const p = pose.transform.position;
+        m.position.set(p.x, p.y, p.z);
+        m.visible = true;
+        visible = true;
+        if (name === 'thumb-tip') thumbTip = m.position.clone();
+        if (name === 'index-finger-tip') indexTip = m.position.clone();
+      } else {
+        m.visible = false;
+      }
+    }
+    visual.grp.visible = visible;
+    // pinch detection
+    if (thumbTip && indexTip) {
+      const d = thumbTip.distanceTo(indexTip);
+      const pinch = d < PINCH_THRESHOLD;
+      if (isRight) {
+        if (pinch && VR3.pinchRArm) { VR3.pinchR = true; VR3.pinchRArm = false; }
+        else if (!pinch) { VR3.pinchRArm = true; VR3.pinchR = false; }
+      } else {
+        if (pinch && VR3.pinchLArm) { VR3.pinchL = true; VR3.pinchLArm = false; }
+        else if (!pinch) { VR3.pinchLArm = true; VR3.pinchL = false; }
+      }
+    }
+    return visible;
+  }
+
+  // ---------------------------------------------------------------------
+  // 10. Passthrough
+  // ---------------------------------------------------------------------
+  function applyPassthrough(on) {
+    if (on) {
+      if (!VR3._scenicState) {
+        VR3._scenicState = { bg: scene.background, fog: scene.fog };
+      }
+      scene.background = null;
+      scene.fog = null;
+      try { renderer.setClearColor(0x000000, 0); } catch (e) {}
+      VR3._passthroughHidden.length = 0;
+      scene.traverse(o => {
+        const n = (o.name || '').toLowerCase();
+        if (o.isMesh && (n.includes('wall') || n.includes('backdrop') || n.includes('floor') || n.includes('ceiling') || n.includes('hepa'))) {
+          if (o.visible) { o.visible = false; VR3._passthroughHidden.push(o); }
+        }
+      });
+      VR3.unlock('passthrough');
+    } else {
+      if (VR3._scenicState) {
+        scene.background = VR3._scenicState.bg;
+        scene.fog        = VR3._scenicState.fog;
+      }
+      try { renderer.setClearColor(0x000000, 1); } catch (e) {}
+      for (const o of VR3._passthroughHidden) o.visible = true;
+      VR3._passthroughHidden.length = 0;
+    }
+  }
+
+  // ---------------------------------------------------------------------
+  // 11. enterVR — robust Quest-aware
+  // ---------------------------------------------------------------------
+  const _origEnterVR = window.enterVR;
+  // v8 R7: visible on-screen status overlay
+  window._vrStatus = function(text, isError) {
+    let el = document.getElementById('vrStatusOverlay');
     if (!el) {
       el = document.createElement('div');
-      el.id = 'vrEdStatus';
-      el.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); padding:24px 36px; background:rgba(11,22,38,0.96); border:3px solid #7CFF7C; border-radius:14px; color:#fff; font:bold 17px Arial; letter-spacing:1px; z-index:99999; text-align:center; max-width:80vw; line-height:1.5; box-shadow:0 8px 40px rgba(0,0,0,0.7);';
+      el.id = 'vrStatusOverlay';
+      el.style.cssText = 'position:fixed; top:50%; left:50%; transform:translate(-50%,-50%); padding:24px 36px; background:rgba(14,22,32,0.96); border:3px solid #6395BD; border-radius:14px; color:#fff; font:bold 18px Arial; letter-spacing:1px; z-index:99999; text-align:center; max-width:80vw; line-height:1.5; box-shadow:0 8px 40px rgba(0,0,0,0.7);';
       document.body.appendChild(el);
     }
     el.innerHTML = text;
-    el.style.borderColor = isError ? '#FF5C5C' : '#7CFF7C';
+    el.style.borderColor = isError ? '#D9534F' : '#6395BD';
     el.style.display = 'block';
-  }
-  function statusHide() {
-    const el = document.getElementById('vrEdStatus'); if (el) el.style.display = 'none';
-  }
-
-  // ───────────────────────────────────────────────────────────────────
-  // Wrist Tablet — KOMPLETT-HUD am linken Handgelenk
-  // ───────────────────────────────────────────────────────────────────
-  function buildWristTablet() {
-    const cnv = document.createElement('canvas');
-    cnv.width = 512; cnv.height = 320;
-    const tex = new THREE.CanvasTexture(cnv);
-    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0.98, side: THREE.DoubleSide, depthTest: true });
-    // 25×16cm — wirklich groß genug zum Lesen
-    const geo = new THREE.PlaneGeometry(0.25, 0.16);
-    const mesh = new THREE.Mesh(geo, mat);
-    // Im Grip-Space: ein bisschen über der Hand, gekippt wie Smartwatch
-    mesh.position.set(0, 0.06, -0.02);
-    mesh.rotation.x = -Math.PI * 0.42;
-    mesh.renderOrder = 20;
-    return { mesh, canvas: cnv, ctx: cnv.getContext('2d'), tex, _hzAcc: 0 };
-  }
-
-  function drawWrist() {
-    const w = VR.wrist; if (!w) return;
-    const c = w.ctx, W = w.canvas.width, H = w.canvas.height;
-    // r171: GROSSE Leckrate-Anzeige am unteren Rand wenn man sprüht
-    // (wird vor allem anderen gezeichnet, dann von normalem Layout überlagert wo nötig)
-    // r164: Cheat-Menü-Modus
-    if (VR.cheatMenuOpen) {
-      c.fillStyle = '#1A0B26'; c.fillRect(0,0,W,H);
-      c.strokeStyle = '#FF6BB5'; c.lineWidth = 4; c.strokeRect(2,2,W-4,H-4);
-      c.fillStyle = '#FF6BB5'; c.font = 'bold 22px Inter, Arial';
-      c.fillText('🎲 CHEATS', 16, 32);
-      c.fillStyle = '#C8C8E0'; c.font = '13px Inter, Arial';
-      c.fillText('Linker Stick = wählen  ·  A = aktivieren  ·  Y = zu', 16, 58);
-      for (let i = 0; i < VR_CHEATS.length; i++) {
-        const y = 90 + i * 50;
-        const ch = VR_CHEATS[i];
-        const isSel = (i === VR.cheatIdx);
-        c.fillStyle = isSel ? '#FF6BB5' : '#3A2540';
-        c.fillRect(10, y - 22, W - 20, 44);
-        c.fillStyle = isSel ? '#0B1626' : '#fff';
-        c.font = 'bold 20px Inter, Arial';
-        c.fillText(ch.name, 22, y + 2);
-        c.fillStyle = isSel ? '#0B1626' : '#9DCDED';
-        c.font = '12px Inter, Arial';
-        c.fillText(ch.desc, 22, y + 18);
-      }
-      w.tex.needsUpdate = true;
+    console.log('[VR] ' + text.replace(/<[^>]+>/g, ' '));
+  };
+  window._vrStatusHide = function() {
+    const el = document.getElementById('vrStatusOverlay');
+    if (el) el.style.display = 'none';
+  };
+  window.enterVR = async function() {
+    window._vrStatus('🥽 Initializing VR…');
+    // R13: Re-Entry-Schutz — wenn Session noch läuft, abbrechen statt erneuten setSession
+    if (renderer && renderer.xr && renderer.xr.isPresenting) {
+      window._vrStatus('⚠️ VR-Session läuft bereits.<br><span style="font-size:13px; opacity:0.8">Helm absetzen + zurücksetzen, oder Seite neu laden (Strg+Shift+R).</span>', true);
       return;
     }
-    c.fillStyle = '#0B1626'; c.fillRect(0,0,W,H);
-
-    // Header
-    c.fillStyle = '#142540'; c.fillRect(0,0,W,38);
-    c.fillStyle = '#7CFF7C'; c.font = 'bold 17px Inter, sans-serif';
-    c.fillText('🥽 VR EDITION v1', 12, 26);
-    let modeLabel = 'FREE PLAY';
-    if (typeof trainingState !== 'undefined' && trainingState) modeLabel = 'TRAINING L' + trainingState.level;
-    if (window._missionId) modeLabel = 'MISSION ' + window._missionId;
-    c.fillStyle = '#9DDCEE'; c.font = 'bold 13px Inter';
-    c.textAlign = 'right'; c.fillText(modeLabel, W - 12, 25); c.textAlign = 'left';
-
-    // SCORE + LECKS
-    const sc = (typeof score !== 'undefined') ? Math.round(score) : 0;
-    c.fillStyle = '#7A8FA8'; c.font = '11px Inter'; c.fillText('SCORE', 12, 58);
-    c.fillStyle = '#FFE298'; c.font = 'bold 30px Inter';
-    c.fillText(sc.toLocaleString('de-DE'), 12, 88);
-    const lf = (typeof leakFoundCount !== 'undefined') ? leakFoundCount : 0;
-    const lt = (typeof leakStartCount !== 'undefined') ? leakStartCount : 5;
-    c.fillStyle = '#7A8FA8'; c.font = '11px Inter'; c.fillText('LECKS', 300, 58);
-    c.fillStyle = '#7CFF7C'; c.font = 'bold 30px Inter';
-    c.fillText(lf + ' / ' + lt, 300, 88);
-    const lpFrac = Math.min(1, lf / Math.max(1, lt));
-    c.fillStyle = '#1d3050'; c.fillRect(300, 96, 200, 7);
-    c.fillStyle = '#7CFF7C'; c.fillRect(300, 96, 200 * lpFrac, 7);
-
-    // ── LECKRATEN-GRAPH (v8-Stil, Verlauf, log-Skala, Trigger-Linie) ──
-    {
-      const gx = 12, gy = 116, gw = W - 24, gh = 92;
-      c.fillStyle = '#7A8FA8'; c.font = '11px Inter';
-      c.fillText('LECKRATE  (mbar·L/s)', gx, gy - 4);
-      c.fillStyle = '#0B1828'; c.fillRect(gx, gy, gw, gh);
-      c.strokeStyle = 'rgba(99,149,189,0.30)'; c.lineWidth = 1; c.strokeRect(gx, gy, gw, gh);
-      const logMin = -10, logMax = -4;
-      const toY = function(v){
-        const lg = Math.log10(Math.max(v, 1e-12));
-        const t = (lg - logMin) / (logMax - logMin);
-        return gy + gh - Math.max(0, Math.min(1, t)) * gh;
-      };
-      c.fillStyle = '#5A7A95'; c.font = '9px "Courier New", monospace';
-      c.strokeStyle = 'rgba(99,149,189,0.14)';
-      for (let e = logMin; e <= logMax; e += 2) {
-        const yy = toY(Math.pow(10, e));
-        c.beginPath(); c.moveTo(gx, yy); c.lineTo(gx + gw, yy); c.stroke();
-        c.fillText('1e' + e, gx + 2, Math.max(gy + 9, yy - 1));
-      }
-      const hist = (typeof _graphHistory !== 'undefined') ? _graphHistory : [];
-      const maxN = (typeof _GRAPH_MAX_SAMPLES !== 'undefined') ? _GRAPH_MAX_SAMPLES : 360;
-      if (hist.length > 1) {
-        c.strokeStyle = '#7CFF7C'; c.lineWidth = 2; c.beginPath();
-        for (let i = 0; i < hist.length; i++) {
-          const x = gx + (i / (maxN - 1)) * gw;
-          const y = toY(hist[i]);
-          if (i === 0) c.moveTo(x, y); else c.lineTo(x, y);
-        }
-        c.stroke();
-        const lastX = gx + ((hist.length - 1) / (maxN - 1)) * gw;
-        const lastY = toY(hist[hist.length - 1]);
-        c.fillStyle = '#7CFF7C'; c.beginPath(); c.arc(lastX, lastY, 3, 0, Math.PI*2); c.fill();
-      }
-      const trig = (typeof DETECTION_TRIGGER !== 'undefined') ? DETECTION_TRIGGER : 1e-7;
-      const yT = toY(trig);
-      c.strokeStyle = 'rgba(255,59,48,0.8)'; c.lineWidth = 1.4; c.setLineDash([6,4]);
-      c.beginPath(); c.moveTo(gx, yT); c.lineTo(gx + gw, yT); c.stroke(); c.setLineDash([]);
-      c.fillStyle = '#FF6B5C'; c.font = 'bold 10px "Courier New", monospace';
-      c.textAlign = 'right'; c.fillText('TRIGGER', gx + gw - 4, yT - 3); c.textAlign = 'left';
-      const sig = (typeof signalEMA !== 'undefined') ? signalEMA : 5e-12;
-      const ex = Math.floor(Math.log10(Math.max(sig, 1e-15)));
-      const mant = sig / Math.pow(10, ex);
-      const sigStr = mant.toFixed(1) + 'e' + ex;
-      const sigCol = sig > trig ? '#7CFF7C' : sig > 5e-9 ? '#FFB347' : '#9DDCEE';
-      c.fillStyle = sigCol; c.font = 'bold 15px monospace';
-      c.fillText(sigStr, gx + 5, gy + 15);
+    // R13: Wenn nach einem Crash der xr-Manager-State korrupt ist → Seite-Reload
+    if (renderer && renderer.xr && renderer.xr._lastCrash) {
+      window._vrStatus('❌ VR ist gecrasht.<br><span style="font-size:14px">Bitte die Seite neu laden (F5 oder Strg+Shift+R), bevor VR wieder gestartet werden kann.</span>', true);
+      return;
     }
-
-    // ── HELICAN + iBOOST ──
-    {
-      const hl = (typeof helicansLeft !== 'undefined') ? helicansLeft : 0;
-      c.fillStyle = '#7A8FA8'; c.font = '11px Inter'; c.fillText('HELICAN', 12, 232);
-      c.fillStyle = (hl <= 0.1) ? '#FF5C5C' : '#9DDCEE'; c.font = 'bold 18px Inter';
-      c.fillText((hl <= 0.1 ? 'LEER — Patrone aufnehmen' : Math.ceil(hl) + ' Patr.'), 12, 254);
-      c.fillStyle = '#1d3050'; c.fillRect(12, 262, 220, 8);
-      c.fillStyle = (hl <= 0.1) ? '#FF5C5C' : '#9DDCEE'; c.fillRect(12, 262, 220 * Math.min(1, hl/9), 8);
-
-      const ib  = (typeof iBoostLevel !== 'undefined') ? iBoostLevel : 0;
-      const ibm = (typeof iBoostMaxAllowed !== 'undefined') ? iBoostMaxAllowed : 5;
-      const ibf = (typeof BOOST_FACTORS_3D !== 'undefined' && BOOST_FACTORS_3D[ib]) ? BOOST_FACTORS_3D[ib] : ib;
-      c.fillStyle = '#7A8FA8'; c.font = '11px Inter'; c.fillText('iBOOST', 300, 232);
-      c.fillStyle = ib >= 4 ? '#FF5C5C' : ib >= 2 ? '#FFB347' : '#7CFF7C'; c.font = 'bold 18px Inter';
-      c.fillText('x' + ibf + ' (L' + ib + ')', 300, 254);
-      c.fillStyle = '#1d3050'; c.fillRect(300, 262, 200, 8);
-      const ibCol = ib >= 4 ? '#FF5C5C' : ib >= 2 ? '#FFB347' : '#7CC8FF';
-      c.fillStyle = ibCol; c.fillRect(300, 262, 200 * (ib / Math.max(1, ibm)), 8);
+    if (!navigator.xr) {
+      window._vrStatus('❌ WebXR not available in this browser.<br><span style="font-size:14px; opacity:0.8">On Quest 3: use the Meta-Browser. On PC: Chrome / Edge with WebXR.</span>', true);
+      return;
     }
-
-    // ── UNTERGRUND (Helium-Background) — ganz unten, klar getrennt vom Leckratensignal ──
-    {
-      const he = (typeof heBg !== 'undefined') ? heBg : 0;
-      c.fillStyle = '#5A7090'; c.font = '10px Inter';
-      c.fillText('UNTERGRUND (He)', 12, 290);
-      c.fillStyle = '#16263d'; c.fillRect(12, 296, W - 24, 13);
-      const heCol = he < 0.4 ? '#3E6B8C' : he < 0.7 ? '#C99A3A' : '#CC4444';
-      c.fillStyle = heCol; c.fillRect(12, 296, (W - 24) * Math.min(1, he), 13);
-      c.fillStyle = '#AFC2D6'; c.font = 'bold 9px Inter';
-      c.fillText(Math.round(he * 100) + '%', 18, 306);
-      const cheats = [];
-      if (typeof _radarActive !== 'undefined' && _radarActive > 0) cheats.push('RADAR');
-      if (window._infiniteHelium) cheats.push('∞HE');
-      if (window._chainsawMode) cheats.push('SAW');
-      c.fillStyle = '#5A7090'; c.font = '10px Inter'; c.textAlign = 'right';
-      c.fillText((cheats.length ? cheats.join(' ') + '  ·  ' : '') + 'Mode: ' + VR.locomotion, W - 12, 306);
-      c.textAlign = 'left';
-    }
-
-    w.tex.needsUpdate = true;
-  }
-
-    function buildVersionLabel() {
-    const cv = document.createElement('canvas');
-    cv.width = 1024; cv.height = 128;
-    const cc = cv.getContext('2d');
-    cc.fillStyle = 'rgba(11,22,38,0.92)'; cc.fillRect(0,0,1024,128);
-    cc.strokeStyle = '#7CFF7C'; cc.lineWidth = 4; cc.strokeRect(2,2,1020,124);
-    cc.fillStyle = '#7CFF7C'; cc.font = 'bold 56px Arial';
-    cc.textAlign = 'center'; cc.textBaseline = 'middle';
-    cc.fillText('🥽 VR EDITION v1 — Build OK', 512, 64);
-    const tex = new THREE.CanvasTexture(cv);
-    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
-    const geo = new THREE.PlaneGeometry(1.6, 0.2);
-    const mesh = new THREE.Mesh(geo, mat);
-    return mesh;
-  }
-
-  // ───────────────────────────────────────────────────────────────────
-  // Build controller models (visible "stubs" for orientation)
-  // ───────────────────────────────────────────────────────────────────
-  function buildControllerStub(color) {
-    const grp = new THREE.Group();
-    const body = new THREE.Mesh(
-      new THREE.BoxGeometry(0.04, 0.04, 0.10),
-      new THREE.MeshStandardMaterial({ color: color, metalness: 0.3, roughness: 0.5 })
-    );
-    body.position.z = -0.03;
-    grp.add(body);
-    return grp;
-  }
-
-  // ───────────────────────────────────────────────────────────────────
-  // Hint rings (show all leaks for 5s)
-  // ───────────────────────────────────────────────────────────────────
-  function showHintRings() {
-    if (typeof leaks === 'undefined') return;
-    leaks.forEach(function(lk){
-      if (lk.found) return;
-      const ring = new THREE.Mesh(
-        new THREE.TorusGeometry(0.18, 0.025, 8, 24),
-        new THREE.MeshBasicMaterial({ color: 0xFF3B30, transparent: true, opacity: 0.85, depthTest: false })
-      );
-      ring.position.copy(lk.position);
-      ring.renderOrder = 50;
-      scene.add(ring);
-      setTimeout(function(){ scene.remove(ring); ring.geometry.dispose(); ring.material.dispose(); }, 5000);
-    });
-  }
-
-  // ───────────────────────────────────────────────────────────────────
-  // enterVR — public API for the "🥽 Start VR" button
-  // ───────────────────────────────────────────────────────────────────
-  window.enterVR = async function() {
-    status('🥽 VR EDITION v1 — Initialisierung…');
-    if (!navigator.xr) { status('❌ WebXR fehlt.<br>Auf Quest: Meta-Browser benutzen.', true); return; }
-    if (renderer.xr.isPresenting) { status('⚠️ VR läuft bereits.<br>Helm absetzen oder Seite neu laden.', true); return; }
-
+    window._vrStatus('🥽 Checking VR support…');
     let supported = false;
-    try { supported = await navigator.xr.isSessionSupported('immersive-vr'); } catch(e){}
-    if (!supported) { status('❌ immersive-vr nicht unterstützt.<br>HTTPS oder localhost nötig.', true); return; }
-
-    // r166: Pre-warm audio context im User-Gesture (Click) — Quest blockt sonst
+    try { supported = await navigator.xr.isSessionSupported('immersive-vr'); }
+    catch (e) {
+      window._vrStatus('❌ VR support check failed: ' + (e && e.message), true);
+      return;
+    }
+    if (!supported) {
+      window._vrStatus('❌ Immersive VR not supported.<br><span style="font-size:14px; opacity:0.8">Needs HTTPS and a WebXR-capable browser.</span>', true);
+      return;
+    }
+    // pre-warm audio (Quest verbietet AudioContext-Start IN-Session)
     try {
-      if (typeof audio3D === 'function') {
-        const ac = audio3D();
-        if (ac && ac.state !== 'running') ac.resume();
-        console.log('[r166] audio3D wake state:', ac && ac.state);
+      if (!VR3.audioCtx) {
+        const Ctx = THREE.AudioContext && THREE.AudioContext.getContext ? THREE.AudioContext.getContext() : new (window.AudioContext || window.webkitAudioContext)();
+        VR3.audioCtx = Ctx;
+        if (Ctx.resume) Ctx.resume();
       }
-      if (window.AudioContext) {
-        const ac = THREE.AudioContext && THREE.AudioContext.getContext ? THREE.AudioContext.getContext() : new AudioContext();
-        if (ac.state !== 'running') ac.resume();
+    } catch (e) {}
+
+    // pre-init renderer settings
+    try { renderer.xr.enabled = true; } catch (e) {}
+    try { renderer.xr.setReferenceSpaceType('local-floor'); } catch (e) {}
+    try {
+      if (typeof renderer.xr.setFramebufferScaleFactor === 'function') {
+        renderer.xr.setFramebufferScaleFactor(VR3.isQuest ? 1.0 : VR3.settings.framebufferScale);  // R13: 1.2 war Crash-Auslöser
       }
-    } catch(e){}
+    } catch (e) {}
 
-    renderer.xr.enabled = true;
-    try { renderer.xr.setReferenceSpaceType('local-floor'); } catch(e){}
-
-    status('🥽 Session-Anfrage…');
-    const optFeatures = ['local-floor','bounded-floor','hand-tracking'];
-    if (IS_QUEST) optFeatures.push('high-refresh-rate','high-fixed-foveation-level');
-
+    const optionalFeatures = ['local-floor','bounded-floor','hand-tracking'];   // v8 R9: 'layers' raus — inkompatibel mit Three.js r128 baseLayer
+    if (VR3.isQuest) {
+      optionalFeatures.push('high-refresh-rate', 'high-fixed-foveation-level');
+    }
+    _vrStatus('🥽 Requesting VR session…');
     let session = null;
     try {
-      session = await navigator.xr.requestSession('immersive-vr', { requiredFeatures: ['local-floor'], optionalFeatures: optFeatures });
-      VR.refSpaceType = 'local-floor';
-    } catch(e1) {
-      warn('local-floor failed, retry local:', e1 && e1.message);
-      try {
-        session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures: optFeatures });
-        VR.refSpaceType = 'local';
-      } catch(e2) {
-        status('❌ VR-Session-Start fehlgeschlagen:<br>' + (e2 && e2.message), true);
+      session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures, requiredFeatures: ['local-floor'] });
+      VR3._refSpaceType = 'local-floor';
+    } catch (e1) {
+      console.warn('[VR] requiredFeatures failed:', e1);
+      _vrStatus('🥽 Retrying without strict floor reference…');
+      try { session = await navigator.xr.requestSession('immersive-vr', { optionalFeatures }); VR3._refSpaceType = 'local'; }
+      catch (e2) {
+        _vrStatus('❌ VR session request failed.<br><span style="font-size:14px; opacity:0.85">' + (e2 && e2.message || 'unknown error') + '</span><br><br><span style="font-size:13px; opacity:0.7">Try: Quest browser permission granted? VR mode not blocked?</span>', true);
         return;
       }
     }
-
-    log('session granted, refSpaceType=', VR.refSpaceType);
-    status('🥽 Renderer-Setup…');
-
-    try { renderer.xr.setFramebufferScaleFactor(1.1); } catch(e){}   // r169: 1.1 für flüssiger
-    // v2: KEIN setFramebufferScaleFactor — Default lassen
-    // KEIN setFoveation(0.6) später — wir setzen 0 im sessionstart
-
-    try { await renderer.xr.setSession(session); }
-    catch(e) {
-      status('❌ Renderer-Setup gescheitert: ' + (e && e.message) + '<br>Bitte Seite neu laden (F5).', true);
+    _vrStatus('🥽 Setting up renderer…');
+    try {
+      await renderer.xr.setSession(session);
+    } catch (e) {
+      _vrStatus('❌ Renderer setup failed: ' + (e && e.message) + '<br><span style="font-size:13px; opacity:0.85">Bitte Seite neu laden (F5 / Strg+Shift+R) bevor VR erneut versucht wird.</span>', true);
+      console.error('[VR3] setSession failed', e);
+      // R13: Korrupten Zustand markieren — nächster enterVR-Aufruf wird sofort mit Reload-Hinweis abgewiesen
+      try { renderer.xr._lastCrash = true; } catch(_){}
       return;
     }
+    _vrStatusHide();
 
-    try { renderer.xr.setFoveation(0); log('foveation=0 (v2 fix)'); } catch(e){}
+    // Quest-3-specials
+    try {
+      if (session.updateTargetFrameRate && session.supportedFrameRates) {
+        const rates = session.supportedFrameRates;
+        const want = rates.includes(120) ? 120 : (rates.includes(90) ? 90 : rates[rates.length-1]);
+        try { await session.updateTargetFrameRate(want); console.log('[VR3] target frame rate set to', want, 'Hz'); } catch (e) {}
+      }
+    } catch (e) {}
+    try { renderer.xr.setFoveation(VR3.settings.foveation === 'high' ? 1.0 : VR3.settings.foveation === 'medium' ? 0.6 : VR3.settings.foveation === 'low' ? 0.3 : 0); } catch (e) {}
 
-    statusHide();
-    log('session.setSession OK');
+    VR3.session = session;
+    console.log('[VR3] integration loaded — Quest:', VR3.isQuest, ' settings:', VR3.settings);
   };
 
-  // ───────────────────────────────────────────────────────────────────
-  // sessionstart — main setup
-  // ───────────────────────────────────────────────────────────────────
+  // ---------------------------------------------------------------------
+  // 12. Session lifecycle hooks
+  // ---------------------------------------------------------------------
   renderer.xr.addEventListener('sessionstart', function() {
-    VR.inXR = true;
-    VR.session = renderer.xr.getSession();
-    log('sessionstart fired');
-
-    // 1) Create dolly, reparent camera into it
-    if (!VR.dolly) {
-      VR.dolly = new THREE.Group();
-      VR.dolly.name = 'VR_DOLLY';
-    }
-    if (camera.parent !== VR.dolly) {
-      VR._origCameraParent = camera.parent || scene;
-      if (camera.parent) camera.parent.remove(camera);
-      VR.dolly.add(camera);
-      scene.add(VR.dolly);
-      log('camera reparented to dolly');
-    }
-    // Camera local position so HMD ends up at ~1.6m if 'local' refSpace
-    if (VR.refSpaceType === 'local') {
-      camera.position.set(0, 1.6, 0);   // manual floor offset
-    } else {
-      camera.position.set(0, 0, 0);     // local-floor gives HMD height
-    }
-
-    // 2) Spawn position: 8m vor Kammer-Center
-    VR.dolly.position.set(0, 0, 8);
-    VR.dolly.rotation.set(0, 0, 0);
-    VR._spawnUntil = performance.now() + 3000;  // v2: 3s statt 1.5s   // force-hold first 1.5s
-    log('dolly spawn (0, 0, 8)');
-
-    // 3) Get controllers + grips, add to dolly so they move with player
-    VR.controllers[0] = renderer.xr.getController(0);
-    VR.controllers[1] = renderer.xr.getController(1);
-    VR.grips[0]       = renderer.xr.getControllerGrip(0);
-    VR.grips[1]       = renderer.xr.getControllerGrip(1);
-    VR.controllers.forEach(function(c){ if (c && !c.parent) VR.dolly.add(c); });
-    VR.grips.forEach(function(g){ if (g && !g.parent) VR.dolly.add(g); });
-
-    // 4) Visible stubs so user sees their hands
-    if (VR.grips[0]) VR.grips[0].add(buildControllerStub(0x9DCDED));
-    // r164: KEIN Right-Controller-Stub — die SmartSpray sitzt da
-
-    // 5) Wrist tablet on left grip (or left controller if no grip)
-    VR.wrist = buildWristTablet();
-    const leftAttach = VR.grips[0] || VR.controllers[0];
-    if (leftAttach) {
-      leftAttach.add(VR.wrist.mesh);
-      log('wrist tablet attached to', VR.grips[0] ? 'left grip' : 'left controller');
-    } else {
-      warn('NO left attach point — wrist invisible!');
-    }
-
-    // r164: HART Force-Equip — Hide-Timer in r161/r163 haben gefeuert weil Session-Start > 3s dauert
+    console.log('[VR R8] sessionstart fired');
+    VR3.inXR = true;
+    VR3.session = renderer.xr.getSession();
+    // === R8 DIAGNOSTIC: hörbarer Beep + 3D-Banner ===
     try {
-      window._spraySetupComplete = true;
-      if (typeof window._showSprayInHand === 'function') window._showSprayInHand();
-      if (typeof sprayContainer !== 'undefined' && sprayContainer) {
-        sprayContainer.visible = true;
-        sprayContainer.children.forEach(function(c){
-          if (typeof sprayHandModel !== 'undefined' && c === sprayHandModel) {
-            c.visible = true;
-            c.traverse(function(ch){ ch.visible = true; });
-          }
-        });
-      }
-      // Force-Equip-Loop für 5 Sekunden — überlebt alle hide-Timer
-      VR._sprayForceUntil = performance.now() + 5000;
-      // r173: Pickup-Podest (Tisch + Spray-Dummy + Licht-Beam + Pfeil) in VR ausblenden.
-      // Bug: VR setzte nur _spraySetupComplete=true statt _forceSprayPickup() zu rufen → tableGroup blieb sichtbar.
-      try { if (typeof window._forceSprayPickup === 'function') window._forceSprayPickup(); } catch(e){}
-      try { if (window._sprayPickupTable) { window._sprayPickupTable.visible = false; window._sprayPickupTable.traverse(function(o){ o.visible=false; if(o.isLight) o.intensity=0; }); } } catch(e){}
-      log('SmartSpray HART auto-equipped + Pickup-Podest versteckt');
-    } catch(e) { warn('auto-equip:', e); }
-
-    // r165: Progress-Ring vor SmartSpray (visuelles Feedback bei Treffer)
-    try {
-      const ringCanvas = document.createElement('canvas');
-      ringCanvas.width = 256; ringCanvas.height = 256;
-      VR._ringCanvas = ringCanvas;
-      VR._ringCtx = ringCanvas.getContext('2d');
-      const ringTex = new THREE.CanvasTexture(ringCanvas);
-      VR._ringTex = ringTex;
-      const ringMat = new THREE.MeshBasicMaterial({ map: ringTex, transparent: true, side: THREE.DoubleSide, depthTest: false });
-      const ringMesh = new THREE.Mesh(new THREE.PlaneGeometry(0.16, 0.16), ringMat);
-      ringMesh.position.set(0, 0.05, -0.30);   // vor SmartSpray
-      ringMesh.renderOrder = 100;
-      VR._progressRing = ringMesh;
-      const rightCtrl = VR.controllers[1] || VR.grips[1];
-      if (rightCtrl) {
-        rightCtrl.add(ringMesh);
-        log('Progress-Ring attached to right controller');
-      }
-    } catch(e) { warn('progress ring err', e); }
-
-    // r169: Comfort-Vignette als 3D-Mesh um Player (transparent center, dark edges)
-    try {
-      if (!VR._vignetteMesh) {
-        const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 1024;
-        const cx = cv.getContext('2d');
-        const grad = cx.createRadialGradient(512, 512, 280, 512, 512, 512);
-        grad.addColorStop(0.0, 'rgba(0,0,0,0)');
-        grad.addColorStop(0.7, 'rgba(0,0,0,0)');
-        grad.addColorStop(0.95, 'rgba(0,0,0,0.45)');
-        grad.addColorStop(1.0, 'rgba(0,0,0,0.95)');
-        cx.fillStyle = grad; cx.fillRect(0, 0, 1024, 1024);
-        const tex = new THREE.CanvasTexture(cv);
-        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, depthTest: false, depthWrite: false });
-        const vmesh = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 2.0), mat);
-        vmesh.position.set(0, 0, -0.4);
-        vmesh.renderOrder = 1000;
-        VR.dolly.add(vmesh);
-        VR._vignetteMesh = vmesh;
-        VR._vignetteMesh.visible = false;
-        log('Vignette-Mesh angelegt');
-      }
-    } catch(e) { warn('vignette:', e); }
-
-    // r170: KEIN GLB-Status-Plane mehr (Thomas-Feedback)
-    if (false) try {
-      const cv = document.createElement('canvas'); cv.width = 512; cv.height = 96;
-      const cx = cv.getContext('2d');
-      const ulOk = !!window._ulLoaded;
-      const spOk = !!window._spLoaded;
-      cx.fillStyle = 'rgba(11,22,38,0.92)'; cx.fillRect(0,0,512,96);
-      cx.font = 'bold 20px Arial'; cx.textAlign = 'center'; cx.textBaseline = 'middle';
-      cx.fillStyle = ulOk ? '#7CFF7C' : '#FF5C5C';
-      cx.fillText('UL3000-GLB: ' + (ulOk ? '✓ geladen' : '✗ NICHT geladen'), 256, 30);
-      cx.fillStyle = spOk ? '#7CFF7C' : '#FF5C5C';
-      cx.fillText('SmartSpray-GLB: ' + (spOk ? '✓ geladen' : '✗ NICHT geladen'), 256, 64);
-      const tex = new THREE.CanvasTexture(cv);
-      const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
-      const plane = new THREE.Mesh(new THREE.PlaneGeometry(1.4, 0.26), mat);
-      plane.position.set(-2.8, 2.1, 6);   // links vom Spawn, sichtbar
-      scene.add(plane);
-      setTimeout(() => { scene.remove(plane); mat.dispose(); tex.dispose(); plane.geometry.dispose(); }, 12000);
-    } catch(e) {}
-
-    // 6) SmartSpray → right controller
-    try {
-      if (typeof sprayContainer !== 'undefined' && sprayContainer) {
-        VR._origSprayParent = sprayContainer.parent || camera;
-        VR._origSprayPos    = sprayContainer.position.clone();
-        VR._origSprayRot    = sprayContainer.rotation.clone();
-        const rightAttach = VR.controllers[1] || VR.grips[1];
-        if (rightAttach) {
-          rightAttach.add(sprayContainer);
-          sprayContainer.position.set(0, -0.02, -0.08);
-          sprayContainer.rotation.set(0, 0, 0);
-          sprayContainer.visible = true;
-          log('SmartSpray reparented to right controller');
-        }
-      }
-    } catch(e) { warn('SmartSpray reparent failed', e); }
-
-    // r170: KEIN version-banner mehr (Thomas-Feedback)
-    if (false && !VR.versionLabel) {
-      VR.versionLabel = buildVersionLabel();
-      VR.versionLabel.position.set(0, 2.2, 5);
-      scene.add(VR.versionLabel);
-      // Nach 8s ausblenden — User hat dann verifiziert dass es ankam
-      setTimeout(function(){
-        if (VR.versionLabel) {
-          VR.versionLabel.material.opacity = 0.6;
-          VR.versionLabel.position.set(0, 2.8, 5);  // höher, weniger im Weg
-          VR.versionLabel.material.transparent = true;
-        }
-      }, 8000);
+      const ac = (VR3.audioCtx || (typeof audio3D === 'function' && audio3D()));
+      if (ac) {
+        const o = ac.createOscillator(); const g = ac.createGain();
+        o.frequency.value = 880; g.gain.value = 0.30;
+        o.connect(g); g.connect(ac.destination);
+        o.start(); o.frequency.linearRampToValueAtTime(1320, ac.currentTime + 0.30);
+        g.gain.linearRampToValueAtTime(0.0001, ac.currentTime + 0.40);
+        o.stop(ac.currentTime + 0.45);
+        console.log('[VR R8] beep played — audio OK');
+      } else { console.warn('[VR R8] no audio ctx'); }
+    } catch (e) { console.warn('[VR R8] beep failed', e); }
+    // R13: Diagnostic-Banner entfernt — depthTest:false + renderOrder 9999
+    // hat unter Last das Quest-Stereo-Rendering gestört (überlagerte Bilder).
+    // setup controllers + dolly
+    vrSetupControllers();
+    const d = ensureDolly();
+    // === R8: Force Dolly to safe spawn position ===
+    if (d) {
+      // R13: refSpace prüfen — bei 'local' (kein floor) Spieler manuell auf 1.6m heben
+      let needHeightFallback = false;
+      try {
+        const rs = renderer.xr.getReferenceSpace();
+        // Three.js r128 hat keinen .type — wir versuchen über trial: wenn keine
+        // local-floor anfragbar war, ist es 'local' und HMD startet bei y=0.
+        needHeightFallback = (VR3._refSpaceType === 'local');
+      } catch (e) {}
+      const spawnY = needHeightFallback ? 1.6 : 0;
+      d.position.set(0, spawnY, 8);
+      d.rotation.y = 0;
+      console.log('[VR R13] dolly spawn (0, ' + spawnY + ', 8), refSpaceType=' + (VR3._refSpaceType||'unknown'));
+      // R13: Force-Spawn die ersten 1.5s — gegen Drift bei verzögertem Head-Tracking-Init
+      VR3._spawnForceUntil = performance.now() + 1500;
+      VR3._spawnX = 0; VR3._spawnY = spawnY; VR3._spawnZ = 8;
     }
-
-    // 8) Hide DOM HUD
-    ['hud','rightPanel','crosshair','crosshairContainer','startScreen','liveGraph','endGameOverlay','victoryOverlay'].forEach(function(id){
-      const el = document.getElementById(id);
-      if (el) { VR._hudHidden.push({el: el, prev: el.style.display}); el.style.display = 'none'; }
+    // === R8: Force renderer.setAnimationLoop reregister (manchmal verloren bei setSession) ===
+    try {
+      if (typeof window.animate === 'function') {
+        renderer.setAnimationLoop(window.animate);
+        console.log('[VR R8] setAnimationLoop re-registered');
+      }
+    } catch (e) { console.warn('[VR R8] setAnimationLoop failed', e); }
+    // re-parent sprayContainer to right controller
+    try {
+      if (typeof sprayContainer !== 'undefined' && sprayContainer && xrController2) {
+        sprayContainer.userData._origParent = sprayContainer.parent || camera;
+        xrController2.add(sprayContainer);
+        sprayContainer.position.set(0, -0.02, -0.08);
+        sprayContainer.rotation.set(0, 0, 0);
+      }
+    } catch (e) {}
+    // attach wrist tablet to left grip, laser to right (R13: mark _attached, re-poll if grip missing)
+    try {
+      const w = buildWristTablet();
+      if (xrGrip1 && !w.mesh.parent) { xrGrip1.add(w.mesh); w._attached = true; console.log('[VR R13] wrist tablet attached @ sessionstart'); }
+      else if (xrController1 && !w.mesh.parent) { xrController1.add(w.mesh); w._attached = true; console.log('[VR R13] wrist tablet attached to controller @ sessionstart'); }
+      else { console.warn('[VR R13] wrist tablet NOT attached yet — will retry in perFrame'); }
+      const laser = buildLaser();
+      if (xrController2 && !laser.parent) xrController2.add(laser);
+    } catch (e) { console.warn('[VR R13] wrist/laser attach failed', e); }
+    // hand visuals
+    if (!VR3.handR) VR3.handR = buildHandVisual(0xFFB347);
+    if (!VR3.handL) VR3.handL = buildHandVisual(0x9DCDED);
+    // refSpace
+    try { VR3.refSpace = renderer.xr.getReferenceSpace(); } catch (e) {}
+    // hide HUD
+    ['hud','rightPanel','crosshair','startScreen','crosshairContainer','liveGraph'].forEach(id => {
+      const el = document.getElementById(id); if (el) { el.dataset._vrHidden = el.style.display || ''; el.style.display = 'none'; }
     });
-
-    // 9) refSpace
-    try { VR.refSpace = renderer.xr.getReferenceSpace(); } catch(e){}
-
-    // r170: AudioContext HÄRTER aufwecken — 3 Versuche mit setTimeout
-    try {
-      if (typeof audio3D === 'function') {
-        const ac = audio3D();
-        if (ac) {
-          ac.resume();
-          setTimeout(() => { if (ac.state !== 'running') ac.resume(); }, 100);
-          setTimeout(() => { if (ac.state !== 'running') ac.resume(); }, 500);
-          setTimeout(() => { log('audioCtx final state: ' + ac.state); }, 1000);
-        }
-      }
-    } catch(e) {}
-
-    // r170: VACUUM PROCESS CHAMBER labelPlate ausblenden
-    try {
-      if (typeof labelPlate !== 'undefined' && labelPlate) {
-        labelPlate.visible = false;
-        if (labelPlate.parent) labelPlate.parent.remove(labelPlate);
-        log('labelPlate (VACUUM PROCESS CHAMBER) entfernt');
-      }
-    } catch(e) {}
-    // r169: INFICON-Logo auf Chamber-Front
-    try {
-      if (typeof chamberGroup !== 'undefined' && chamberGroup && !chamberGroup._inficonLogo) {
-        const cv = document.createElement('canvas');
-        cv.width = 2048; cv.height = 512;
-        const cx = cv.getContext('2d');
-        // Transparenter Hintergrund (geschickter: Marken-Cyan auf hellem Steel)
-        cx.fillStyle = 'rgba(0,0,0,0)';
-        cx.fillRect(0, 0, 2048, 512);
-        // INFICON in Marken-Cyan, der "i" mit orangem Punkt
-        cx.fillStyle = '#6395BD';
-        cx.font = 'bold 380px Arial, Helvetica, sans-serif';
-        cx.textBaseline = 'middle';
-        cx.textAlign = 'center';
-        // Erst "INF" + "CON" zeichnen, dann "i" mit orangem Punkt
-        cx.fillText('INF', 480, 256);
-        cx.fillText('CON', 1480, 256);
-        // i — der Stamm in Cyan
-        cx.fillRect(960, 130, 70, 270);
-        // i — der Punkt in INFICON-BLAU (r174: Thomas — INFICON wird KOMPLETT blau geschrieben, nie orange)
-        cx.fillStyle = '#6395BD';
-        cx.beginPath(); cx.arc(995, 80, 50, 0, Math.PI * 2); cx.fill();
-        const tex = new THREE.CanvasTexture(cv);
-        const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide });
-        // r171: INFICON-Plate weit vorn — schwebend vor der Kammer, NICHT im Tool-Fenster
-        const plane = new THREE.Mesh(new THREE.PlaneGeometry(4.0, 1.0), mat);
-        plane.position.set(0, 3.0, 4.0);   // 4m vor Kammer-Center, 3m hoch — gut sichtbar
-        chamberGroup.add(plane);
-        chamberGroup._inficonLogo = plane;
-        log('INFICON-Logo auf Chamber-Front platziert');
-      }
-    } catch(e) { warn('Logo:', e); }
-
-    // r170: Tisch HARDCORE per-frame killen — als globale Funktion
-    // r171: BRUTE-FORCE Tisch-Kill — Welt-Position-Check
-    // r173: Brute-Force-Radius ENTFERNT — der 3m-Radius um (-5.5,1.25,2.8) hat
-    // die linke Kammer-Ecke mit-gelöscht (distSq~8.86 < 9) → Kammer weg, Flansche
-    // schwebend. Jetzt NUR noch gezieltes Entfernen der Spray-Check-Gruppe.
-    window._vrKillTable = function() {
-      try {
-        if (typeof sprayCheckGroup !== 'undefined' && sprayCheckGroup && sprayCheckGroup.parent) {
-          sprayCheckGroup.parent.remove(sprayCheckGroup);
-        }
-      } catch(e) { console.warn('[r173] killTable err', e); }
-    };
-    window._vrKillTable();
-    // r169: sprayCheckGroup ENDGÜLTIG weg — PointLights stoppen, removeFromParent
-    try {
-      if (typeof sprayCheckGroup !== 'undefined' && sprayCheckGroup) {
-        sprayCheckGroup.visible = false;
-        sprayCheckGroup.traverse(function(c){
-          c.visible = false;
-          // Lichter: intensity=0 statt visible (visible stoppt nicht die illumination!)
-          if (c.isLight) c.intensity = 0;
-          // Materials transparent+opacity=0 als doppelte Sicherheit
-          if (c.material) {
-            if (Array.isArray(c.material)) c.material.forEach(function(m){ m.transparent=true; m.opacity=0; });
-            else { c.material.transparent=true; c.material.opacity=0; }
-          }
-        });
-        // Aus Scene komplett entfernen
-        if (sprayCheckGroup.parent) sprayCheckGroup.parent.remove(sprayCheckGroup);
-        log('sprayCheckGroup ENTFERNT (visible=false + intensity=0 + removeFromParent)');
-      }
-      // sprayCheckAnim deaktivieren (per-frame Animation greift sonst noch zu)
-      try {
-        if (typeof sprayCheckAnim !== 'undefined' && sprayCheckAnim) {
-          sprayCheckAnim.ring = null; sprayCheckAnim.light = null; sprayCheckAnim.led = null;
-        }
-      } catch(_e){}
-    } catch(e) {}
-    // r167: Helican + Radar Pickups beim Sessionstart resetten
-    try {
-      if (typeof _resetHelicanPickups === 'function') _resetHelicanPickups();
-      if (typeof _resetRadarPickups === 'function') _resetRadarPickups();
-      log('Pickups zurückgesetzt');
-    } catch(e) {}
-
-    // 10) Force-start the game (skip start screen) so leak generation runs
-    try {
-      if (typeof startGame3D === 'function' && (!window._gameStarted)) {
-        startGame3D();
-        window._gameStarted = true;
-        log('startGame3D triggered for VR');
-      }
-    } catch(e) { warn('startGame3D failed', e); }
-
-    log('sessionstart complete');
+    // tutorial / onboarding
+    if (!VR3.onboarded) {
+      VR3.onboardActive = true;
+      VR3.onboardStep = 0;
+      setTimeout(()=>VR3.showBanner('Trigger', 'Rechter Trigger = sprühen', 4.5), 1200);
+    } else {
+      setTimeout(()=>VR3.showBanner('Willkommen', 'Linker Grip = Pause-Menü', 4.5), 1500);
+    }
+    VR3.unlock('quest_start');
+    // start ambient hum
+    try { startHum(); } catch (e) {}
   });
 
-  // ───────────────────────────────────────────────────────────────────
-  // sessionend — cleanup
-  // ───────────────────────────────────────────────────────────────────
   renderer.xr.addEventListener('sessionend', function() {
-    log('sessionend fired');
-    VR.inXR = false;
-    VR.session = null;
-    VR._spawnUntil = 0;
-
-    // r161: AUDIO-CLEANUP — alle Oscillators stoppen, AudioContext suspenden
+    VR3.inXR = false;
+    VR3.session = null;
+    VR3._spawnForceUntil = 0;
+    // R13: Wrist re-attach Flag zurücksetzen — wird beim nächsten sessionstart wieder gebraucht
+    if (VR3.wrist) VR3.wrist._attached = false;
+    // R13: setAnimationLoop löschen + Desktop-RAF fortsetzen, gegen "stuck"-Crash
+    try { renderer.setAnimationLoop(null); } catch (e) {}
+    try { if (typeof window.animate === 'function') requestAnimationFrame(window.animate); } catch (e) {}
+    // restore sprayContainer
     try {
-      // Pre-existing audioCtx?
-      if (typeof audioCtx !== 'undefined' && audioCtx && audioCtx.state === 'running') {
-        audioCtx.suspend();
-        log('audioCtx suspended');
+      if (typeof sprayContainer !== 'undefined' && sprayContainer && sprayContainer.userData._origParent) {
+        sprayContainer.userData._origParent.add(sprayContainer);
+        sprayContainer.position.set(0.18, -0.20, -0.30);
+        sprayContainer.rotation.set(0, -0.10, 0);
       }
-      // Three.js AudioContext singleton
-      if (THREE.AudioContext && THREE.AudioContext.getContext) {
-        const tac = THREE.AudioContext.getContext();
-        if (tac && tac.state === 'running') tac.suspend();
-      }
-      // VR3-namespace audio (alte legacy)
-      if (window._vrAudioCtx && window._vrAudioCtx.state === 'running') {
-        window._vrAudioCtx.suspend();
-      }
-      // Hum-Reste (falls trotzdem aktiv) — stoppen
-      ['_vrHum','_vrFan'].forEach(function(k){
-        if (window[k] && window[k].osc) {
-          try { window[k].osc.stop(); } catch(_e){}
-          try { window[k].osc.disconnect(); } catch(_e){}
-          window[k] = null;
-        }
-      });
-    } catch(e) { warn('audio cleanup err', e); }
-
-    // Restore camera parent
-    try {
-      if (camera.parent === VR.dolly && VR._origCameraParent) {
-        VR.dolly.remove(camera);
-        VR._origCameraParent.add(camera);
-        camera.position.set(0, 1.7, 8);
-        camera.rotation.set(0, 0, 0);
-      }
-    } catch(e){}
-
-    // Restore SmartSpray
-    try {
-      if (typeof sprayContainer !== 'undefined' && sprayContainer && VR._origSprayParent) {
-        if (sprayContainer.parent) sprayContainer.parent.remove(sprayContainer);
-        VR._origSprayParent.add(sprayContainer);
-        if (VR._origSprayPos) sprayContainer.position.copy(VR._origSprayPos);
-        if (VR._origSprayRot) sprayContainer.rotation.copy(VR._origSprayRot);
-      }
-    } catch(e){}
-
-    // Restore HUD
-    VR._hudHidden.forEach(function(rec){ rec.el.style.display = rec.prev || ''; });
-    VR._hudHidden = [];
-
-    // Remove version label
-    if (VR.versionLabel) {
-      scene.remove(VR.versionLabel);
-      VR.versionLabel.material.dispose(); VR.versionLabel.geometry.dispose();
-      VR.versionLabel = null;
-    }
-
-    // Stop XR animation loop, fall back to desktop RAF
-    try { renderer.setAnimationLoop(null); } catch(e){}
-    try { if (typeof window.animate === 'function') requestAnimationFrame(window.animate); } catch(e){}
-
-    log('sessionend cleanup complete');
+    } catch (e) {}
+    // restore HUD
+    ['hud','rightPanel','crosshair','startScreen','crosshairContainer','liveGraph'].forEach(id => {
+      const el = document.getElementById(id); if (el && '_vrHidden' in el.dataset) el.style.display = el.dataset._vrHidden;
+    });
+    // stop hum
+    try { stopHum(); } catch (e) {}
+    VR3.setVignette(0);
+    if (VR3.menu) VR3.menu.grp.visible = false;
+    if (VR3.laser) VR3.laser.visible = false;
+    if (VR3.teleArc) { VR3.teleArc.line.visible = false; VR3.teleArc.ring.visible = false; }
+    applyPassthrough(false);
   });
 
-  // ───────────────────────────────────────────────────────────────────
-  // Per-frame logic
-  // ───────────────────────────────────────────────────────────────────
-  let _lastTs = performance.now();
-
-  function vrFrame() {
-    if (!VR.inXR || !VR.session) return;
-
-    const now = performance.now();
-    VR.lastDt = Math.min(0.08, (now - _lastTs) / 1000);
-    _lastTs = now;
-    const dt = VR.lastDt > 0 ? VR.lastDt : 1/72;
-
-    // Force-hold spawn for first 1.5s after sessionstart
-    if (VR._spawnUntil && now < VR._spawnUntil) {
-      VR.dolly.position.set(0, 0, 8);
-    } else if (VR._spawnUntil) {
-      VR._spawnUntil = 0;
-    }
-    // r170: Tisch per-frame killen (falls irgendwo wieder visible gesetzt wird)
-    if (typeof window._vrKillTable === 'function') window._vrKillTable();
-    // r164: Force-Equip Spray die ersten 5s
-    if (VR._sprayForceUntil && performance.now() < VR._sprayForceUntil) {
-      window._spraySetupComplete = true;
-      if (typeof sprayContainer !== 'undefined' && sprayContainer) sprayContainer.visible = true;
-      // Force-attach to right controller every frame during this window
-      try {
-        const rightCtrl = VR.controllers[1] || VR.grips[1];
-        if (rightCtrl && sprayContainer && sprayContainer.parent !== rightCtrl) {
-          rightCtrl.add(sprayContainer);
-          sprayContainer.position.set(0, -0.02, -0.08);
-          sprayContainer.rotation.set(0, 0, 0);
-          sprayContainer.visible = true;
-          console.log('[r164] sprayContainer force-attached to right controller');
-        }
-      } catch(e) {}
-    } else if (VR._sprayForceUntil) {
-      VR._sprayForceUntil = 0;
-    }
-    // r169: KEIN Leak-Halo mehr (Thomas-Feedback), nur sehr subtiles emissive
+  // ---------------------------------------------------------------------
+  // 13. Spatial audio — UL3000 hum
+  // ---------------------------------------------------------------------
+  function startHum(){
+    // v8 R11: Brummen komplett aus — Thomas-Feedback "Brummen stört"
+    return;
+  }
+  function stopHum(){
     try {
-      if (typeof leaks !== 'undefined' && typeof spraying !== 'undefined' && typeof signalEMA !== 'undefined') {
-        if (!VR._glowedLeaks) VR._glowedLeaks = [];
-        VR._glowedLeaks.forEach(function(lk){
-          if (lk && lk.mesh && lk.mesh.material && lk._origEmissiveIntensity !== undefined) {
-            lk.mesh.material.emissiveIntensity = lk._origEmissiveIntensity;
-          }
-        });
-        VR._glowedLeaks = [];
-        if (spraying && signalEMA > 1e-8) {
-          const tip = new THREE.Vector3();
-          getSprayTipWorld(tip);
-          let best = null, bestD = 99;
-          for (const lk of leaks) {
-            if (lk.found || lk.isSprayCheck) continue;
-            const d = tip.distanceTo(lk.mesh.position);
-            if (d < bestD && d < 1.5) { bestD = d; best = lk; }   // ENGER cone 1.5m
-          }
-          if (best && best.mesh && best.mesh.material) {
-            if (best._origEmissiveIntensity === undefined) {
-              best._origEmissiveIntensity = best.mesh.material.emissiveIntensity || 0;
-            }
-            // SUBTIL — max 1.0 intensity statt 3.0
-            best.mesh.material.emissiveIntensity = 0.3 + Math.min(0.7, signalEMA * 1e7);
-            VR._glowedLeaks.push(best);
-          }
-        }
-      }
-    } catch(e) {}
-    // r169: Halo komplett aus — falls noch da, dispose
-    if (VR._leakHalo) {
-      scene.remove(VR._leakHalo);
-      if (VR._leakHalo.geometry) VR._leakHalo.geometry.dispose();
-      if (VR._leakHalo.material) VR._leakHalo.material.dispose();
-      VR._leakHalo = null;
-    }
+      if (VR3.hum && VR3.hum.osc) { VR3.hum.osc.stop(); VR3.hum = null; }
+    } catch (e) {}
+  }
 
-    // r170: Leckrate-DISPLAY (große Zahl + farbcodierter Balken) — ersetzt Ring
-    if (VR._progressRing && VR._ringCtx) {
-      const c = VR._ringCtx, W = 256, H = 256;
-      c.clearRect(0, 0, W, H);
-      let showDisp = false;
-      let sig = 5e-12;
-      try {
-        if (typeof signalEMA !== 'undefined' && typeof spraying !== 'undefined' && spraying) {
-          sig = signalEMA;
-          showDisp = true;
-        }
-      } catch(e) {}
-      if (showDisp) {
-        // Hintergrund
-        c.fillStyle = 'rgba(11,22,38,0.92)'; c.fillRect(0, 0, W, H);
-        c.strokeStyle = '#6395BD'; c.lineWidth = 6; c.strokeRect(3, 3, W-6, H-6);
-        // Leckrate als wissenschaftliche Zahl
-        const exp = Math.floor(Math.log10(Math.max(sig, 1e-20)));
-        const mant = sig / Math.pow(10, exp);
-        const sigStr = mant.toFixed(1) + 'e' + exp;
-        // Farbe nach Stärke
-        const col = sig > 1e-6 ? '#7CFF7C' : sig > 1e-7 ? '#FFE298' : sig > 5e-9 ? '#FFB347' : '#9DDCEE';
-        c.fillStyle = col; c.font = 'bold 38px monospace';
-        c.textAlign = 'center';
-        c.fillText(sigStr, W/2, 110);
-        c.fillStyle = '#9DDCEE'; c.font = 'bold 18px Arial';
-        c.fillText('mbar·L/s', W/2, 140);
-        // Balken: log scale 1e-12 bis 1e-5
-        const f = Math.max(0, Math.min(1, (Math.log10(sig) - (-12)) / 7));
-        c.fillStyle = '#1d3050'; c.fillRect(20, 180, W-40, 28);
-        c.fillStyle = col; c.fillRect(20, 180, (W-40) * f, 28);
-        c.fillStyle = '#9DDCEE'; c.font = 'bold 14px Arial';
-        c.fillText('LECK-SIGNAL', W/2, 230);
-      }
-      VR._ringTex.needsUpdate = true;
-      VR._progressRing.visible = false; /* r173: Front-Display aus → Leckrate als Verlaufs-Graph aufs Wrist-Tablet */
-    }
-    // r169 old code (Ring) — Container behält scope, but skipped via showRing check
-    if (VR._progressRing && VR._ringCtx) {
-      let showRing = false;
-      let frac = 0;
-      try {
-        if (typeof signalEMA !== 'undefined' && typeof spraying !== 'undefined' && spraying &&
-            typeof leaks !== 'undefined') {
-          // Ist mind. ein echtes Leck nah genug am Spray-Tip?
-          const tip = new THREE.Vector3();
-          getSprayTipWorld(tip);
-          for (const lk of leaks) {
-            if (lk.found || lk.isSprayCheck) continue;
-            if (tip.distanceTo(lk.mesh.position) < 1.5) { showRing = true; break; }
-          }
-          if (showRing) {
-            // Linear log-scale: 0% bei 1e-9, 100% bei 1e-7 (DETECTION_TRIGGER)
-            const s = signalEMA;
-            if (s > 1e-9) {
-              const expVal = Math.log10(s);  // -9..-7
-              frac = Math.max(0, Math.min(1, (expVal - (-9)) / 2));   // 0 bei -9, 1 bei -7
-            }
-          }
-        }
-      } catch(e) {}
-      const c = VR._ringCtx, W = 256, H = 256;
-      c.clearRect(0, 0, W, H);
-      if (showRing) {
-        c.strokeStyle = 'rgba(157,220,238,0.85)'; c.lineWidth = 14;
-        c.beginPath(); c.arc(128, 128, 100, 0, Math.PI * 2); c.stroke();
-        const col = frac > 0.7 ? '#7CFF7C' : frac > 0.3 ? '#FFE298' : '#9DDCEE';
-        c.strokeStyle = col; c.lineWidth = 14;
-        c.beginPath(); c.arc(128, 128, 100, -Math.PI/2, -Math.PI/2 + frac * Math.PI * 2); c.stroke();
-        c.fillStyle = col; c.font = 'bold 36px Arial'; c.textAlign = 'center';
-        c.fillText(Math.round(frac * 100) + '%', 128, 142);
-      }
-      VR._ringTex.needsUpdate = true;
-      VR._progressRing.visible = false; /* r173: %-Ring aus */
-    }
+  // ---------------------------------------------------------------------
+  // 14. Phase-1 vrPollInput → NoOp shadow (prevents double snap-turn)
+  // ---------------------------------------------------------------------
+  if (typeof window.vrPollInput === 'function') {
+    window.vrPollInput = function(){ /* noop — VR3 owns input */ };
+  }
 
-    // r164/r165: Jump-Physics mit gravityScale
-    if (VR._jumping) {
-      VR._jumpY += VR._jumpVy * dt;
-      VR._jumpVy -= 9.8 * (VR._gravityScale || 1.0) * dt;
-      if (VR._jumpY <= 0) {
-        VR._jumpY = 0; VR._jumpVy = 0; VR._jumping = false;
-      }
-      VR.dolly.position.y = (VR._duckOffset || 0) + VR._jumpY;
+  // ---------------------------------------------------------------------
+  // 15. animate() wrap — full per-frame VR3 logic
+  // ---------------------------------------------------------------------
+  const _origAnimate = window.animate || animate;
+  function vr3PerFrame() {
+    if (!VR3.inXR || !VR3.session) return;
+    const session = VR3.session;
+    const refSpace = VR3.refSpace || renderer.xr.getReferenceSpace();
+    const frame = renderer.xr.getFrame ? renderer.xr.getFrame() : null;
+    if (!refSpace) return;
+    // hand tracking
+    let haveHand = false;
+    for (const src of session.inputSources) {
+      if (!src || !src.hand) continue;
+      if (VR3.settings.handTracking === 'off') continue;
+      if (!frame) break;
+      const visual = (src.handedness === 'right') ? VR3.handR : VR3.handL;
+      if (visual) updateHandFromSource(src, refSpace, frame, visual, src.handedness === 'right');
+      haveHand = true;
     }
-    // r164: Duck (B-Button right btn[5] hold)
-    if (VR._ducking) {
-      VR.dolly.position.y = -0.5;
-    } else if (!VR._jumping) {
-      VR.dolly.position.y = 0;       // r170: standard Höhe
-    }
+    VR3.inputMode = haveHand ? 'hand' : 'controller';
+    // hide controller stubs when hand mode
+    if (xrGrip1) xrGrip1.visible = !haveHand || VR3.settings.handTracking === 'off';
+    if (xrGrip2) xrGrip2.visible = !haveHand || VR3.settings.handTracking === 'off';
 
-    // Wrist update at 5 Hz
-    if (VR.wrist) {
-      VR.wrist._hzAcc += dt;
-      if (VR.wrist._hzAcc > 0.2) { VR.wrist._hzAcc = 0; drawWrist(); }
-    }
-
-    // Input poll
-    for (const src of VR.session.inputSources) {
+    // input poll
+    const dt = VR3.lastDt;
+    for (const src of session.inputSources) {
       const gp = src.gamepad;
-      if (!gp || !gp.axes) continue;
-      const handed = src.handedness;
-      const ax = gp.axes;
+      if (!gp) continue;
+      const ax = gp.axes || [];
       const btn = gp.buttons || [];
-      // Thumbstick is axes[2] and axes[3] for standard XR gamepad
-      const sx = ax[2] || 0, sy = ax[3] || 0;
-
+      const handed = src.handedness;
+      const stickX = ax[2] || 0, stickY = ax[3] || 0;
+      // R13: LINKER Stick = Laufen — Speed 2.5 m/s (war 1.8, zu langsam laut Test)
       if (handed === 'left') {
-        // Smooth walk
-        // r169: Vignette default unsichtbar wenn nicht bewegt
-        if (VR._vignetteMesh && Math.abs(sx) < 0.15 && Math.abs(sy) < 0.15 && handed === 'left') {
-          VR._vignetteMesh.visible = false;
-        }
-        if (VR.locomotion === 'smooth' && !VR.cheatMenuOpen && (Math.abs(sx) > 0.15 || Math.abs(sy) > 0.15)) {
-          // r165: Player-Collision — Tool-Bereich (rund um 0,0,0) ist tabu
-          const _preX = VR.dolly.position.x, _preZ = VR.dolly.position.z;
+        if (VR3.settings.locomotion !== 'teleport' && (Math.abs(stickX) > 0.15 || Math.abs(stickY) > 0.15)) {
           const cam = renderer.xr.getCamera();
-          // Use camera world quaternion for movement direction
-          const camQuat = new THREE.Quaternion();
-          cam.getWorldQuaternion(camQuat);
-          const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(camQuat);
-          fwd.y = 0;
-          if (fwd.lengthSq() > 0.001) fwd.normalize();
-          const right = new THREE.Vector3(1,0,0).applyQuaternion(camQuat);
-          right.y = 0;
-          if (right.lengthSq() > 0.001) right.normalize();
-          const speed = 2.7;  // r169: Kompromiss zwischen 2.0 und 3.5 (Thomas-Feedback)
-          VR.dolly.position.addScaledVector(fwd, speed * (-sy) * dt);
-          VR.dolly.position.addScaledVector(right, speed * sx * dt);
-          // r174: Comfort-Vignette deaktiviert (schwarze Fläche mit Loch beim Laufen — Thomas-Feedback)
-          if (VR._vignetteMesh) VR._vignetteMesh.visible = false;
-          // r169: Footstep alle 0.45s während Bewegung
-          const _mvMag = Math.hypot(sx, sy);
-          if (_mvMag > 0.3) {
-            VR._stepAcc = (VR._stepAcc || 0) + dt * _mvMag;
-            if (VR._stepAcc > 0.45) {
-              VR._stepAcc = 0;
-              try {
-                const _ac = (typeof audioCtx !== 'undefined' && audioCtx) ? audioCtx : null;
-                if (_ac && _ac.state === 'running') {
-                  const _o = _ac.createOscillator(); _o.type = 'sine'; _o.frequency.value = 80 + Math.random() * 30;
-                  const _g = _ac.createGain(); _g.gain.value = 0.06;
-                  _o.connect(_g).connect(_ac.destination);
-                  _o.start();
-                  _g.gain.linearRampToValueAtTime(0.0001, _ac.currentTime + 0.10);
-                  _o.stop(_ac.currentTime + 0.12);
-                }
-              } catch(_e){}
-            }
-          } else { VR._stepAcc = 0; }
-          // r171: Treppen begehbar — Plattform-AABB check
-          const _px = VR.dolly.position.x, _pz = VR.dolly.position.z;
-          // Plattform north-of-chamber (PLAT_X, PLAT_Z, PLAT_W, PLAT_D, PLAT_H=0.9)
-          // Aus Code: deck.position.set(PLAT_X, PLAT_H, PLAT_Z) — wir suchen PLAT_X, PLAT_Z, PLAT_W
-          try {
-            if (typeof PLAT_X !== 'undefined' && typeof PLAT_Z !== 'undefined' &&
-                typeof PLAT_W !== 'undefined' && typeof PLAT_D !== 'undefined' &&
-                typeof PLAT_H !== 'undefined') {
-              const inPlat = (Math.abs(_px - PLAT_X) < PLAT_W/2 + 0.3 &&
-                              Math.abs(_pz - PLAT_Z) < PLAT_D/2 + 0.3);
-              if (inPlat) {
-                // Erhebe Spieler auf Plattform-Höhe
-                if (!VR._jumping && !VR._ducking) {
-                  VR.dolly.position.y = PLAT_H;
-                }
-              }
-            }
-          } catch(_e){}
-          // r170: Tool-Bereiche (Kammer 6.5×1.7 + UL3000 bei 1.0,_,1.85): AABB-Check
-          // Chamber (x: -3.25..+3.25, z: -0.85..+0.85)
-          if (_px > -3.45 && _px < 3.45 && _pz > -1.05 && _pz < 1.05) {
-            // Push out on Z (kürzeste Distanz)
-            VR.dolly.position.z = _pz > 0 ? 1.05 : -1.05;
-          }
-          // UL3000 (1.0, _, 1.85), radius 0.7m
-          const _dx = _px - 1.0, _dz = _pz - 1.85;
-          const _dt = Math.hypot(_dx, _dz);
-          if (_dt < 0.9) {
-            const _s = 0.9 / Math.max(0.01, _dt);
-            VR.dolly.position.x = 1.0 + _dx * _s;
-            VR.dolly.position.z = 1.85 + _dz * _s;
+          const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
+          fwd.y = 0; fwd.normalize();
+          const right = new THREE.Vector3(1,0,0).applyQuaternion(cam.quaternion);
+          right.y = 0; right.normalize();
+          const speed = 2.5;   // R13: war 1.8
+          const safeDt = (typeof dt === 'number' && dt > 0 && dt < 0.1) ? dt : 1/72;
+          VR3.dolly.position.addScaledVector(fwd, speed * (-stickY) * safeDt);
+          VR3.dolly.position.addScaledVector(right, speed * stickX * safeDt);
+          if (VR3.settings.comfortVignette !== 'aus') VR3.setVignette(0.20);
+        }
+      }
+      // snap-turn (right stick X)
+      if (handed === 'right') {
+        if (Math.abs(stickX) > 0.7 && VR3.snapTurnArmed) {
+          const deg = VR3.settings.snapTurnDeg * (stickX > 0 ? -1 : 1);
+          VR3.dolly.rotation.y += deg * Math.PI / 180;
+          VR3.snapTurnArmed = false;
+          VR3.flashVignette(180);
+        } else if (Math.abs(stickX) < 0.3) {
+          VR3.snapTurnArmed = true;
+        }
+        // smooth walk (right Y) in smooth/mixed mode
+        if (VR3.settings.locomotion !== 'teleport' && Math.abs(stickY) > 0.15) {
+          const cam = renderer.xr.getCamera();
+          const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
+          fwd.y = 0; fwd.normalize();
+          const speed = 1.6 * (-stickY);
+          VR3.dolly.position.addScaledVector(fwd, speed * dt);
+          if (VR3.settings.comfortVignette !== 'aus') VR3.setVignette(0.25 * Math.abs(stickY));
+        } else if (VR3.settings.locomotion !== 'teleport' && Math.abs(stickY) < 0.15) {
+          // ease vignette off
+          VR3.setVignette(0);
+        }
+        // A button = menu click  (btn[4])
+        if (btn[4] && btn[4].pressed && !btn[4]._was) {
+          if (VR3.menuOpen) handleLaserClick();
+          else if (VR3.onboardActive) { VR3.onboardStep++; }
+          btn[4]._was = true;
+        } else if (btn[4] && !btn[4].pressed) btn[4]._was = false;
+        // B button = onboarding next / spawn reset (btn[5])
+        if (btn[5] && btn[5].pressed && !btn[5]._was) {
+          if (VR3.onboardActive) { VR3.onboardStep++; advanceOnboarding(); }
+          else { VR3.dolly.position.set(0,0,5); }
+          btn[5]._was = true;
+        } else if (btn[5] && !btn[5].pressed) btn[5]._was = false;
+        // grip = hint rings (squeeze)
+        if (btn[1] && btn[1].pressed && !btn[1]._was) { showHintRings(); btn[1]._was = true; }
+        else if (btn[1] && !btn[1].pressed) btn[1]._was = false;
+        // trigger = spray
+        if (btn[0]) {
+          const pressed = btn[0].pressed || btn[0].value > 0.5;
+          window.spraying = pressed && !VR3.menuOpen;
+          if (pressed && !btn[0]._was) { VR3.pulse('right', 0.3, 80); btn[0]._was = true; }
+          else if (!pressed) btn[0]._was = false;
+        }
+      } else if (handed === 'left') {
+        // R13: Teleport-Gesture NUR im Teleport-Modus aktiv — sonst kollidiert mit Smooth-Walk
+        if (VR3.settings.locomotion === 'teleport') {
+          const mag = Math.hypot(stickX, stickY);
+          if (mag > 0.5) {
+            VR3.teleportActive = true;
+            const cam = renderer.xr.getCamera();
+            const fwd = new THREE.Vector3(0,0,-1).applyQuaternion(cam.quaternion);
+            fwd.y = Math.max(-0.05, Math.min(0.5, fwd.y + 0.25));
+            updateTeleportArc(cam.getWorldPosition(new THREE.Vector3()), fwd);
+          } else if (VR3.teleportActive) {
+            commitTeleport();
           }
         }
-        // Left trigger = iBoost cycle
+        // trigger = iBoost cycle
         if (btn[0] && btn[0].pressed && !btn[0]._was) {
           if (typeof iBoostLevel !== 'undefined' && typeof iBoostMaxAllowed !== 'undefined') {
             window.iBoostLevel = (iBoostLevel + 1) % (iBoostMaxAllowed + 1);
           }
+          VR3.pulse('left', 0.4, 60);
           btn[0]._was = true;
         } else if (btn[0] && !btn[0].pressed) btn[0]._was = false;
-        // Left grip = toggle locomotion mode
+        // grip = toggle menu
         if (btn[1] && btn[1].pressed && !btn[1]._was) {
-          VR.locomotion = (VR.locomotion === 'smooth') ? 'teleport' : 'smooth';
-          log('locomotion →', VR.locomotion);
+          if (VR3.menuOpen) closeMenu(); else openMenu();
           btn[1]._was = true;
         } else if (btn[1] && !btn[1].pressed) btn[1]._was = false;
-        // r168: Y-Button — wenn Endgame offen: Restart, sonst Cheat-Menü
-        if (btn[5] && btn[5].pressed && !btn[5]._was) {
-          if (window._vrEndgameShown) {
-            console.log('[r168] Y → restart from endgame');
-            if (typeof hideVR_Endgame === 'function') hideVR_Endgame();
-            if (typeof restartGame3D === 'function') {
-              setTimeout(() => location.reload(), 50);   // einfache aber zuverlässige restart
-            }
-          } else {
-            VR_toggleCheatMenu();
-          }
-          btn[5]._was = true;
-        } else if (btn[5] && !btn[5].pressed) btn[5]._was = false;
-        // r164: Im Cheat-Menü: linker Stick Y zum Scrollen
-        if (VR.cheatMenuOpen && !VR._cheatScrollLock && Math.abs(sy) > 0.6) {
-          VR.cheatIdx = (VR.cheatIdx + (sy > 0 ? 1 : -1) + VR_CHEATS.length) % VR_CHEATS.length;
-          VR._cheatScrollLock = true;
-        } else if (Math.abs(sy) < 0.3) {
-          VR._cheatScrollLock = false;
-        }
-
-      } else if (handed === 'right') {
-        // r169: Smooth-Turn als Default (war Snap-Turn) — Thomas bevorzugt das
-        if (Math.abs(sx) > 0.15) {
-          VR.dolly.rotation.y -= sx * 1.5 * dt;
-        }
-        // r165: Right trigger = SPRAY (dispatch MouseEvent — lokale `spraying`-let kann nur so gesetzt werden)
-        if (btn[0]) {
-          const pressed = btn[0].pressed || (btn[0].value > 0.5);
-          if (pressed && !btn[0]._sprayDown) {
-            btn[0]._sprayDown = true;
-            try {
-              document.dispatchEvent(new MouseEvent('mousedown', { button: 0, bubbles: true }));
-              console.log('[r165] spray START');
-            } catch(e) {}
-          } else if (!pressed && btn[0]._sprayDown) {
-            btn[0]._sprayDown = false;
-            try {
-              document.dispatchEvent(new MouseEvent('mouseup', { button: 0, bubbles: true }));
-              console.log('[r165] spray STOP');
-            } catch(e) {}
-          }
-        }
-        // Right grip = hint rings
-        if (btn[1] && btn[1].pressed && !btn[1]._was) {
-          showHintRings();
-          btn[1]._was = true;
-        } else if (btn[1] && !btn[1].pressed) btn[1]._was = false;
-        // r164: A-Button (right btn[4]) — Springen / Cheat bestätigen
-        if (btn[4] && btn[4].pressed && !btn[4]._was) {
-          btn[4]._was = true;
-          try { if (window._r174RegisterAPress) window._r174RegisterAPress(); } catch(e){}   // r174: 3x A schnell → Rainbow-Glitzer
-          if (VR.cheatMenuOpen) { VR_activateCheat(VR.cheatIdx); }
-          else if (!VR._jumping) {
-            VR._jumping = true;
-            VR._jumpVy = 4.0;
-            VR._jumpY = 0;
-            log('JUMP!');
-          }
-        } else if (btn[4] && !btn[4].pressed) btn[4]._was = false;
-        // r164: B-Button (right btn[5]) — Ducken solange gehalten
-        if (btn[5]) {
-          if (btn[5].pressed) {
-            VR._ducking = true;
-            btn[5]._was = true;
-          } else {
-            VR._ducking = false;
-            btn[5]._was = false;
-          }
-        }
       }
     }
-  }
-
-  // ───────────────────────────────────────────────────────────────────
-  // Hook into existing animate (wrap)
-  // ───────────────────────────────────────────────────────────────────
-  const _origAnimate = window.animate || (typeof animate === 'function' ? animate : null);
-  window.animate = function() {
-    if (_origAnimate) {
-      try { _origAnimate.apply(this, arguments); } catch(e) { console.error('[VR-EDITION] origAnimate err', e); }
-    }
-    try { vrFrame(); } catch(e) { console.error('[VR-EDITION] vrFrame err', e); }
-  };
-  try { renderer.setAnimationLoop(window.animate); }
-  catch(e) { warn('setAnimationLoop register failed', e); }
-
-  log('VR EDITION v1 loaded and ready');
-})();
-
-// =====================================================================
-// END VR EDITION v1
-// =====================================================================
-
-
-// ════════════════════════════════════════════════════════════════════
-//  r168: VR-ENDGAME 3D-OVERLAY
-// ════════════════════════════════════════════════════════════════════
-window.showVR_Endgame = function() {
-  if (!window.VR || !window.VR.inXR) return;
-  if (window._vrEndgameShown) return;
-  window._vrEndgameShown = true;
-  try {
-    const cv = document.createElement('canvas');
-    cv.width = 1024; cv.height = 768;
-    const c = cv.getContext('2d');
-    // Background
-    c.fillStyle = 'rgba(11,22,38,0.95)'; c.fillRect(0,0,1024,768);
-    c.strokeStyle = '#FFE298'; c.lineWidth = 6; c.strokeRect(3,3,1018,762);
-    // Title
-    c.fillStyle = '#FFE298'; c.font = 'bold 70px Arial'; c.textAlign = 'center';
-    c.fillText('🎉 ALLE LECKS GEFUNDEN!', 512, 90);
-    // Stats
-    c.fillStyle = '#7CFF7C'; c.font = 'bold 120px Arial';
-    const _score = (typeof score !== 'undefined') ? Math.round(score) : 0;
-    c.fillText(_score.toLocaleString('de-DE') + ' Pkt', 512, 230);
-    c.fillStyle = '#9DDCEE'; c.font = '32px Arial';
-    const _elapsed = (performance.now() - (window._freeplayStartedAt || performance.now())) / 1000;
-    const mins = Math.floor(_elapsed / 60), secs = Math.floor(_elapsed % 60);
-    c.fillText('Zeit: ' + mins + ':' + String(secs).padStart(2,'0') + '   Lecks: ' + (typeof leakFoundCount !== 'undefined' ? leakFoundCount : 0), 512, 290);
-    // Top 5 highscores
-    c.fillStyle = '#FFB347'; c.font = 'bold 36px Arial';
-    c.fillText('🏆 TOP 5', 512, 360);
+    // R13: Wrist-Tablet re-attach falls xrGrip1 erst nach sessionstart kommt
     try {
-      const hs = JSON.parse(localStorage.getItem('leakhunter_3d_highscores_v1') || '[]')
-        .sort((a,b) => (b.score||0) - (a.score||0)).slice(0,5);
-      c.fillStyle = '#C8D2DC'; c.font = '26px monospace'; c.textAlign = 'left';
-      let y = 410;
-      hs.forEach(function(h, i){
-        const name = (h.name || 'ANON').padEnd(10).slice(0,10);
-        const sc = (h.score || 0).toString().padStart(7);
-        const isCurrent = h.score === _score;
-        c.fillStyle = isCurrent ? '#7CFF7C' : '#C8D2DC';
-        c.fillText((i+1) + '. ' + name + sc, 220, y);
-        y += 38;
-      });
-      if (hs.length === 0) {
-        c.fillStyle = '#7A8FA8'; c.fillText('(noch keine Highscores)', 380, y);
+      if (VR3.wrist && !VR3.wrist._attached) {
+        if (xrGrip1) {
+          xrGrip1.add(VR3.wrist.mesh);
+          VR3.wrist._attached = true;
+          console.log('[VR R13] wrist tablet attached to left grip');
+        } else if (xrController1) {
+          xrController1.add(VR3.wrist.mesh);
+          VR3.wrist._attached = true;
+          console.log('[VR R13] wrist tablet attached to left controller (no grip)');
+        }
       }
-    } catch(e) { console.warn('hs render err', e); }
-    c.textAlign = 'center';
-    c.fillStyle = '#FFE298'; c.font = 'bold 28px Arial';
-    c.fillText('🎮 Y-Button drücken für NEUES SPIEL', 512, 720);
-
-    const tex = new THREE.CanvasTexture(cv);
-    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, side: THREE.DoubleSide, depthTest: false });
-    const plane = new THREE.Mesh(new THREE.PlaneGeometry(2.0, 1.5), mat);
-    // Vor dem Spieler, in Augenhöhe
-    plane.position.set(VR.dolly.position.x, 1.7, VR.dolly.position.z - 2.5);
-    plane.renderOrder = 999;
-    plane.lookAt(VR.dolly.position.x, 1.7, VR.dolly.position.z);
-    plane.userData._isEndgame = true;
-    scene.add(plane);
-    window._vrEndgamePlane = plane;
-    console.log('[r168] VR endgame shown');
-  } catch(e) { console.error('[r168] showVR_Endgame err', e); }
-};
-window.hideVR_Endgame = function() {
-  if (window._vrEndgamePlane) {
-    scene.remove(window._vrEndgamePlane);
-    if (window._vrEndgamePlane.material) {
-      if (window._vrEndgamePlane.material.map) window._vrEndgamePlane.material.map.dispose();
-      window._vrEndgamePlane.material.dispose();
+    } catch (e) {}
+    // R13: Force-Spawn die ersten 1.5s nach sessionstart
+    if (VR3._spawnForceUntil && performance.now() < VR3._spawnForceUntil) {
+      VR3.dolly.position.set(VR3._spawnX, VR3._spawnY, VR3._spawnZ);
+    } else if (VR3._spawnForceUntil) {
+      VR3._spawnForceUntil = 0;  // disable
     }
-    window._vrEndgamePlane.geometry.dispose();
-    window._vrEndgamePlane = null;
+    // pinch right = trigger emulation
+    if (VR3.pinchR && !VR3.menuOpen) {
+      window.spraying = true;
+      VR3.pinchR = false;
+    }
+    // pinch left = menu click
+    if (VR3.pinchL) {
+      if (VR3.menuOpen) handleLaserClick();
+      VR3.pinchL = false;
+    }
+    // raycaster for menu hover
+    if (VR3.menuOpen && VR3.menu && xrController2) {
+      const m = VR3.menu;
+      const origin = new THREE.Vector3();
+      const dir = new THREE.Vector3(0,0,-1);
+      xrController2.getWorldPosition(origin);
+      xrController2.getWorldQuaternion(new THREE.Quaternion());
+      const tmpQ = new THREE.Quaternion(); xrController2.getWorldQuaternion(tmpQ);
+      dir.applyQuaternion(tmpQ);
+      m.raycaster.set(origin, dir.normalize());
+      const hits = m.raycaster.intersectObjects(m.buttons.map(b => b.box), false);
+      for (const b of m.buttons) {
+        b.box.material.color.setHex(b.box.userData.baseCol);
+      }
+      if (hits.length > 0) {
+        const hit = hits[0].object;
+        hit.material.color.setHex(hit.userData.hovCol);
+        VR3._hoverBtn = hit.userData.btnId;
+      } else {
+        VR3._hoverBtn = null;
+      }
+    }
+    // wrist tablet update (5 Hz)
+    VR3._wristHz += dt;
+    if (VR3._wristHz > 0.2) { VR3._wristHz = 0; VR3.drawWrist(); }
   }
-  window._vrEndgameShown = false;
-};
+
+  function handleLaserClick(){
+    if (VR3._hoverBtn) {
+      handleMenuClick(VR3._hoverBtn);
+      VR3.pulse('right', 0.3, 50);
+    }
+  }
+  function showHintRings(){
+    if (typeof realLeaks === 'undefined' || !realLeaks) return;
+    const created = [];
+    for (const lk of realLeaks) {
+      if (lk.found) continue;
+      const ring = new THREE.Mesh(
+        new THREE.TorusGeometry(0.25, 0.02, 8, 24),
+        new THREE.MeshBasicMaterial({ color: 0xFF4040, transparent: true, opacity: 0.8 })
+      );
+      ring.position.copy(lk.mesh.position);
+      ring.rotation.x = Math.PI / 2;
+      scene.add(ring);
+      created.push(ring);
+    }
+    setTimeout(()=>{ for (const r of created) scene.remove(r); }, 5000);
+  }
+
+  function advanceOnboarding(){
+    const STEPS = [
+      ['Trigger', 'Rechter Trigger = sprühen'],
+      ['Teleport', 'Linker Stick = Teleport-Arc'],
+      ['Snap-Turn', 'Rechter Stick links/rechts'],
+      ['Wrist-Tablet', 'Linkes Handgelenk anschauen']
+    ];
+    if (VR3.onboardStep >= STEPS.length) {
+      VR3.onboardActive = false;
+      VR3.onboarded = true;
+      csSet('vr_onboarded', true);
+      VR3.showBanner('Bereit!', 'Viel Spaß auf der Quest.', 3);
+      return;
+    }
+    const s = STEPS[VR3.onboardStep];
+    VR3.showBanner(s[0], s[1], 4);
+  }
+
+  // wrap animate
+  let _lastTs = performance.now();
+  window.animate = function() {
+    const now = performance.now();
+    VR3.lastDt = Math.min(0.08, (now - _lastTs) / 1000);
+    _lastTs = now;
+    try { _origAnimate.apply(this, arguments); } catch (e) { console.error('[VR3] origAnimate err', e); }
+    try { vr3PerFrame(); } catch (e) { console.error('[VR3] perFrame err', e); }
+  };
+  try { renderer.setAnimationLoop(window.animate); } catch (e) { console.warn('[VR3] setAnimationLoop re-register failed', e); }
+
+  // ---------------------------------------------------------------------
+  // 16. markLeakFound wrap — haptic + achievement
+  // ---------------------------------------------------------------------
+  if (typeof markLeakFound === 'function') {
+    const _origMark = markLeakFound;
+    window.markLeakFound = function(lk) {
+      const wasFound = lk && lk.found;
+      try { _origMark.call(this, lk); } catch (e) { throw e; }
+      if (!wasFound && lk && lk.found) {
+        VR3.pulse('right', 0.8, 200);
+        VR3.unlock('first_leak');
+        if (typeof comboCount !== 'undefined') {
+          if (comboCount >= 5)  VR3.unlock('combo_5');
+          if (comboCount >= 10) VR3.unlock('combo_10');
+        }
+        // count leaks in this round
+        if (typeof realLeaks !== 'undefined') {
+          const f = realLeaks.filter(l => l.found).length;
+          if (f >= 10) VR3.unlock('leaks_10_round');
+        }
+        if (typeof iBoostLevel !== 'undefined' && iBoostLevel === 0 && typeof trainingState !== 'undefined' && trainingState) {
+          // tentative no-iBoost flag — verified at level complete
+        }
+        if (typeof iBoostLevel !== 'undefined' && iBoostLevel >= 5) {
+          VR3.unlock('iboost_5');
+        }
+      }
+    };
+    // also retain original ref via direct binding
+    try { markLeakFound = window.markLeakFound; } catch (e) {}
+  }
+
+  // ---------------------------------------------------------------------
+  // 17. startGame3D wrap — HUD restore + spawn-reset
+  // ---------------------------------------------------------------------
+  if (typeof window.startGame3D === 'function') {
+    const _origStart = window.startGame3D;
+    window.startGame3D = function() {
+      try { _origStart.apply(this, arguments); } catch (e) { throw e; }
+      if (VR3.inXR) {
+        // keep HUD hidden, reset dolly
+        ['hud','rightPanel','crosshair','startScreen','crosshairContainer','liveGraph'].forEach(id => {
+          const el = document.getElementById(id); if (el) el.style.display = 'none';
+        });
+        if (VR3.dolly) VR3.dolly.position.set(0, 0, 5);
+      }
+    };
+  }
+
+  console.log('[VR3] integration loaded — Quest:', VR3.isQuest, ' settings:', VR3.settings);
+})();
+// =====================================================================
+// END VR PHASE 3 INTEGRATION
+// =====================================================================
+
 
 // ════════════════════════════════════════════════════════════════════
 //  v3 EXTRAS BLOCK — Pickup-Phase, Radar, Musik. Alles top-level.
@@ -8391,7 +8421,6 @@ window._showSprayInHand = function() {
   // Position the table near the chamber but reachable from spawn
   tableGroup.position.set(0, 0, 5.0);   // 2m weiter weg von der Kammer
   scene.add(tableGroup);
-  window._sprayPickupTable = tableGroup;   // r173: global expose damit VR es sicher ausblenden kann
   console.log('[v3-extras] table at (0,0,3.0) added to scene');
 
   // Hide spray on hand initially (multiple retries for late GLB load)
@@ -8492,7 +8521,6 @@ function _spawnRadarPickup(x, z) {
   g.userData.bobPhase = Math.random() * Math.PI * 2;
   g.userData.consumed = false;
   scene.add(g);
-  g.add(_makePickupLabel("Leckradar", "#9DDCEE", 1.55));
   _radarPickups.push(g);
   return g;
 }
@@ -8524,7 +8552,7 @@ function _activateRadar() {
   try { playRadarChime(); } catch(e){}
 }
 function _updateRadarPickups(dt, t) {
-  // r163: kein gameStarted check mehr
+  if (!gameStarted) return;
   for (const p of _radarPickups) {
     if (p.userData.consumed) {
       if (p.userData.respawnAt && t >= p.userData.respawnAt) { p.userData.consumed = false; p.visible = true; p.userData.respawnAt = 0; }
@@ -8535,16 +8563,12 @@ function _updateRadarPickups(dt, t) {
     p.children[1].position.y = 1.10 + bob;
     p.children[1].rotation.x += dt * 1.2;
     p.children[1].rotation.y += dt * 0.9;
-    let _pickupX = 0, _pickupZ = 0;
-    if (window.VR && window.VR.dolly && window.VR.inXR) {
-      _pickupX = window.VR.dolly.position.x; _pickupZ = window.VR.dolly.position.z;
-    } else { _pickupX = camera.position.x; _pickupZ = camera.position.z; }
-    const dx = _pickupX - p.position.x;
-    const dz = _pickupZ - p.position.z;
-    if (dx*dx + dz*dz < 2.25) {
+    const dx = camera.position.x - p.position.x;
+    const dz = camera.position.z - p.position.z;
+    if (dx*dx + dz*dz < 1.0) {
       p.userData.consumed = true;
       p.visible = false;
-      p.userData.respawnAt = t + 30;   // r175: Radarball nach 30 s wieder erscheinen
+      p.userData.respawnAt = t + 30;   // r: Radarball nach 30 s wieder erscheinen
       _activateRadar();
     }
   }
@@ -8954,7 +8978,7 @@ window._showTrainingEndScreen = _showTrainingEndScreen;
           sprayPointsMat.opacity = 0.95;
         }
       } catch (e) {}
-      _toast('🪚  CHAINSAW MODE — VRRRMMM!', '#FF6B3A');
+      _toast('💀 DOOM MODE', '#FF6B3A');
     } else {
       // SmartSpray zurück, Kettensäge weg
       if (typeof sprayContainer !== 'undefined' && window._spraySetupComplete) sprayContainer.visible = true;
@@ -8965,7 +8989,7 @@ window._showTrainingEndScreen = _showTrainingEndScreen;
           sprayPointsMat.opacity = 0.70;
         }
       } catch (e) {}
-      _toast('💨  SPRAY MODE NORMAL', '#FFE0A8');
+      _toast('Spray normal', '#FFE0A8');
     }
     console.log('[cheat] kk → chainsaw', window._chainsawMode);
   });
@@ -9343,7 +9367,7 @@ window._showAchievement = _showAchievement;
     var el = document.createElement('div');
     el.id = 'ghostHud';
     el.style.cssText =
-      'display:none; position:fixed; top:14px; left:50%; transform:translateX(-50%); ' +
+      'display:none; position:fixed; top:210px; right:20px; ' +
       'z-index:30; padding:6px 14px; background:rgba(14,22,32,0.78); ' +
       'border:1px solid #6395BD; border-radius:7px; ' +
       'font:bold 13px Arial; color:#9DCDED; letter-spacing:1.5px; ' +
@@ -9676,185 +9700,162 @@ window._showAchievement = _showAchievement;
 
   console.log('[ghost] v8 module loaded');
 })();
+
+// ════════════════════════════════════════════════════════════════════
+//  v9 UNICORN EDITION — Einhornmodus + Gadgets (Desktop 3D)
+// ════════════════════════════════════════════════════════════════════
+(function R9Extras(){
+  // ---------- mini toast ----------
+  function t(msg){ let e=document.getElementById('_r9t'); if(!e){ e=document.createElement('div'); e.id='_r9t'; e.style.cssText='position:fixed;top:14%;left:50%;transform:translateX(-50%);z-index:80;padding:8px 18px;border-radius:10px;font:bold 16px Arial;color:#fff;background:rgba(20,30,45,.92);border:1px solid #6395BD;pointer-events:none;opacity:0;transition:opacity .2s;'; document.body.appendChild(e);} e.textContent=msg; e.style.opacity='1'; clearTimeout(e._h); e._h=setTimeout(()=>e.style.opacity='0',1300); }
+
+  // ---------- panels ----------
+  function panel(id){ let d=document.getElementById(id); if(d) return d;
+    d=document.createElement('div'); d.id=id;
+    d.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:75;display:none;min-width:300px;max-width:430px;padding:20px 26px;border-radius:14px;background:linear-gradient(180deg,rgba(20,30,45,.98),rgba(12,20,32,.99));border:2px solid #6395BD;color:#fff;font-family:Arial;box-shadow:0 12px 44px rgba(0,0,0,.65);';
+    document.body.appendChild(d); return d; }
+  function row(k,desc){ return '<div style="display:flex;align-items:center;gap:14px;padding:5px 0;font-size:14px;">'+
+    '<span style="display:inline-block;min-width:62px;text-align:center;background:rgba(99,149,189,.18);border:1px solid rgba(99,149,189,.5);border-radius:6px;padding:3px 6px;font-weight:bold;color:#9DDCEE;">'+k+'</span>'+
+    '<span style="color:#E6EEF6;">'+desc+'</span></div>'; }
+  let controls=null, gadgets=null;
+  function buildControls(){ const d=panel('_ctrlPanel');
+    d.innerHTML='<h2 style="margin:0 0 12px;color:#9DDCEE;letter-spacing:1px;">🎮 Controls</h2>'+
+      row('WASD','Move')+row('Mouse','Look')+row('Hold LMB','Spray')+row('Space','Jump')+
+      row('C','Crouch')+row('1–5','iBoost level')+row('H','Reveal leaks')+row('Esc','Pause')+
+      '<div style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(99,149,189,.3);font-size:13px;color:#FFE298;">Press <b>L</b> for gadgets &nbsp;·&nbsp; <b>G</b> to close</div>';
+    return d; }
+  function buildGadgets(){ const d=panel('_gadgPanel');
+    d.innerHTML='<h2 style="margin:0 0 12px;color:#FF9CE8;letter-spacing:1px;">✨ Gadgets</h2>'+
+      row('U','🦄 Unicorn mode')+row('M','🌙 Moon gravity')+row('N','📡 Leak radar')+row('K K','💀 Doom mode')+
+      '<div style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(99,149,189,.3);font-size:13px;color:#FFE298;">Press <b>L</b> to close</div>';
+    return d; }
+  function show(d,on){ d.style.display = on===undefined ? (d.style.display==='block'?'none':'block') : (on?'block':'none'); }
+
+  // ---------- unicorn: Flansche dekorieren ----------
+  const UNI={on:false,sprites:[],veil:null,light:null,fog:null,beam:null};
+  function buildBeam(){ const grp=new THREE.Group(); const cols=[0xff3b30,0xff9500,0xffd60a,0x34c759,0x00b0ff,0x5856d6,0xaf52de];
+    cols.forEach(function(c,i){ const m=new THREE.Mesh(new THREE.BoxGeometry(0.55,0.045,4.0), new THREE.MeshBasicMaterial({color:c,transparent:true,opacity:0.82,depthWrite:false})); m.position.set(0,(i-3)*0.05,-2.0); grp.add(m); });
+    grp.visible=false; grp.renderOrder=1300; scene.add(grp); return grp; }
+  const SYM=['🦄','🌈','✨','💖','😊','🌸','⭐','🍀'];
+  function symTex(e){ const cv=document.createElement('canvas');cv.width=128;cv.height=128;const x=cv.getContext('2d');x.font='100px Arial';x.textAlign='center';x.textBaseline='middle';x.fillText(e,64,70);return new THREE.CanvasTexture(cv); }
+  let _symCache=null;
+  function setUnicorn(on){ UNI.on=on;
+    if(on){
+      if(!_symCache) _symCache=SYM.map(symTex);
+      try{ (flangeList||[]).slice(0,60).forEach(function(f){
+        const tex=_symCache[(Math.random()*_symCache.length)|0];
+        const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:tex,transparent:true,depthTest:true}));
+        const s=0.28+Math.random()*0.12; sp.scale.set(s,s,1);
+        sp.position.copy(f.pos).add(new THREE.Vector3(0,0.28,0));
+        sp.userData.ph=Math.random()*6.28; scene.add(sp); UNI.sprites.push(sp);
+      }); }catch(e){}
+      if(!UNI.veil){ UNI.veil=document.createElement('div'); UNI.veil.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:40;opacity:0;transition:opacity .5s;background:radial-gradient(circle at 50% 40%,rgba(255,200,235,.16),rgba(255,160,220,.05) 60%,transparent 82%);mix-blend-mode:screen;'; document.body.appendChild(UNI.veil); }
+      UNI.veil.style.opacity='1';
+      if(!UNI.light){ UNI.light=new THREE.PointLight(0xFFB6E1,0,40); UNI.light.position.set(0,6,3); scene.add(UNI.light); } UNI.light.intensity=1.0;
+      try{ if(scene.fog){ if(UNI.fog===null) UNI.fog=scene.fog.color.getHex(); scene.fog.color.setHex(0xFFD9F0); } }catch(e){}
+      t('🦄 Unicorn ON');
+    } else {
+      UNI.sprites.forEach(function(sp){ scene.remove(sp); if(sp.material.map)sp.material.map.dispose(); sp.material.dispose(); }); UNI.sprites=[];
+      if(UNI.veil) UNI.veil.style.opacity='0';
+      if(UNI.light) UNI.light.intensity=0;
+      try{ if(scene.fog && UNI.fog!==null){ scene.fog.color.setHex(UNI.fog); UNI.fog=null; } }catch(e){}
+      t('Unicorn off');
+    }
+  }
+
+  // ---------- doom: Monster + düster (hängt an window._chainsawMode) ----------
+  const DOOM={on:false,monsters:[],veil:null,fogC:null,fogN:null,fogF:null,bg:null};
+  function monsterTex(){
+    const S=320, cv=document.createElement('canvas'); cv.width=S; cv.height=S; const x=cv.getContext('2d'); x.clearRect(0,0,S,S);
+    const bg=x.createRadialGradient(160,150,30,160,175,140); bg.addColorStop(0,'#7a6a55'); bg.addColorStop(.6,'#5c4c3c'); bg.addColorStop(1,'#382a20');
+    x.fillStyle=bg; x.beginPath(); x.ellipse(160,172,122,118,0,0,6.3); x.fill(); x.strokeStyle='#221911'; x.lineWidth=7; x.stroke();
+    x.fillStyle='rgba(120,100,80,0.45)'; [[95,112,16],[225,112,15],[80,205,18],[242,208,17],[160,255,20]].forEach(function(b){x.beginPath();x.arc(b[0],b[1],b[2],0,6.3);x.fill();});
+    function horn(mx,d){ const hg=x.createLinearGradient(mx,0,mx,92); hg.addColorStop(0,'#d2c9b6'); hg.addColorStop(1,'#574d40'); x.fillStyle=hg;
+      x.beginPath(); x.moveTo(mx,88); x.quadraticCurveTo(mx+d*72,4,mx+d*16,16); x.quadraticCurveTo(mx+d*4,56,mx,88); x.closePath(); x.fill(); x.strokeStyle='#281e16'; x.lineWidth=4; x.stroke(); }
+    horn(98,-1); horn(222,1);
+    x.fillStyle='#160d0a'; x.beginPath(); x.ellipse(160,126,54,40,0,0,6.3); x.fill();
+    const ey=x.createRadialGradient(160,126,3,160,126,42); ey.addColorStop(0,'#fff'); ey.addColorStop(.25,'#ffd23a'); ey.addColorStop(.55,'#ff4010'); ey.addColorStop(1,'rgba(150,20,5,0)');
+    x.fillStyle=ey; x.beginPath(); x.arc(160,126,42,0,6.3); x.fill(); x.fillStyle='#180000'; x.beginPath(); x.arc(160,126,9,0,6.3); x.fill();
+    x.fillStyle='#120606'; x.beginPath(); x.ellipse(160,226,84,52,0,0,6.3); x.fill(); x.strokeStyle='#3a1010'; x.lineWidth=5; x.stroke();
+    x.fillStyle='#e9e2cc';
+    for(let i=0;i<9;i++){ const tx=86+i*18; x.beginPath(); x.moveTo(tx,186); x.lineTo(tx+9,218); x.lineTo(tx+18,186); x.closePath(); x.fill();
+      x.beginPath(); x.moveTo(tx,266); x.lineTo(tx+9,236); x.lineTo(tx+18,266); x.closePath(); x.fill(); }
+    x.strokeStyle='rgba(180,220,210,0.5)'; x.lineWidth=3; x.beginPath(); x.moveTo(150,254); x.lineTo(150,286); x.stroke();
+    x.fillStyle='#4a3a2c'; [[42,212,-1],[278,212,1]].forEach(function(a){ x.beginPath(); x.moveTo(a[0],a[1]); x.lineTo(a[0]+a[2]*30,a[1]+42); x.lineTo(a[0]+a[2]*8,a[1]+52); x.closePath(); x.fill(); });
+    return new THREE.CanvasTexture(cv); }
+  let _mTex=null;
+  function setDoom(on){ DOOM.on=on;
+    if(on){
+      if(!_mTex) _mTex=monsterTex();
+      for(let i=0;i<5;i++){ const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:_mTex,transparent:true,depthTest:true}));
+        sp.scale.set(1.5,1.5,1); const a=Math.random()*6.28, r=4+Math.random()*5;
+        sp.position.set(Math.cos(a)*r,1.6+Math.random()*1.8,Math.sin(a)*r);
+        sp.userData={ph:Math.random()*6.28,r:r,a:a,sp:0.2+Math.random()*0.3,base:sp.position.y}; scene.add(sp); DOOM.monsters.push(sp); }
+      if(!DOOM.veil){ DOOM.veil=document.createElement('div'); DOOM.veil.style.cssText='position:fixed;inset:0;pointer-events:none;z-index:40;opacity:0;transition:opacity .6s;background:radial-gradient(circle at 50% 50%,transparent 35%,rgba(60,0,0,.55) 100%);'; document.body.appendChild(DOOM.veil); }
+      DOOM.veil.style.opacity='1';
+      try{ if(scene.fog){ DOOM.fogC=scene.fog.color.getHex(); DOOM.fogN=scene.fog.near; DOOM.fogF=scene.fog.far; scene.fog.color.setHex(0x1a0606); scene.fog.near=6; scene.fog.far=34; } }catch(e){}
+      try{ if(scene.background && scene.background.isColor){ DOOM.bg=scene.background.getHex(); scene.background.setHex(0x140404); } }catch(e){}
+      t('💀 DOOM');
+    } else {
+      DOOM.monsters.forEach(function(sp){ scene.remove(sp); sp.material.dispose(); }); DOOM.monsters=[];
+      if(DOOM.veil) DOOM.veil.style.opacity='0';
+      try{ if(scene.fog && DOOM.fogC!==null){ scene.fog.color.setHex(DOOM.fogC); scene.fog.near=DOOM.fogN; scene.fog.far=DOOM.fogF; DOOM.fogC=null; } }catch(e){}
+      try{ if(scene.background && scene.background.isColor && DOOM.bg!==null){ scene.background.setHex(DOOM.bg); DOOM.bg=null; } }catch(e){}
+    }
+  }
+
+  // ---------- keys ----------
+  window.addEventListener('keydown',function(e){
+    if(e.repeat) return;
+    if(e.code==='KeyG'){ if(!controls) controls=buildControls(); if(!gadgets) gadgets=buildGadgets(); gadgets.style.display='none'; show(controls); }
+    else if(e.code==='KeyL'){ if(!gadgets) gadgets=buildGadgets(); if(controls) controls.style.display='none'; show(gadgets); }
+    else if(e.code==='KeyU'){ setUnicorn(!UNI.on); }
+    else if(e.code==='KeyM'){ window._gravity=(window._gravity&&window._gravity<5)?9.8:2.0; t(window._gravity<5?'🌙 Moon gravity':'Gravity normal'); }
+    else if(e.code==='KeyN'){ try{ if(typeof _activateRadar==='function'){ _activateRadar(); t('📡 Radar'); } else if(typeof showHintRings==='function'){ showHintRings(); t('📡 Radar'); } }catch(e){} }
+  });
+
+  // ---------- Start: Controls zeigen, beim 1. Sprühen weg ----------
+  let _shownAtStart=false, _wasStarted=false;
+  document.addEventListener('mousedown',function(){ if(controls) controls.style.display='none'; });
+
+  // ---------- animate-Wrap ----------
+  if(typeof window.animate==='function'){
+    const _o=window.animate;
+    window.animate=function(){ _o.apply(this,arguments);
+      // Start-Panel beim Spielstart einmal zeigen
+      try{ const gs=(typeof gameStarted!=='undefined'&&gameStarted); if(gs&&!_wasStarted){ _wasStarted=true; if(!_shownAtStart){ _shownAtStart=true; if(!controls)controls=buildControls(); controls.style.display='block'; } } }catch(e){}
+      const ti=performance.now()*0.001;
+      // unicorn sparkle + Regenbogen-Strahl
+      if(UNI.on){
+        for(let i=0;i<UNI.sprites.length;i++){ const sp=UNI.sprites[i]; sp.material.opacity=0.7+0.3*Math.sin(ti*4+sp.userData.ph); }
+        const _spr=(typeof spraying!=='undefined'&&spraying)&&(typeof helicansLeft==='undefined'||helicansLeft>0);
+        if(_spr){ try{ if(typeof sprayPoints!=='undefined') sprayPoints.visible=false; }catch(e){}
+          if(!UNI.beam) UNI.beam=buildBeam();
+          try{ const tp=getSprayTipWorld(new THREE.Vector3()); const dr=getSprayDirWorld(new THREE.Vector3()).normalize();
+            UNI.beam.position.copy(tp); UNI.beam.quaternion.setFromUnitVectors(new THREE.Vector3(0,0,-1), dr);
+            for(let i=0;i<UNI.beam.children.length;i++){ UNI.beam.children[i].material.color.setHSL(((ti*0.4)+(i/7))%1,1,0.55); }
+            UNI.beam.visible=true; }catch(e){}
+        } else if(UNI.beam){ UNI.beam.visible=false; }
+      } else if(UNI.beam){ UNI.beam.visible=false; }
+      // doom monsters drift
+      if(DOOM.on){ for(let i=0;i<DOOM.monsters.length;i++){ const sp=DOOM.monsters[i],u=sp.userData; u.a+=u.sp*0.012; sp.position.x=Math.cos(u.a)*u.r; sp.position.z=Math.sin(u.a)*u.r; sp.position.y=u.base+Math.sin(ti*0.8+u.ph)*0.4; } }
+      // doom an _chainsawMode koppeln
+      const cm=!!window._chainsawMode; if(cm!==DOOM.on) setDoom(cm);
+    };
+    try{ renderer.setAnimationLoop(window.animate); }catch(e){}
+  }
+  console.log('[v9] R9Extras: G=controls, L=gadgets, U=unicorn, M=moon, N=radar, KK=doom');
+})();
 // ════════════════════════════════════════════════════════════════════
 //  END v8 GHOST RACE
 // ════════════════════════════════════════════════════════════════════
-
-
-// ════════════════════════════════════════════════════════════════════
-//  r174 EXTRAS — He-Text-Warnung + Rainbow-Glitzer-Cheat
-// ════════════════════════════════════════════════════════════════════
-(function R174Extras(){
-  // ---- He-Warnung als TEXT "background too high" (statt Vignette/Rechteck) ----
-  let heWarnMesh = null;
-  function buildHeWarn(){
-    const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 256;
-    const x = cv.getContext('2d'); x.clearRect(0,0,1024,256);
-    x.font = 'bold 110px Arial'; x.textAlign = 'center'; x.textBaseline = 'middle';
-    x.lineWidth = 12; x.strokeStyle = 'rgba(0,0,0,0.85)';
-    x.strokeText('BACKGROUND TOO HIGH', 512, 128);
-    x.fillStyle = '#FF6B5C'; x.fillText('BACKGROUND TOO HIGH', 512, 128);
-    const tex = new THREE.CanvasTexture(cv);
-    const mat = new THREE.MeshBasicMaterial({ map: tex, transparent: true, opacity: 0, depthTest: false, depthWrite: false });
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(0.9, 0.225), mat);
-    m.position.set(0, 0.34, -1.1); m.renderOrder = 1500; m.visible = false;
-    try { camera.add(m); } catch(e){ scene.add(m); }
-    return m;
-  }
-  function heWarnTick(){
-    if(!heWarnMesh) heWarnMesh = buildHeWarn();
-    const he = (typeof heBg !== 'undefined') ? heBg : 0;
-    // Erscheint ab 60%, voll bei ~85%, verblasst bis 0 wenn 99% erreicht
-    let op = 0;
-    if(he > 0.6){ if(he < 0.85) op = (he - 0.6) / 0.25; else op = Math.max(0, (0.99 - he) / 0.14); }
-    heWarnMesh.material.opacity = op * 0.92;
-    heWarnMesh.visible = op > 0.01;
-  }
-
-  // ---- Rainbow-Glitzer-Cheat ----
-  const RB = { active:false, t:0, smileyAcc:0, pinkLight:null, pinkVeil:null, smileys:[], _aTimes:[] };
-  window._rainbowActive = function(){ return RB.active; };
-  const SMILEYS = ['😊','🌸','✨','💖','🦄','🌈','😄','⭐'];
-  let _smTexCache = null;
-  function smileyTex(emoji){
-    const cv = document.createElement('canvas'); cv.width = 128; cv.height = 128;
-    const x = cv.getContext('2d'); x.font = '96px Arial'; x.textAlign='center'; x.textBaseline='middle';
-    x.fillText(emoji, 64, 72); return new THREE.CanvasTexture(cv);
-  }
-  function spawnSmiley(){
-    if(!_smTexCache) _smTexCache = SMILEYS.map(smileyTex);
-    const tip = (typeof getSprayTipWorld === 'function') ? getSprayTipWorld(new THREE.Vector3()) : camera.position.clone();
-    const t = _smTexCache[(Math.random()*_smTexCache.length)|0];
-    const mat = new THREE.SpriteMaterial({ map: t, transparent: true, depthTest: false });
-    const sp = new THREE.Sprite(mat); sp.renderOrder = 1400;
-    sp.position.copy(tip).add(new THREE.Vector3((Math.random()-0.5)*0.4, (Math.random()-0.5)*0.3, (Math.random()-0.5)*0.4));
-    const sz = 0.13 + Math.random()*0.10; sp.scale.set(sz, sz, 1);
-    scene.add(sp);
-    RB.smileys.push({ sp:sp, life:1.4, vy:0.5+Math.random()*0.5, vx:(Math.random()-0.5)*0.4 });
-  }
-  function playRainbowChime(){
-    try{
-      const AC = window.AudioContext || window.webkitAudioContext; if(!AC) return;
-      const ac = (THREE.AudioContext && THREE.AudioContext.getContext) ? THREE.AudioContext.getContext() : new AC();
-      [523,659,784,1047,1319].forEach(function(f,i){
-        const o = ac.createOscillator(), g = ac.createGain(); o.type='triangle'; o.frequency.value=f;
-        const t0 = ac.currentTime + i*0.07;
-        g.gain.setValueAtTime(0.0001, t0); g.gain.exponentialRampToValueAtTime(0.18, t0+0.02);
-        g.gain.exponentialRampToValueAtTime(0.0001, t0+0.35);
-        o.connect(g); g.connect(ac.destination); o.start(t0); o.stop(t0+0.36);
-      });
-    }catch(e){}
-  }
-  function setRainbow(on){
-    RB.active = on;
-    if(on){
-      if(!RB.pinkLight){ RB.pinkLight = new THREE.PointLight(0xFFB6E1, 0, 30); RB.pinkLight.position.set(0,4,2); scene.add(RB.pinkLight); }
-      RB.pinkLight.intensity = 1.1;
-      if(!RB.pinkVeil){
-        const mat = new THREE.MeshBasicMaterial({ color:0xFFC0E8, transparent:true, opacity:0, depthTest:false, depthWrite:false, blending:THREE.AdditiveBlending });
-        RB.pinkVeil = new THREE.Mesh(new THREE.PlaneGeometry(3,2), mat);
-        RB.pinkVeil.position.set(0,0,-0.6); RB.pinkVeil.renderOrder = 1450;
-        try { camera.add(RB.pinkVeil); } catch(e){ scene.add(RB.pinkVeil); }
-      }
-      RB.pinkVeil.material.opacity = 0.12;
-      try { if(scene.fog) scene.fog.color.setHex(0xFFD9F0); } catch(e){}
-      try { if(typeof _spawnFloatText==='function') _spawnFloatText(camera.position.clone().add(new THREE.Vector3(0,-0.2,-1.5)), '🌈 RAINBOW! 🌈', '#FF9CE8'); } catch(e){}
-      playRainbowChime();
-    } else {
-      if(RB.pinkLight) RB.pinkLight.intensity = 0;
-      if(RB.pinkVeil) RB.pinkVeil.material.opacity = 0;
-    }
-    console.log('[r174] Rainbow-Glitzer → ' + RB.active);
-  }
-  window._toggleRainbow = function(){ setRainbow(!RB.active); };
-  window._r174RegisterAPress = function(){
-    const now = performance.now();
-    RB._aTimes = RB._aTimes.filter(function(t){ return now - t < 1200; });
-    RB._aTimes.push(now);
-    if(RB._aTimes.length >= 3){ RB._aTimes = []; window._toggleRainbow(); }
-  };
-  // Desktop-Test: G×3 schnell, oder Shift+G zum Umschalten
-  window.addEventListener('keydown', function(e){
-    if(e.code === 'KeyG'){ if(e.shiftKey) window._toggleRainbow(); else window._r174RegisterAPress(); }
-  });
-  function rainbowTick(dt){
-    if(RB.active){
-      RB.t += dt;
-      try { if(typeof sprayPointsMat !== 'undefined' && sprayPointsMat){
-        sprayPointsMat.color.setHSL((RB.t*0.6)%1, 1.0, 0.62);
-        sprayPointsMat.size = 0.16; sprayPointsMat.opacity = 0.95;
-      }} catch(e){}
-      if(typeof spraying !== 'undefined' && spraying){
-        RB.smileyAcc += dt; if(RB.smileyAcc > 0.10){ RB.smileyAcc = 0; spawnSmiley(); }
-      }
-      if(RB.pinkVeil) RB.pinkVeil.material.opacity = 0.10 + 0.05*Math.sin(RB.t*3);
-    }
-    for(let i=RB.smileys.length-1;i>=0;i--){ const s=RB.smileys[i];
-      s.life -= dt; s.sp.position.y += s.vy*dt; s.sp.position.x += s.vx*dt; s.vy *= 0.97;
-      s.sp.material.opacity = Math.max(0, Math.min(1, s.life/0.5));
-      if(s.life <= 0){ scene.remove(s.sp); if(s.sp.material.map) s.sp.material.map.dispose(); s.sp.material.dispose(); RB.smileys.splice(i,1); }
-    }
-  }
-
-  // ---- animate-Wrap (läuft nach dem ghost-Wrap) ----
-  let _last = performance.now();
-  if(typeof window.animate === 'function'){
-    const _orig = window.animate;
-    window.animate = function(){
-      _orig.apply(this, arguments);
-      const n = performance.now(); let dt = (n - _last)/1000; _last = n; if(dt > 0.1) dt = 0.1;
-      try { heWarnTick(); } catch(e){}
-      try { rainbowTick(dt); } catch(e){}
-    };
-    try { renderer.setAnimationLoop(window.animate); } catch(e){}
-  }
-  console.log('[r174] extras geladen — He-Warn-Text + Rainbow (Triple-A in VR, G×3 oder Shift+G am Desktop).');
-})();
-
-// ════════════════════════════════════════════════════════════════════
-//  r175 — VR-Bedienungs-Feld oben im Sichtfeld
-// ════════════════════════════════════════════════════════════════════
-(function R175Controls(){
-  let panel = null;
-  function build(){
-    const cv = document.createElement('canvas'); cv.width = 1024; cv.height = 200;
-    const x = cv.getContext('2d');
-    const r=26,w=1024,h=200;
-    x.beginPath(); x.moveTo(r,0); x.arcTo(w,0,w,h,r); x.arcTo(w,h,0,h,r); x.arcTo(0,h,0,0,r); x.arcTo(0,0,w,0,r); x.closePath();
-    x.fillStyle='rgba(11,22,38,0.84)'; x.fill();
-    x.strokeStyle='rgba(99,149,189,0.75)'; x.lineWidth=4; x.stroke();
-    x.textAlign='center'; x.textBaseline='middle';
-    x.fillStyle='#9DDCEE'; x.font='bold 34px Arial'; x.fillText('STEUERUNG / CONTROLS', 512, 36);
-    x.font='27px Arial'; x.fillStyle='#E6EEF6';
-    x.fillText('Trigger = Sprühen   •   Linker Stick = Laufen   •   Rechter Stick = Drehen', 512, 92);
-    x.fillText('A = Springen (3× schnell = 🌈)   •   R-Grip = Lecks zeigen   •   B = Ducken   •   Y = Cheats', 512, 146);
-    const tex = new THREE.CanvasTexture(cv);
-    const m = new THREE.Mesh(new THREE.PlaneGeometry(1.15, 0.225),
-      new THREE.MeshBasicMaterial({ map:tex, transparent:true, opacity:0.9, depthTest:false, depthWrite:false }));
-    m.position.set(0, 0.48, -1.4); m.renderOrder = 1480; m.visible = false;
-    try { camera.add(m); } catch(e){ scene.add(m); }
-    return m;
-  }
-  if(typeof window.animate === 'function'){
-    const _o = window.animate;
-    window.animate = function(){
-      _o.apply(this, arguments);
-      try {
-        if(!panel) panel = build();
-        const inXR = (window.VR && window.VR.inXR) || (renderer.xr && renderer.xr.isPresenting);
-        panel.visible = !!inXR;
-      } catch(e){}
-    };
-    try { renderer.setAnimationLoop(window.animate); } catch(e){}
-  }
-  console.log('[r175] Bedienungs-Feld geladen (nur in VR sichtbar).');
-})();
 
 </script>
 
 <script>
 // v7 R10: defensiv die Startscreen-Buttons via addEventListener wired
 document.addEventListener('DOMContentLoaded', () => {
+  if (location.hash === '#highscores') setTimeout(()=>{ try{ if(typeof showHighscores3D==='function') showHighscores3D(); }catch(e){} }, 300);
+  if (location.hash === '#settings')   setTimeout(()=>{ try{ if(typeof openSettings3D==='function') openSettings3D(); }catch(e){} }, 300);
   // High scores
   document.querySelectorAll('button').forEach(btn => {
     const txt = btn.textContent.trim();
