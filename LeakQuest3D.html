@@ -152,7 +152,7 @@
     box-shadow: inset 0 0 100px 30px rgba(217,83,79,0.9);
     transition: opacity 0.2s;
   }
-  /* iBoost-on Crosshair-Ring (deutlich rot) */
+  /* I·BOOST-on Crosshair-Ring (deutlich rot) */
   #crosshair.iboost-on .dot { background: #FF3B30 !important; box-shadow: 0 0 14px rgba(255,59,48,0.95); }
   #crosshair.iboost-on .crossV, #crosshair.iboost-on .crossH { background: #FF3B30 !important; box-shadow: 0 0 10px rgba(255,59,48,0.7); }
   #iboostOn {
@@ -848,8 +848,8 @@
     </div>
 
     <div class="info-box" style="opacity:0.9;">
-      <p>Walk the fab with the <b>SMART-Spray</b> and find the helium leaks at the flanges. The <b>UL3000 Fab</b> shows the live leak rate.</p>
-      <p style="margin-top:10px; color:#9DDCEE; font-size:13px;"><b>Mouse</b> look &nbsp;·&nbsp; <b>WASD</b> move &nbsp;·&nbsp; <b>hold mouse</b> spray &nbsp;·&nbsp; <b>Space</b> jump &nbsp;·&nbsp; <b>C</b> crouch &nbsp;·&nbsp; <b>1–5</b> iBoost &nbsp;·&nbsp; <b>G</b> controls</p>
+      <p>Walk the fab with the <b>SMART-Spray</b> and find the helium leaks at the flanges. The <b>UL3000 Fab ULTRA</b> shows the live leak rate.</p>
+      <p style="margin-top:10px; color:#9DDCEE; font-size:13px;"><b>Mouse</b> look &nbsp;·&nbsp; <b>WASD</b> move &nbsp;·&nbsp; <b>hold mouse</b> spray &nbsp;·&nbsp; <b>Space</b> jump &nbsp;·&nbsp; <b>C</b> crouch &nbsp;·&nbsp; <b>1–5</b> I·BOOST &nbsp;·&nbsp; <b>G</b> controls</p>
     </div>
     <div style="color:#5A7090; font-size:11px; letter-spacing:1.5px; margin-top:16px;">Leak Quest 3D &nbsp;·&nbsp; v11 &nbsp;·&nbsp; 2026-06-03 &nbsp;·&nbsp; Thomas Grellmann</div>
   </div>
@@ -884,9 +884,9 @@
   <div id="helicanPickupFlash">+1 HELICAN</div>
   
   
-  <!-- v7: iBoost-Status zentral unten -->
+  <!-- v7: I·BOOST-Status zentral unten -->
   <div id="iboostBottom" style="display:none; position:absolute; bottom:18px; left:50%; transform:translateX(-50%); padding:12px 28px; background:linear-gradient(180deg, rgba(20,30,45,0.94), rgba(14,22,32,0.97)); border:2px solid var(--inf-cyan); border-radius:14px; color:#fff; font:bold 24px Arial; letter-spacing:1.5px; z-index:7; pointer-events:none; box-shadow:0 4px 18px rgba(0,0,0,0.55);">
-    <span style="color:#9DCDED;">iBOOST</span> <span style="font-family:monospace; color:#FFE0A8; margin-left:10px;">LEVEL <span id="iboostBottomLvl">0</span></span>
+    <span style="color:#9DCDED;">I·BOOST</span> <span style="font-family:monospace; color:#FFE0A8; margin-left:10px;">LEVEL <span id="iboostBottomLvl">0</span></span>
     <span style="color:#9DCDED; font-size:13px; font-weight:normal; margin-left:20px;">⌨ Press <b>G</b> — Controls</span>
   </div>
 
@@ -911,7 +911,7 @@
     </div>
     <div id="heBgWarning" style="display:none; padding:4px 12px; background:rgba(217,83,79,0.85); color:#fff; font:bold 11px Arial; letter-spacing:2px; text-align:center; border-radius:0 0 7px 7px;">⚠ HELIUM BACKGROUND HIGH</div>
   </div>
-  <div id="iboostOn" style="display:none !important">⚡ iBOOST ACTIVE — Level <span id="iboostOnLvl">1</span></div>
+  <div id="iboostOn" style="display:none !important">⚡ I·BOOST ACTIVE — Level <span id="iboostOnLvl">1</span></div>
   <div id="comboHUD" style="display:none; position:absolute; top:90px; right:24px; padding:8px 18px; background:linear-gradient(180deg, rgba(232,134,42,0.95), rgba(180,80,30,0.95)); border:2px solid #FFD580; border-radius:10px; font:bold 18px Arial; color:#fff; letter-spacing:2px; box-shadow:0 4px 14px rgba(232,134,42,0.45); z-index:8; pointer-events:none; transition:transform 0.2s;">COMBO × <span id="comboNum">1</span></div>
   <!-- Training-Hint-Panel rechts oben, wie im 2D-Spiel -->
   <div id="trainingHintPanel" style="display:none !important; position:absolute; top:80px; right:20px; width:340px; max-height:60vh; overflow-y:auto; padding:18px 22px; background:linear-gradient(180deg, rgba(20,30,45,0.96), rgba(14,22,32,0.96)); border:2px solid var(--inf-cyan); border-radius:12px; color:#fff; z-index:8; pointer-events:none; box-shadow:0 4px 20px rgba(0,0,0,0.6);">
@@ -939,7 +939,7 @@
     <div style="background: linear-gradient(135deg, #1A3A5A, #0E1B2A); border:3px solid #6395BD; border-radius:14px; padding:32px 48px; max-width:700px; text-align:center; box-shadow: 0 0 80px rgba(99,149,189,0.5);">
       <div style="color:#7CFF7C; font-size:14px; letter-spacing:4px; font-weight:bold;">🏆  MISSION COMPLETE</div>
       <div style="color:#FFE0A8; font-size:54px; font-weight:bold; margin: 14px 0 4px 0; letter-spacing:1px;"><span id="egScore">0</span> <span style="font-size:24px; color:#C8D2DC;">points</span></div>
-      <div style="color:#C8D2DC; font-size:15px; letter-spacing:1px;"><span id="egLeaks">0/0</span> leaks · combo <span id="egCombo">×1</span> · iBoost level <span id="egBoost">1</span> · time <span id="egTime" style="color:#9DCDED; font-family:monospace; font-weight:bold;">0:00</span></div>
+      <div style="color:#C8D2DC; font-size:15px; letter-spacing:1px;"><span id="egLeaks">0/0</span> leaks · combo <span id="egCombo">×1</span> · I·BOOST level <span id="egBoost">1</span> · time <span id="egTime" style="color:#9DCDED; font-family:monospace; font-weight:bold;">0:00</span></div>
       <div style="margin-top: 18px; display: flex; gap: 8px; align-items: center; justify-content: center;">
         <span style="color:#9DCDED; font-size:13px;">Your name:</span>
         <input id="egName" type="text" maxlength="16" placeholder="Player" value="" style="background: rgba(255,255,255,0.12); border: 1px solid #9DCDED; color: #fff; padding: 6px 12px; font-size: 14px; border-radius: 4px; font-family: Arial; min-width: 180px;">
@@ -1056,8 +1056,8 @@
       <div id="t3dLvlRow3" onclick="startTraining3D(3)" style="display:flex; align-items:center; padding:14px 18px; margin-bottom:10px; background:rgba(99,149,189,0.10); border-left:4px solid var(--inf-cyan); border-radius:8px; cursor:pointer;">
         <span style="font-size:32px; font-weight:bold; color:var(--inf-cyan); min-width:50px; text-align:center;">3</span>
         <div style="flex:1; text-align:left; padding:0 12px;">
-          <h3 style="margin:0 0 4px 0; font-size:19px; color:#fff;">iBoost — Empfindlichkeit erhöhen</h3>
-          <p style="margin:0; font-size:13px; color:#aaa;">Stufen 0–5 erleben — wie iBoost τ um Faktor 1–64 verkürzt.</p>
+          <h3 style="margin:0 0 4px 0; font-size:19px; color:#fff;">I·BOOST — Empfindlichkeit erhöhen</h3>
+          <p style="margin:0; font-size:13px; color:#aaa;">Stufen 0–5 erleben — wie I·BOOST τ um Faktor 1–64 verkürzt.</p>
         </div>
         <span id="t3dLvlStatus3" style="font-size:22px; color:var(--sig-orange-hi);">▶</span>
       </div>
@@ -1114,12 +1114,12 @@
 
   <div id="rewardPopup" style="display:none; position:absolute; top:30%; left:50%; transform:translate(-50%,-50%); background: linear-gradient(180deg, #3A5A82, #2C4866); border: 3px solid #FFD580; border-radius: 14px; padding: 24px 36px; z-index: 30; text-align:center; box-shadow: 0 0 40px rgba(255,179,71,0.7); pointer-events:none;">
     <div style="background: #FFB347; color: #1A2E48; padding: 6px 12px; border-radius: 6px; font-weight: bold; font-size: 13px;">🎁  BELOHNUNG FREIGESCHALTET</div>
-    <div style="color: #fff; font-size: 32px; font-weight: bold; margin: 14px 0 4px 0;">iBoost Stufe <span id="rewardLevel">2</span></div>
+    <div style="color: #fff; font-size: 32px; font-weight: bold; margin: 14px 0 4px 0;">I·BOOST Stufe <span id="rewardLevel">2</span></div>
     <div style="color: #FFE0A8; font-size: 13px;">automatisch aktiviert  ·  [<span id="rewardLevelKey">2</span>] zum Wechseln</div>
   </div>
 
   <div id="controlsHint" style="display:none">
-    <b>WASD</b> Laufen &nbsp;·&nbsp; <b>Maus</b> Umschauen &nbsp;·&nbsp; <b>halten</b> sprühen &nbsp;·&nbsp; <b>Leertaste</b> Springen &nbsp;·&nbsp; <b>C</b> Ducken &nbsp;·&nbsp; <b>1-5</b> iBoost &nbsp;·&nbsp; <b>H</b> Lecks zeigen (Hilfe) &nbsp;·&nbsp; <b>Esc</b> entsperren
+    <b>WASD</b> Laufen &nbsp;·&nbsp; <b>Maus</b> Umschauen &nbsp;·&nbsp; <b>halten</b> sprühen &nbsp;·&nbsp; <b>Leertaste</b> Springen &nbsp;·&nbsp; <b>C</b> Ducken &nbsp;·&nbsp; <b>1-5</b> I·BOOST &nbsp;·&nbsp; <b>H</b> Lecks zeigen (Hilfe) &nbsp;·&nbsp; <b>Esc</b> entsperren
   </div>
 
 
@@ -1204,7 +1204,7 @@
         <div class="key">Score</div>             <div class="val score" id="victoryScore">0</div>
         <div class="key">Lecks</div>             <div class="val" id="victoryLeaks">0 / 0</div>
         <div class="key">Beste Combo</div>       <div class="val" id="victoryCombo">–</div>
-        <div class="key">iBoost erreicht</div>   <div class="val" id="victoryBoost">Stufe 1</div>
+        <div class="key">I·BOOST erreicht</div>   <div class="val" id="victoryBoost">Stufe 1</div>
         <div class="key">Trigger</div>           <div class="val" id="victoryTrigger">1e-7 mbar·l/s</div>
       </div>
       <div class="button-row">
@@ -2708,7 +2708,7 @@ buildPlatform({ x:  4.7, z: 0, w: 0.9, d: 2.2, h: 1.6, stairsSide: 'south' });  
 // (4. Plattform entfernt — Thomas: nur 2 Gerüste)
 
 // ----------------- UL3000 FAB UNIT -----------------
-// Hand-modelled fallback that LOOKS like the real INFICON UL3000 Fab — based
+// Hand-modelled fallback that LOOKS like the real INFICON UL3000 Fab ULTRA — based
 // on the product reference: white cylindrical body, dark sockel, sloped top
 // operator-wedge with display, blue INFICON branding on the side.
 const ul3000 = new THREE.Group();
@@ -2722,7 +2722,7 @@ ulBase.position.y = 0.06;
 ulBase.castShadow = true;
 ul3000.add(ulBase);
 
-// Main NAVY-BLUE cylindrical body — matches the real INFICON UL3000 Fab.
+// Main NAVY-BLUE cylindrical body — matches the real INFICON UL3000 Fab ULTRA.
 // (The reference photo shows a navy body with a white operator tray on top;
 //  the per-vertex-color scheme used by the GLB loader confirms this: NAVY for
 //  0.10 < Y < 0.78, WHITE for Y > 0.78, GREY for Y < 0.10.)
@@ -2804,8 +2804,8 @@ ictx.textAlign = 'left';
 ictx.fillText('INFICON', 30, 100);
 // Product name
 ictx.fillStyle = '#1F3A5F';
-ictx.font = 'bold 56px Arial';
-ictx.fillText('UL3000 Fab', 30, 170);
+ictx.font = 'bold 40px Arial';
+ictx.fillText('UL3000 Fab ULTRA', 30, 175);   // v11: kleiner, damit voller Name auf den Canvas passt
 // Subtitle
 ictx.fillStyle = '#2C4866';
 ictx.font = 'italic 22px Arial';
@@ -3095,7 +3095,7 @@ scene.add(bellowsGroup);
 // Bulky machine bodies left and right of the main chamber, like in the ASML
 // reference — gives the tool more visual weight and "real installation" feel.
 function makeProcessModule(x, z, w, h, d, name, accentColor) {
-  // NOTE: Background equipment is fully desaturated/grey so the iBoost tool in
+  // NOTE: Background equipment is fully desaturated/grey so the I·BOOST tool in
   // the center reads as the focal element. accentColor is ignored on purpose.
   const g = new THREE.Group();
   // v7 R23: fast schwarz damit Process-Modules in der schwarzen Hülle verschwinden
@@ -3220,7 +3220,7 @@ makeCableBundle( 3.0, 2.2, -7.0,  3.0, 5.0, -5.0, CBL);
 // ----------------- FAB BACKDROP (grey perimeter walls with silhouettes) -----------------
 // Large painted walls at the perimeter showing the silhouette of more fab
 // equipment in the distance — purely visual, all greyscale, so the central
-// iBoost tool reads as the obvious focal element.
+// I·BOOST tool reads as the obvious focal element.
 function makeFabBackdropTexture(width, height, perspective) {
   const c = document.createElement('canvas');
   c.width = width; c.height = height;
@@ -3913,7 +3913,7 @@ function placeLeaks(count) {
   const chosen = pool.slice(0, Math.min(count, pool.length));
   for (const f of chosen) {
     // Leak rate between 1e-8 and 5e-5 mbar·l/s
-    const value = Math.pow(10, -6.00 + Math.random() * 0.70);
+    const value = Math.pow(10, -5.60 + Math.random() * 0.60);
     makeLeak(f.pos.clone(), value, 'Flansch');
   }
   // SPRAY-Check is always present as a calibration "leak"
@@ -4563,7 +4563,7 @@ function markLeakFound(lk) {
   score += pts * combo;
   // detection bell (tonal)
   try { playDetectionBell(lk.exp); } catch(e){}
-  // iBoost unlock check (free play)
+  // I·BOOST unlock check (free play)
   if (!trainingState) {
     const oldMax = iBoostMaxAllowed;
     iBoostMaxAllowed = computeIBoostMax3D();
@@ -4690,7 +4690,7 @@ function _wireVictoryButtons() {
           if (added >= 3) break;
           // Skip already-used positions
           if (leaks.some(l => l.mesh && l.mesh.position.distanceTo(c.pos) < 0.8)) continue;
-          const value = Math.pow(10, -6.00 + Math.random() * 0.70);
+          const value = Math.pow(10, -5.60 + Math.random() * 0.60);
           makeLeak(c.pos.clone(), value, 'Leck');
           leakStartCount++;
           added++;
@@ -4726,7 +4726,7 @@ function showVictory() {
         score:   score,
         leaks:   leakStartCount,
         time:    (performance.now() / 1000 - (window._freeplayStartedAt || performance.now()/1000)),
-        iBoost:  iBoostMaxAllowed,
+        I·BOOST:  iBoostMaxAllowed,
         mode:    proMode ? 'Pro' : 'Free',
         ts:      Date.now()
       });
@@ -4954,7 +4954,7 @@ function showVictory() {
         score:   score,
         leaks:   leakStartCount,
         time:    (performance.now() / 1000 - (window._freeplayStartedAt || performance.now()/1000)),
-        iBoost:  iBoostMaxAllowed,
+        I·BOOST:  iBoostMaxAllowed,
         mode:    proMode ? 'Profi' : 'Frei',
         ts:      Date.now()
       });
@@ -5094,7 +5094,7 @@ window.enterVR = function() {
 
 
 // ============================================================
-//  iBoost / He-Background MECHANICS — 2026-05-24 evening
+//  I·BOOST / He-Background MECHANICS — 2026-05-24 evening
 //  Mirrors the V4 2D version. Activated in Free Play and Training.
 // ============================================================
 const BOOST_FACTORS_3D = [1, 1.5, 2.5, 4, 8, 32, 64];   // v11: Stufe 6 (versteckt) = 64×
@@ -5165,7 +5165,10 @@ _spawnHelicanPickup( 0.0,  8.5);
 function _updateHelicanPickups(dt, t) {
   if (!gameStarted) return;
   for (const p of _helicanPickups) {
-    if (p.userData.consumed) continue;
+    if (p.userData.consumed) {
+      if (p.userData.respawnAt && t >= p.userData.respawnAt) { p.userData.consumed = false; p.visible = true; p.userData.respawnAt = 0; }
+      else continue;
+    }
     // Bob + spin
     const bob = Math.sin(t * 2.0 + p.userData.bobPhase) * 0.07;
     p.children.forEach(c => {
@@ -5182,8 +5185,9 @@ function _updateHelicanPickups(dt, t) {
       // Pickup!
       p.userData.consumed = true;
       p.visible = false;
+      p.userData.respawnAt = t + 30;   // r: Helican nach 30 s wieder erscheinen (wie Leckradar)
       helicansLeft = Math.min(15, helicansLeft + 3);   // +1 cartridge worth
-      // iBoost-Stufen-Bonus: jedes Pickup hebt max-Stufe um 1 (bis 5)
+      // I·BOOST-Stufen-Bonus: jedes Pickup hebt max-Stufe um 1 (bis 5)
       window._iBoostBonus = (window._iBoostBonus || 0) + 1;
       if (typeof computeIBoostMax3D === 'function') {
         iBoostMaxAllowed = computeIBoostMax3D();
@@ -5294,7 +5298,7 @@ function updateIBoostUI3D() {
     if (lvl === iBoostLevel) b.classList.add(lvl >= 4 ? 'active-high' : 'active');
   });
   const lbl = document.getElementById('hudIBoostLbl');
-  if (lbl) lbl.textContent = 'iBOOST: Level ' + iBoostLevel + '  (Keys 0–5)';
+  if (lbl) lbl.textContent = 'I·BOOST: Level ' + iBoostLevel + '  (Keys 0–5)';
   const ibBot = document.getElementById('iboostBottomLvl');
   if (ibBot) {
     ibBot.textContent = iBoostLevel;
@@ -5638,28 +5642,28 @@ const TRAINING_SCRIPTS_3D = {
         showDiagram: true,
         waitFor: 'next' },
       { title: 'Lernziel — und Ausblick',
-        body: 'Die Ansprechzeit τ hängt ab von:\n\n• V — Volumen der Anlage (größer ⇒ langsamer)\n• S — Saugvermögen des Lecksuchers (größer ⇒ schneller)\n• C — Leitwert der Verbindung (größer ⇒ schneller)\n\nIn der Praxis ist V durch die Anlage vorgegeben. Kurze, weite Verbindungen ⇒ niedrige τ.\n\niBoost kennt seine eigene Ansprechzeit und korrigiert das Anzeigesignal mathematisch — das lernst du im nächsten Level.',
+        body: 'Die Ansprechzeit τ hängt ab von:\n\n• V — Volumen der Anlage (größer ⇒ langsamer)\n• S — Saugvermögen des Lecksuchers (größer ⇒ schneller)\n• C — Leitwert der Verbindung (größer ⇒ schneller)\n\nIn der Praxis ist V durch die Anlage vorgegeben. Kurze, weite Verbindungen ⇒ niedrige τ.\n\nI·BOOST kennt seine eigene Ansprechzeit und korrigiert das Anzeigesignal mathematisch — das lernst du im nächsten Level.',
         waitFor: 'next', nextLabel: 'Nächstes Level', finishOnNext: true },
     ]
   },
   3: {
-    title: 'iBoost — schneller messen',
+    title: 'I·BOOST — schneller messen',
     leakSetup: 'level3',
     steps: [
-      { title: 'Was ist iBoost?',
-        body: 'iBoost erhöht das effektive Saugvermögen des Lecksuchers — und damit die Detektor-Bandbreite — um einen großen Faktor. Folge: die Ansprechzeit τ wird viel kürzer.\n\nFaktoren der Stufen 0–5:\n• 0 = Aus  (×1)\n• 1 = ×2\n• 2 = ×4\n• 3 = ×8\n• 4 = ×16\n• 5 = ×64\n\nDu wirst gleich denselben Aufbau mit verschiedenen Stufen ausprobieren.',
+      { title: 'Was ist I·BOOST?',
+        body: 'I·BOOST erhöht das effektive Saugvermögen des Lecksuchers — und damit die Detektor-Bandbreite — um einen großen Faktor. Folge: die Ansprechzeit τ wird viel kürzer.\n\nFaktoren der Stufen 0–5:\n• 0 = Aus  (×1)\n• 1 = ×2\n• 2 = ×4\n• 3 = ×8\n• 4 = ×16\n• 5 = ×64\n\nDu wirst gleich denselben Aufbau mit verschiedenen Stufen ausprobieren.',
         waitFor: 'next' },
       { title: 'Aufbau — drei mittelweite Lecks',
-        body: 'Vor dir liegen drei gleich große Lecks (1·10⁻⁶ mbar·l/s) mit gleicher mittlerer Anbindung an den UL3000. Ohne iBoost dauert die Erkennung jeweils mehrere Sekunden.\n\nIm Trainings-Modus sind alle iBoost-Stufen sofort verfügbar — drücke nacheinander 0, 3 und 5.',
+        body: 'Vor dir liegen drei gleich große Lecks (1·10⁻⁶ mbar·l/s) mit gleicher mittlerer Anbindung an den UL3000. Ohne I·BOOST dauert die Erkennung jeweils mehrere Sekunden.\n\nIm Trainings-Modus sind alle I·BOOST-Stufen sofort verfügbar — drücke nacheinander 0, 3 und 5.',
         waitFor: 'next' },
       { title: 'Stufe 0 — Boost AUS',
-        body: 'Drücke jetzt die Taste 0 (iBoost AUS). Beobachte: bei Stufe 0 vergehen typisch 3–4 s, bis das Signal "Leck erkannt" greift.\n\nFinde anschließend das erste Leck (grüner Pfeil).',
+        body: 'Drücke jetzt die Taste 0 (I·BOOST AUS). Beobachte: bei Stufe 0 vergehen typisch 3–4 s, bis das Signal "Leck erkannt" greift.\n\nFinde anschließend das erste Leck (grüner Pfeil).',
         action: '⌨  Taste 0 drücken — dann sprühen',
         highlightLeak: 0, highlightColor: 0x7CFF7C,
         showTimer: true,
         waitFor: 'iboost0AndLeak0' },
       { title: 'Stufe 3 — Boost mittel',
-        body: 'Sehr gut. Drücke jetzt die Taste 3 (iBoost Stufe 3, ×8 Faktor). Sprühe das zweite Leck.\n\nDu wirst sehen: deutlich kürzere Reaktionszeit — das Signal steigt fast sofort.',
+        body: 'Sehr gut. Drücke jetzt die Taste 3 (I·BOOST Stufe 3, ×8 Faktor). Sprühe das zweite Leck.\n\nDu wirst sehen: deutlich kürzere Reaktionszeit — das Signal steigt fast sofort.',
         action: '⌨  Taste 3 drücken — dann sprühen',
         highlightLeak: 1, highlightColor: 0xFFB347,
         showTimer: true,
@@ -5671,7 +5675,7 @@ const TRAINING_SCRIPTS_3D = {
         showTimer: true,
         waitFor: 'iboost5AndLeak2' },
       { title: 'Lernziel',
-        body: 'Ohne iBoost: lange τ, ruhige Anzeige, aber langsame Lokalisierung.\nMit iBoost: kurze τ, sofortige Reaktion, aber mehr He background.\n\nFaustregel: in offenen Anlagen mit klaren Hits → niedrige Stufe. In komplexen / langen Anlagen wo du systematisch suchst → höhere Stufe.\n\nDie eigentliche Sparsamkeit lernst du in Level 4: nur eine Helican-Kartusche!',
+        body: 'Ohne I·BOOST: lange τ, ruhige Anzeige, aber langsame Lokalisierung.\nMit I·BOOST: kurze τ, sofortige Reaktion, aber mehr He background.\n\nFaustregel: in offenen Anlagen mit klaren Hits → niedrige Stufe. In komplexen / langen Anlagen wo du systematisch suchst → höhere Stufe.\n\nDie eigentliche Sparsamkeit lernst du in Level 4: nur eine Helican-Kartusche!',
         showMeasure: 'iboost',
         waitFor: 'next', nextLabel: 'Weiter zu Level 4 →', finishOnNext: true },
     ]
@@ -5681,10 +5685,10 @@ const TRAINING_SCRIPTS_3D = {
     leakSetup: 'level4',
     steps: [
       { title: 'Sprühen kostet',
-        body: 'Helium-Sprühen verbraucht Gas aus der Helican-Kartusche UND baut den He background in der Halle / Kammer auf. Sobald der He background hoch ist, "sieht" der Lecksucher überall etwas — Lecks werden schwieriger zu lokalisieren.\n\nHandwerklich gut: kurze, gezielte Sprühstöße. iBoost reduziert die nötige Sprühdauer durch schnellere Erkennung.',
+        body: 'Helium-Sprühen verbraucht Gas aus der Helican-Kartusche UND baut den He background in der Halle / Kammer auf. Sobald der He background hoch ist, "sieht" der Lecksucher überall etwas — Lecks werden schwieriger zu lokalisieren.\n\nHandwerklich gut: kurze, gezielte Sprühstöße. I·BOOST reduziert die nötige Sprühdauer durch schnellere Erkennung.',
         waitFor: 'next' },
       { title: 'Die Mission',
-        body: 'Vor dir sind 3 Lecks. Du hast NUR 1 Helican-Kartusche (ca. 30 s Spray-Zeit) — finde sie alle.\n\nTipps:\n• iBoost Stufe 3 oder höher hilft enorm.\n• Höre auf zu sprühen wenn das Signal nicht steigt — der He background (Balken rechts) zeigt, wie viel "ungenutztes" Helium in der Luft ist.\n• Stuck? Drücke H für 5 s Leck-Position-Hinweise.',
+        body: 'Vor dir sind 3 Lecks. Du hast NUR 1 Helican-Kartusche (ca. 30 s Spray-Zeit) — finde sie alle.\n\nTipps:\n• I·BOOST Stufe 3 oder höher hilft enorm.\n• Höre auf zu sprühen wenn das Signal nicht steigt — der He background (Balken rechts) zeigt, wie viel "ungenutztes" Helium in der Luft ist.\n• Stuck? Drücke H für 5 s Leck-Position-Hinweise.',
         waitFor: 'next' },
       { title: 'Such-Lauf',
         body: 'Los geht es! Achte auf:\n• HELICAN-Balken links — bei 0 ist Schluss.\n• HE BACKGROUND-Balken oben — bleibt der grün/blau, sprühst du sparsam.\n• Bei He background > 70 % zeichnet sich ein roter Schleier ab.\n\nFinde alle 3 Lecks bevor das Helium ausgeht.',
@@ -5692,7 +5696,7 @@ const TRAINING_SCRIPTS_3D = {
         showHeBg: true,
         waitFor: 'allLeaksFound' },
       { title: 'Geschafft — bravo!',
-        body: 'Mit einem klaren Kopf, iBoost und kurzen Stößen lassen sich alle drei Lecks mit einer Patrone finden.\n\nLehrsatz: Wenig sprühen, gezielt zielen, iBoost statt mehr He.\n\nDie Praxis: in Level 5 wartet die echte Inspektion auf dich.',
+        body: 'Mit einem klaren Kopf, I·BOOST und kurzen Stößen lassen sich alle drei Lecks mit einer Patrone finden.\n\nLehrsatz: Wenig sprühen, gezielt zielen, I·BOOST statt mehr He.\n\nDie Praxis: in Level 5 wartet die echte Inspektion auf dich.',
         waitFor: 'next', nextLabel: 'Weiter zu Level 5 →', finishOnNext: true },
     ]
   },
@@ -5704,7 +5708,7 @@ const TRAINING_SCRIPTS_3D = {
         body: '5 zufällig platzierte Lecks unterschiedlicher Größe. Zeit-Limit: 5 Minuten.\n\nPunkte:\n• Je größer das Leck, desto mehr Basis-Punkte.\n• Je schneller du nach dem letzten Fund das nächste findest, desto höher der Multiplikator (×2,0 / ×1,5 / ×1,2).\n• Combo-Multiplikator wie im freien Spiel.\n\nViel Erfolg!',
         waitFor: 'next', nextLabel: 'Test starten →' },
       { title: 'Lauf — finde alle 5 Lecks',
-        body: 'Achte auf den Countdown oben. Höchster Score landet in der Top-10 Highscore-Liste.\n\n• Tasten 1–5: iBoost\n• H: Lecks kurz zeigen (Hilfe)\n• Esc: Pause',
+        body: 'Achte auf den Countdown oben. Höchster Score landet in der Top-10 Highscore-Liste.\n\n• Tasten 1–5: I·BOOST\n• H: Lecks kurz zeigen (Hilfe)\n• Esc: Pause',
         showHeBg: true,
         showL5Timer: true,
         waitFor: 'l5done' },
@@ -5789,9 +5793,9 @@ function setupTrainingChamber3D(setup) {
       picked.push(c);
     }
     for (const c of picked) {
-      makeLeak(c.pos.clone(), 1e-6, 'iBoost-Leck');
+      makeLeak(c.pos.clone(), 1e-6, 'I·BOOST-Leck');
     }
-    // Force all of them to identical tauMult so iBoost is the only differentiator
+    // Force all of them to identical tauMult so I·BOOST is the only differentiator
     for (const lk of leaks) {
       if (lk.isSprayCheck) continue;
       lk.tauMult = 1.5;
@@ -5828,7 +5832,7 @@ function setupTrainingChamber3D(setup) {
       picked.push(c);
     }
     for (const c of picked) {
-      const value = Math.pow(10, -6.00 + Math.random() * 0.70);
+      const value = Math.pow(10, -5.60 + Math.random() * 0.60);
       makeLeak(c.pos.clone(), value, 'Leck');
     }
   }
@@ -5999,7 +6003,7 @@ function renderTrainingStep3D() {
       const t0 = (lt[0] || 0).toFixed(1);
       const t1 = (lt[1] || 0).toFixed(1);
       const t2 = (lt[2] || 0).toFixed(1);
-      measEl.innerHTML = `iBoost 0: <b style="color:#7CFF7C">${t0} s</b><br>iBoost 3: <b style="color:#FFB347">${t1} s</b><br>iBoost 5: <b style="color:#D9534F">${t2} s</b>`;
+      measEl.innerHTML = `I·BOOST 0: <b style="color:#7CFF7C">${t0} s</b><br>I·BOOST 3: <b style="color:#FFB347">${t1} s</b><br>I·BOOST 5: <b style="color:#D9534F">${t2} s</b>`;
     } else if (step.showMeasure === 'l5' && l5State) {
       const t = ((performance.now()/1000 - l5State.startedAt) | 0);
       const mins = Math.floor(t / 60), secs = t % 60;
@@ -6095,7 +6099,7 @@ function t3dCompleteLevel() {
     document.getElementById('t3dCompleteText').textContent =
       lvl === 1
         ? 'Du beherrschst die SMART-Spray und die Bedienung. Jetzt geht es um die Physik der Ansprechzeit.'
-        : 'Du hast verstanden, wie τ die Lecksuche prägt. Weiter mit iBoost.';
+        : 'Du hast verstanden, wie τ die Lecksuche prägt. Weiter mit I·BOOST.';
   } else {
     btn.style.display = 'none';
     document.getElementById('t3dCompleteText').textContent =
@@ -6111,7 +6115,7 @@ function t3dCompleteLevel() {
       leaks:  l5State.foundLeaks || 0,
       total:  l5State.totalLeaks,
       time:   t,
-      iBoost: iBoostMaxAllowed,
+      I·BOOST: iBoostMaxAllowed,
       mode:   'Level 5',
       ts:     Date.now()
     });
@@ -6248,7 +6252,7 @@ function trainingTick3D(dt) {
     trainingHighlightArrow.position.y = base + 0.08 * Math.sin(clock.elapsedTime * 3.0);
     trainingHighlightArrow.rotation.y += dt * 1.6;
   }
-  // track per-level iBoost flags
+  // track per-level I·BOOST flags
   trainingState.flags['iboost' + iBoostLevel] = true;
   // Step-scoped step number snapshot so we can compute combined conditions
   let advance = false;
@@ -6548,7 +6552,7 @@ window.resumeGame    = function() {
 // ESC to release pointer-lock is handled by the browser; we just listen so we
 // can pause cleanly.
 document.addEventListener('keydown', e => {
-  // iBoost numeric keys (0..5) — only while game is started
+  // I·BOOST numeric keys (0..5) — only while game is started
   if (gameStarted && /^Digit[0-6]$/.test(e.code)) {
     const lvl = parseInt(e.code.slice(5), 10);
     setIBoostLevel3D(lvl);
@@ -6722,7 +6726,7 @@ function animate() {
   if (gameStarted && spraying && helicansLeft > 0) {
     for (let k = 0; k < 5; k++) spawnSprayParticle();
     if (!window._infiniteHelium) helicansLeft = Math.max(0, helicansLeft - dt * 0.24);  // r9: +25% Laufzeit (~37.5 s/cartridge)
-    heBg = Math.min(1, heBg + dt / 1.8);
+    heBg = Math.min(1, heBg + dt / 3.0);   // v11: ~60% Anstiegsgeschwindigkeit (war 1.8) — nicht so schnell rot
     if (!_sprayNoiseSrc) playSpraySoundStart();
   } else {
     heBg = Math.max(0, heBg - dt / 3.2);   // half-speed decay so He-BG actually matters
@@ -6769,12 +6773,12 @@ function animate() {
       if (sig > bestSignal) { bestSignal = sig; bestLeak = lk; }
     }
   }
-  // EMA toward bestSignal (or baseline). iBoost shortens tau; heBg lengthens it.
+  // EMA toward bestSignal (or baseline). I·BOOST shortens tau; heBg lengthens it.
   const _boostFactor = getBoostFactor3D(iBoostLevel);
   const _heSlow = 1 + heBg * (iBoostLevel > 0 ? 0.45 : 1.6);
   const _leakMult = bestLeak ? (bestLeak.tauMult || 1) : 1;
   const tauRise = (TAU_NORMAL / _boostFactor) * _heSlow * _leakMult;
-  const tauFall = tauRise * 0.35;   // v11: Signal fällt schneller als es steigt (skaliert über _boostFactor mit iBoost)
+  const tauFall = tauRise * 0.35;   // v11: Signal fällt schneller als es steigt (skaliert über _boostFactor mit I·BOOST)
   const target = bestLeak ? bestSignal : _baselineNoise();
   const a = 1 - Math.exp(-dt / ((target < signalEMA) ? tauFall : tauRise));
   signalEMA += (target - signalEMA) * a;
@@ -7264,7 +7268,7 @@ renderer.domElement.addEventListener('click', () => {
       c.textAlign = 'right'; c.fillText('! HE-WARNUNG !', W - 12, 119); c.textAlign = 'left';
     }
 
-    // ---- Row 3: HELICAN + iBOOST side by side ----
+    // ---- Row 3: HELICAN + I·BOOST side by side ----
     const hl = (typeof helicansLeft !== 'undefined') ? helicansLeft : 0;
     c.fillStyle = '#7A8FA8'; c.font = '10px Inter';
     c.fillText('HELICAN', 8, 142);
@@ -7277,12 +7281,12 @@ renderer.domElement.addEventListener('click', () => {
     const ibMax = (typeof iBoostMaxAllowed !== 'undefined') ? iBoostMaxAllowed : 5;
     const ibFactor = (typeof BOOST_FACTORS_3D !== 'undefined' && BOOST_FACTORS_3D[ib]) ? BOOST_FACTORS_3D[ib] : ib;
     c.fillStyle = '#7A8FA8'; c.font = '10px Inter';
-    c.fillText('iBOOST', 200, 142);
+    c.fillText('I·BOOST', 200, 142);
     c.fillStyle = ib >= 4 ? '#FF5C5C' : ib >= 2 ? '#FFB347' : '#7CFF7C';
     c.font = 'bold 16px Inter';
     c.fillText('x' + ibFactor + ' (L' + ib + ')', 200, 160);
     c.fillStyle = '#1d3050'; c.fillRect(200, 166, 170, 8);
-    // iBoost bar colour escalates with level
+    // I·BOOST bar colour escalates with level
     const ibCol = ib >= 4 ? '#FF5C5C' : ib >= 2 ? '#FFB347' : '#7CC8FF';
     c.fillStyle = ibCol; c.fillRect(200, 166, 170 * (ib / Math.max(1, ibMax)), 8);
 
@@ -7466,8 +7470,8 @@ renderer.domElement.addEventListener('click', () => {
     { id:'combo_10',       name:'10er-Combo',            desc:'10 Lecks in Folge' },
     { id:'spray_100s',     name:'Sprüher',               desc:'100 s gesprüht' },
     { id:'all_levels',     name:'Alles gelernt',         desc:'Alle Trainings-Level' },
-    { id:'no_iboost_win',  name:'Reine Kunst',           desc:'Level ohne iBoost geschafft' },
-    { id:'iboost_5',       name:'Maximal-Boost',         desc:'iBoost Level 5 erreicht' },
+    { id:'no_iboost_win',  name:'Reine Kunst',           desc:'Level ohne I·BOOST geschafft' },
+    { id:'iboost_5',       name:'Maximal-Boost',         desc:'I·BOOST Level 5 erreicht' },
     { id:'leaks_10_round', name:'Zehnender',             desc:'10 Lecks in einer Runde' },
     { id:'passthrough',    name:'Mixed Reality',         desc:'Passthrough aktiviert' }
   ];
@@ -8103,7 +8107,7 @@ renderer.domElement.addEventListener('click', () => {
             commitTeleport();
           }
         }
-        // trigger = iBoost cycle
+        // trigger = I·BOOST cycle
         if (btn[0] && btn[0].pressed && !btn[0]._was) {
           if (typeof iBoostLevel !== 'undefined' && typeof iBoostMaxAllowed !== 'undefined') {
             window.iBoostLevel = (iBoostLevel + 1) % (iBoostMaxAllowed + 1);
@@ -8248,7 +8252,7 @@ renderer.domElement.addEventListener('click', () => {
           if (f >= 10) VR3.unlock('leaks_10_round');
         }
         if (typeof iBoostLevel !== 'undefined' && iBoostLevel === 0 && typeof trainingState !== 'undefined' && trainingState) {
-          // tentative no-iBoost flag — verified at level complete
+          // tentative no-I·BOOST flag — verified at level complete
         }
         if (typeof iBoostLevel !== 'undefined' && iBoostLevel >= 5) {
           VR3.unlock('iboost_5');
@@ -9690,7 +9694,7 @@ window._showAchievement = _showAchievement;
   // ---------- panels ----------
   function panel(id){ let d=document.getElementById(id); if(d) return d;
     d=document.createElement('div'); d.id=id;
-    d.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:75;display:none;min-width:300px;max-width:430px;padding:20px 26px;border-radius:14px;background:linear-gradient(180deg,rgba(20,30,45,.98),rgba(12,20,32,.99));border:2px solid #6395BD;color:#fff;font-family:Arial;box-shadow:0 12px 44px rgba(0,0,0,.65);';
+    d.style.cssText='position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);z-index:75;display:none;min-width:300px;max-width:430px;padding:20px 26px;border-radius:14px;background:linear-gradient(180deg,rgba(20,30,45,.98),rgba(12,20,32,.99));border:2px solid #6395BD;color:#fff;font-family:Arial;box-shadow:0 12px 44px rgba(0,0,0,.65);pointer-events:none;';
     document.body.appendChild(d); return d; }
   function row(k,desc){ return '<div style="display:flex;align-items:center;gap:14px;padding:5px 0;font-size:14px;">'+
     '<span style="display:inline-block;min-width:62px;text-align:center;background:rgba(99,149,189,.18);border:1px solid rgba(99,149,189,.5);border-radius:6px;padding:3px 6px;font-weight:bold;color:#9DDCEE;">'+k+'</span>'+
@@ -9699,7 +9703,7 @@ window._showAchievement = _showAchievement;
   function buildControls(){ const d=panel('_ctrlPanel');
     d.innerHTML='<h2 style="margin:0 0 12px;color:#9DDCEE;letter-spacing:1px;">🎮 Controls</h2>'+
       row('WASD','Move')+row('Mouse','Look')+row('Hold LMB','Spray')+row('Space','Jump')+
-      row('C','Crouch')+row('1–5','iBoost level')+row('H','Reveal leaks')+row('Esc','Pause')+
+      row('C','Crouch')+row('1–5','I·BOOST level')+row('H','Reveal leaks')+row('Esc','Pause')+
       '<div style="margin-top:14px;padding-top:10px;border-top:1px solid rgba(99,149,189,.3);font-size:13px;color:#FFE298;">Press <b>L</b> for gadgets &nbsp;·&nbsp; <b>G</b> to close</div>';
     return d; }
   function buildGadgets(){ const d=panel('_gadgPanel');
@@ -9804,14 +9808,20 @@ window._showAchievement = _showAchievement;
 
   // ---------- Start: Controls zeigen, beim 1. Sprühen weg ----------
   let _shownAtStart=false, _wasStarted=false;
-  document.addEventListener('mousedown',function(){ if(controls) controls.style.display='none'; });
+  document.addEventListener('mousedown',function(){ if(controls) controls.style.display='none'; if(window._awaitStart){ window._awaitStart=false; window._freeplayStartedAt = performance.now()/1000; } });
 
   // ---------- animate-Wrap ----------
   if(typeof window.animate==='function'){
     const _o=window.animate;
     window.animate=function(){ _o.apply(this,arguments);
       // Start-Panel beim Spielstart einmal zeigen
-      /* v11: Start-Controls subtil — kein großes Panel mehr beim Start (Controls erscheinen im Spiel; G öffnet sie) */
+      // v11: beim Spielstart Controls-Menü zeigen; Zeit pausiert bis zum 1. Klick/Sprühen
+      try{
+        const gs=(typeof gameStarted!=='undefined'&&gameStarted);
+        if(gs && !_wasStarted){ _wasStarted=true; window._awaitStart=true; if(!controls)controls=buildControls(); controls.style.display='block'; }
+        if(!gs){ _wasStarted=false; }
+        if(window._awaitStart){ window._freeplayStartedAt = performance.now()/1000; }   // Uhr steht still bis Start
+      }catch(e){}
       const ti=performance.now()*0.001;
       try{ _iboostHintTick(); }catch(e){}
       try{ _starTick(); }catch(e){}
@@ -9833,15 +9843,15 @@ window._showAchievement = _showAchievement;
     };
     try{ renderer.setAnimationLoop(window.animate); }catch(e){}
   }
-  // v11: iBoost-Hinweise
+  // v11: I·BOOST-Hinweise
   let _ibBanner=null,_ibHint=null,_ibStartAt=0;
   function _ibBig(show){ if(!_ibBanner){ _ibBanner=document.createElement('div');
       _ibBanner.style.cssText='position:fixed;top:42%;left:50%;transform:translate(-50%,-50%);z-index:65;padding:24px 48px;border-radius:16px;font:bold 36px Arial;color:#fff;background:linear-gradient(180deg,rgba(99,149,189,0.95),rgba(44,72,102,0.95));border:2px solid #9DDCEE;box-shadow:0 8px 28px rgba(0,0,0,0.5);pointer-events:none;text-align:center;';
-      _ibBanner.innerHTML='Press number <span style="color:#FFE298;font-size:56px;">3</span> to activate iBoost<br><span style="font-size:20px;font-weight:normal;color:#C8D2DC;">for a much faster search</span>';
+      _ibBanner.innerHTML='Press number <span style="color:#FFE298;font-size:56px;">3</span> to activate I·BOOST<br><span style="font-size:20px;font-weight:normal;color:#C8D2DC;">for a much faster search</span>';
       document.body.appendChild(_ibBanner); } _ibBanner.style.display=show?'block':'none'; }
   function _ibSmall(show){ if(!_ibHint){ _ibHint=document.createElement('div');
       _ibHint.style.cssText='position:fixed;top:14px;left:50%;transform:translateX(-50%);z-index:64;padding:8px 18px;border-radius:9px;font:bold 14px Arial;color:#9DDCEE;background:rgba(14,22,32,0.85);border:1px solid rgba(99,149,189,0.5);pointer-events:none;';
-      _ibHint.textContent='Keys 1–5 = iBoost (faster search)'; document.body.appendChild(_ibHint); } _ibHint.style.display=show?'block':'none'; }
+      _ibHint.textContent='Keys 1–5 = I·BOOST (faster search)'; document.body.appendChild(_ibHint); } _ibHint.style.display=show?'block':'none'; }
   function _iboostHintTick(){
     const gs=(typeof gameStarted!=='undefined'&&gameStarted);
     if(!gs){ _ibBig(false); _ibSmall(false); _ibStartAt=0; return; }
@@ -9851,7 +9861,7 @@ window._showAchievement = _showAchievement;
     const ib=(typeof iBoostLevel!=='undefined')?iBoostLevel:0;
     _ibBig(lf>=1 && ib===0);
   }
-  // v11: verstecktes Stern-Gadget hinten im Raum → iBoost Stufe 6
+  // v11: verstecktes Stern-Gadget hinten im Raum → I·BOOST Stufe 6
   let _star=null,_starDone=false;
   function buildStar(){
     const cv=document.createElement('canvas'); cv.width=128; cv.height=128; const x=cv.getContext('2d');
@@ -9872,7 +9882,7 @@ window._showAchievement = _showAchievement;
     if(dx*dx+dz*dz<2.2){ _starDone=true; _star.visible=false; window._iBoost6Unlocked=true;
       try{ if(typeof computeIBoostMax3D==='function') iBoostMaxAllowed=computeIBoostMax3D(); }catch(e){}
       try{ if(typeof updateIBoostUI3D==='function') updateIBoostUI3D(); }catch(e){}
-      try{ t('⭐ Secret found — iBoost LEVEL 6 unlocked! (press 6)'); }catch(e){}
+      try{ t('⭐ Secret found — I·BOOST LEVEL 6 unlocked! (press 6)'); }catch(e){}
     }
   }
   window.startLight3D = function(){
