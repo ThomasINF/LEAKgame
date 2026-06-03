@@ -1,48 +1,38 @@
 <!DOCTYPE html>
-<html lang="de">
+<html lang="en">
 <head>
 <meta charset="UTF-8" />
 <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20viewBox%3D%220%200%2064%2064%22%3E%3Crect%20width%3D%2264%22%20height%3D%2264%22%20rx%3D%228%22%20fill%3D%22%2314263B%22%2F%3E%3Crect%20x%3D%2224%22%20y%3D%2228%22%20width%3D%2216%22%20height%3D%2228%22%20fill%3D%22%236395BD%22%20rx%3D%223%22%2F%3E%3Ccircle%20cx%3D%2232%22%20cy%3D%2213%22%20r%3D%229%22%20fill%3D%22%236395BD%22%2F%3E%3C%2Fsvg%3E"/>
-<title>INFICON · LEAK QUEST</title>
+<title>Leak Quest — INFICON</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <style>
-  :root{ --inf-cyan:#6395BD; --inf-cyan-hi:#9DDCEE; --inf-navy:#14263B; --sig-orange:#E8862A; }
+  :root{ --inf-cyan:#6395BD; --inf-cyan-hi:#9DDCEE; --inf-navy:#14263B; }
   *{ box-sizing:border-box; }
   html,body{ margin:0; padding:0; min-height:100%; }
-  body{
-    font-family:'Segoe UI',Arial,sans-serif; color:#fff; min-height:100vh;
+  body{ font-family:'Segoe UI',Arial,sans-serif; color:#fff; min-height:100vh;
     background:
       radial-gradient(1200px 600px at 50% 6%, rgba(99,149,189,0.20), transparent 60%),
       radial-gradient(900px 500px at 82% 92%, rgba(157,220,238,0.08), transparent 60%),
       linear-gradient(180deg,#0E1620 0%,#14263B 100%);
-    display:flex; flex-direction:column; align-items:center; padding:40px 20px;
-  }
-  header{ text-align:center; margin-bottom:30px; }
+    display:flex; flex-direction:column; align-items:center; padding:40px 20px; }
+  header{ text-align:center; margin-bottom:28px; }
   .logo{ font-size:42px; font-weight:700; letter-spacing:3px; color:var(--inf-cyan); }
   h1{ margin:8px 0 4px; font-size:52px; letter-spacing:5px;
-    background:linear-gradient(180deg,#fff,#B8D6E8); -webkit-background-clip:text;
-    -webkit-text-fill-color:transparent; }
+    background:linear-gradient(180deg,#fff,#B8D6E8); -webkit-background-clip:text; -webkit-text-fill-color:transparent; }
   .subtitle{ font-size:13px; color:var(--inf-cyan-hi); letter-spacing:4px; }
-  .grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr));
-    max-width:840px; width:100%; }
-  .card{
-    background:linear-gradient(180deg,rgba(22,33,48,0.92),rgba(14,22,32,0.95));
-    border:2px solid var(--inf-cyan); border-radius:14px; padding:24px 22px;
-    text-decoration:none; color:#fff; transition:transform .16s,box-shadow .16s,border-color .16s;
-    box-shadow:0 6px 20px rgba(0,0,0,0.4); display:flex; flex-direction:column; min-height:150px;
-  }
+  .grid{ display:grid; gap:18px; grid-template-columns:repeat(auto-fit,minmax(250px,1fr)); max-width:840px; width:100%; }
+  .card{ background:linear-gradient(180deg,rgba(22,33,48,0.92),rgba(14,22,32,0.95));
+    border:2px solid var(--inf-cyan); border-radius:14px; padding:24px 22px; text-decoration:none; color:#fff;
+    transition:transform .16s,box-shadow .16s; box-shadow:0 6px 20px rgba(0,0,0,0.4);
+    display:flex; flex-direction:column; min-height:150px; }
   .card:hover{ transform:translateY(-4px); box-shadow:0 12px 28px rgba(99,149,189,0.4); }
   .card .icon{ font-size:40px; margin-bottom:10px; }
   .card .title{ font-size:20px; font-weight:700; margin-bottom:6px; }
   .card .desc{ font-size:13px; line-height:1.5; color:#C8D2DC; }
-  .card .cta{ margin-top:auto; padding-top:12px; font-size:11px; letter-spacing:2px;
-    font-weight:bold; color:var(--inf-cyan-hi); }
-  .card.soon{ border-color:rgba(120,140,160,0.35); cursor:default; pointer-events:none;
-    filter:grayscale(0.85); opacity:0.5; }
-  .card.soon:hover{ transform:none; box-shadow:0 6px 20px rgba(0,0,0,0.4); }
-  .badge{ display:inline-block; align-self:flex-start; font-size:10px; letter-spacing:1.5px;
-    font-weight:bold; padding:3px 10px; border-radius:5px; margin-bottom:10px; }
-  footer{ margin-top:34px; font-size:11px; color:#7A8FA8; letter-spacing:1px; text-align:center; line-height:1.7; }
+  .card .cta{ margin-top:auto; padding-top:12px; font-size:11px; letter-spacing:2px; font-weight:bold; color:var(--inf-cyan-hi); }
+  .card.soon{ border-color:rgba(120,140,160,0.35); cursor:default; pointer-events:none; filter:grayscale(0.85); opacity:0.5; }
+  .badge{ display:inline-block; align-self:flex-start; font-size:10px; letter-spacing:1.5px; font-weight:bold; padding:3px 10px; border-radius:5px; margin-bottom:10px; }
+  footer{ margin-top:34px; font-size:11px; color:#7A8FA8; letter-spacing:1px; text-align:center; line-height:1.8; }
   footer b{ color:var(--inf-cyan-hi); }
 </style>
 </head>
@@ -54,33 +44,33 @@
   </header>
 
   <div class="grid">
-    <a class="card" href="iBoost_Game3D_v10.html">
+    <a class="card" href="LeakQuest3D.html">
       <span class="badge" style="background:#7CFF7C;color:#0E1620;">PLAY</span>
       <div class="icon">🖥️</div>
-      <div class="title">Browser Game</div>
-      <div class="desc">The 3D game — play right here with mouse &amp; keyboard. No headset needed.</div>
+      <div class="title">Leak Quest 3D</div>
+      <div class="desc">The 3D browser game — mouse &amp; keyboard, no headset needed.</div>
       <div class="cta">START →</div>
     </a>
 
-    <a class="card" href="iBoost_Game3D_VR_r175.html">
+    <a class="card" href="LeakQuest3DVR.html">
       <span class="badge" style="background:#9DDCEE;color:#0E1620;">VR</span>
       <div class="icon">🥽</div>
-      <div class="title">VR Game</div>
-      <div class="desc">The immersive version for Meta Quest. Open this on the headset's browser.</div>
+      <div class="title">Leak Quest 3DVR</div>
+      <div class="desc">The immersive VR version for Meta Quest. Open this in the headset browser.</div>
       <div class="cta">START VR →</div>
     </a>
 
-    <a class="card" href="iBoost_Game3D_v10.html#highscores">
+    <a class="card" href="LeakQuest3D.html#highscores">
       <div class="icon">🏆</div>
       <div class="title">High Scores</div>
-      <div class="desc">See the top runs and best combos.</div>
+      <div class="desc">Top runs and best combos.</div>
       <div class="cta">VIEW →</div>
     </a>
 
-    <a class="card" href="iBoost_Game3D_v10.html#settings">
+    <a class="card" href="LeakQuest3D.html#settings">
       <div class="icon">⚙️</div>
       <div class="title">Settings</div>
-      <div class="desc">Sound, mouse sensitivity, field of view and more.</div>
+      <div class="desc">Sound, mouse sensitivity, field of view.</div>
       <div class="cta">OPEN →</div>
     </a>
 
@@ -96,9 +86,14 @@
       <span class="badge" style="background:#7A8FA8;color:#0E1620;">COMING SOON</span>
       <div class="icon">🎬</div>
       <div class="title">Campaign</div>
-      <div class="desc">Story missions through the fab — hunt the hidden leaks.</div>
+      <div class="desc">Story missions through the fab.</div>
       <div class="cta">SOON</div>
     </div>
   </div>
+
+  <footer>
+    <b>Leak Quest</b> · Build v11 · 2026-06-03<br>
+    Created by <b>Thomas Grellmann</b> · INFICON
+  </footer>
 </body>
 </html>
